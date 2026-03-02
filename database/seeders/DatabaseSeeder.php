@@ -17,9 +17,18 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+         $this->command->info('🌱 Starting database seeding...');
+
+        // 1. Buat admin user
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Administrator',
+            'email' => 'admin@example.com',
+            'role' => 'admin',
+            'email_verified_at' => now(),
         ]);
+
+        $this->command->newLine();
+        $this->command->info('🎉 Database seeding completed!');
+        $this->command->info('📧 Admin login: admin@example.com / password');
     }
 }
