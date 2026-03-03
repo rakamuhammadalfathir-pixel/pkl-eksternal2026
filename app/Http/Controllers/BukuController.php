@@ -21,7 +21,7 @@ class BukuController extends Controller
      */
     public function create()
     {
-        //
+        return view('buku.create');
     }
 
     /**
@@ -29,7 +29,15 @@ class BukuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $buku = new Buku();
+        $buku->judul = $request->input('judul');
+        $buku->pengarang = $request->input('pengarang');
+        $buku->penerbit = $request->input('penerbit');
+        $buku->tahun = $request->input('tahun');
+        $buku->stok = $request->input('stok');
+
+        $buku->save();
+        return redirect()->route('buku.index');
     }
 
     /**
@@ -37,7 +45,8 @@ class BukuController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $buku = Buku::findOrFail($id);
+        return view('buku.show', compact('buku'));
     }
 
     /**
@@ -45,7 +54,8 @@ class BukuController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $buku = Buku::findOrFail($id);
+        return view('buku.edit', compact('buku'));
     }
 
     /**
@@ -53,7 +63,15 @@ class BukuController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $buku = Buku::findOrFail($id);
+        $buku->judul = $request->input('judul');
+        $buku->pengarang = $request->input('pengarang');
+        $buku->penerbit = $request->input('penerbit');
+        $buku->tahun = $request->input('tahun');
+        $buku->stok = $request->input('stok');
+
+        $buku->save();
+        return redirect()->route('buku.index');
     }
 
     /**
@@ -61,6 +79,8 @@ class BukuController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $buku = Buku::findOrFail($id);
+        $buku->delete();
+        return redirect()->route('buku.index');
     }
 }

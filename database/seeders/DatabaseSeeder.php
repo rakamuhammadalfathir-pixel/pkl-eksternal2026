@@ -15,20 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->command->info('🌱 Starting database seeding...');
 
-         $this->command->info('🌱 Starting database seeding...');
+        // Menggunakan updateOrCreate agar tidak error jika dijalankan ulang
+        User::updateOrCreate(
+            ['email' => 'admin@example.com'], // Kolom unik untuk dicek
+            [
+                'name' => 'Administrator',
+                'role' => 'admin',
+                'email_verified_at' => now(),
+                'password' => bcrypt('password'), // Pastikan password terisi
+            ]
+        );
 
-        // 1. Buat admin user
-        User::factory()->create([
-            'name' => 'Administrator',
-            'email' => 'admin@example.com',
-            'role' => 'admin',
-            'email_verified_at' => now(),
-        ]);
-
-        $this->command->newLine();
         $this->command->info('🎉 Database seeding completed!');
-        $this->command->info('📧 Admin login: admin@example.com / password');
     }
 }

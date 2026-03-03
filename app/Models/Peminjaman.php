@@ -6,15 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Peminjaman extends Model
 {
-    protected $fillable = ['kode_transaksi', 'anggota_id', 'user_id', 'tgl_pinjam', 'tgl_harus_kembali', 'status'];
+    protected $table = 'peminjamans';
+    protected $fillable = ['kode_transaksi', 'anggota_id', 'tgl_pinjam', 'tgl_harus_kembali', 'status'];
 
     public function anggota()
     {
         return $this->belongsTo(Anggota::class);
-    }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
     public function peminjamanDetails()
     {
