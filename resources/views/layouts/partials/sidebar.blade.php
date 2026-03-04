@@ -68,47 +68,73 @@
 
           <div class="menu-inner-shadow"></div>
 
-          <ul class="menu-inner py-1 {{ request()->routeIs('*') ? 'active' : '' }}">
-            <!-- Dashboard -->
-            <li class="menu-item {{ request()->routeIs('home') ? 'active' : '' }}">  
-              <a href="{{ route('home') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Dashboard</div>
-              </a>
+          <ul class="menu-inner py-1">
+            @auth
+            <li class="menu-item {{ request()->is('admin/dashboard', 'home') ? 'active' : '' }}">
+                <a href="{{ Auth::user()->role == 'admin' ? route('admin.dashboard') : route('home') }}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                    
+                    <div>{{ Auth::user()->role == 'admin' ? 'Dashboard' : 'Home' }}</div>
+                </a>
             </li>
-            
-            <!-- Tables -->
-            <li class="menu-header small text-uppercase"><span class="menu-header-text">Data E-Perpustakaan</span></li>
-            <!-- Tables -->
-            <li class="menu-item {{ request()->routeIs('buku.index') ? 'active' : '' }}">
-              <a href="{{ route('buku.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-book"></i>
-                <div data-i18n="Tables">Buku</div>
-              </a>
-            </li>
-            <li class="menu-item {{ request()->routeIs('anggota.index') ? 'active' : '' }}">
-              <a href="{{ route('anggota.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Tables">Anggota</div>
-              </a>
-            </li>
-            <li class="menu-item {{ request()->routeIs('peminjaman.index') ? 'active' : '' }}">
-              <a href="{{ route('peminjaman.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Tables">Peminjaman</div>
-              </a>
-            </li>
-            <li class="menu-item {{ request()->routeIs('peminjaman_detail.index') ? 'active' : '' }}">
-              <a href="{{ route('peminjaman_detail.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Tables">Peminjaman Detail</div>
-              </a>
-            </li>
-            <li class="menu-item {{ request()->routeIs('pengembalian.index') ? 'active' : '' }}">
-              <a href="{{ route('pengembalian.index') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Tables">Pengembalian</div>
-              </a>
-            </li>
-          </ul>
-        </aside>
+
+            @if(Auth::user()->role == 'admin')
+                <li class="menu-item {{ request()->routeIs('home') ? 'active' : '' }}">
+                    <a href="{{ route('home') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-world"></i>
+                        <div>Lihat Website (Home)</div>
+                    </a>
+                </li>
+
+                <li class="menu-header small text-uppercase">
+                    <span class="menu-header-text">Data E-Perpustakaan</span>
+                </li>
+                
+                <li class="menu-item {{ request()->routeIs('admin.kategori.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.kategori.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-category"></i>
+                        <div>Kategori</div>
+                    </a>
+                </li>
+                
+                <li class="menu-item {{ request()->routeIs('admin.rak.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.rak.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-grid-alt"></i>
+                        <div>Rak</div>
+                    </a>
+                </li>
+
+                <li class="menu-item {{ request()->routeIs('admin.buku.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.buku.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-book"></i>
+                        <div>Buku</div>
+                    </a>
+                </li>
+
+                <li class="menu-item {{ request()->routeIs('admin.anggota.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.anggota.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-user"></i>
+                        <div>Anggota</div>
+                    </a>
+                </li>
+
+                <li class="menu-header small text-uppercase">
+                    <span class="menu-header-text">Transaksi</span>
+                </li>
+
+                <li class="menu-item {{ request()->routeIs('admin.peminjaman.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.peminjaman.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-transfer"></i>
+                        <div>Peminjaman</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('admin.pengembalian.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.pengembalian.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-undo"></i>
+                        <div>Pengembalian</div>
+                    </a>
+                </li>
+              @endauth
+            @endif
+        </ul>
+      </aside>

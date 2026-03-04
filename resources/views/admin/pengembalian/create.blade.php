@@ -81,46 +81,60 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="card bg-primary text-white mb-4 overflow-hidden" style="min-height: 300px;">
-                  <div class="d-flex align-items-center row p-4">
-                      <div class="col-md-7">
-                          <h2 class="text-white fw-bold mb-3">Tingkatkan Pengetahuan Tanpa Batas 📚</h2>
-                          <p class="mb-4">Koleksi buku terlengkap dari berbagai kategori tersedia untuk dipinjam secara gratis bagi anggota resmi E-Perpustakaan.</p>
-                          
-                          @guest
-                              <a href="{{ route('register') }}" class="btn btn-warning me-2">Daftar Anggota</a>
-                              <a href="#katalog" class="btn btn-outline-white text-white">Lihat Katalog</a>
-                          @else
-                              <h5 class="text-white">Selamat Datang Kembali, {{ Auth::user()->name }}!</h5>
-                          @endguest
-                      </div>
-                      <div class="col-md-5 text-center">
-                          <img src="{{ asset('assets/img/illustrations/man-with-laptop-light.png') }}" width="250" alt="Hero Image">
-                      </div>
-                  </div>
-              </div>
-
-              <div id="katalog" class="row mt-5">
-                  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Koleksi /</span> Buku Terbaru</h4>
-                  
-                  @foreach($buku as $item)
-                  <div class="col-md-4 col-lg-3 mb-4">
-                      <div class="card h-100">
-                          <div class="card-body">
-                              <h5 class="card-title">{{ $item->judul }}</h5>
-                              <p class="card-text text-muted small">Kategori: {{ $item->kategori->nama ?? 'Umum' }}</p>
-                              
-                              @auth
-                                  <a href="#" class="btn btn-primary btn-sm w-100">Pinjam Sekarang</a>
-                              @else
-                                  <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm w-100">Login untuk Pinjam</a>
-                              @endauth
+                <!-- Basic Layout & Basic with Icons -->
+              <div class="row">
+                <!-- Basic with Icons -->
+                <div class="col-xxl">
+                  <div class="card mb-4">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                      <h5 class="mb-0">Tambah Data Pengembalian</h5>
+                      <small class="text-muted float-end"></small>
+                    </div>
+                    <div class="card-body">
+                      <form action="{{ route('admin.pengembalian.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Peminjaman</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-package"></i></span>
+                              <select name="peminjaman_id" class="form-control">
+                                @foreach($peminjamans as $peminjaman)
+                                  <option value="{{ $peminjaman->id }}">{{ $peminjaman->kode_transaksi }}</option>
+                                @endforeach
+                              </select>
+                            </div>
                           </div>
-                      </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Tanggal Kembali Aktual</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <input type="date" class="form-control" name="tgl_kembali_aktual"/>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Denda</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <input type="number" class="form-control" name="denda"/>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row justify-content-end">
+                          <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
                   </div>
-                  @endforeach
+                </div>
               </div>
-          </div>   
+              <!--/ Bordered Table -->
             </div>
             <!-- Footer -->
             @include('layouts.partials.footer')

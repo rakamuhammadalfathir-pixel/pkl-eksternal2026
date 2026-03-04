@@ -81,46 +81,63 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="card bg-primary text-white mb-4 overflow-hidden" style="min-height: 300px;">
-                  <div class="d-flex align-items-center row p-4">
-                      <div class="col-md-7">
-                          <h2 class="text-white fw-bold mb-3">Tingkatkan Pengetahuan Tanpa Batas 📚</h2>
-                          <p class="mb-4">Koleksi buku terlengkap dari berbagai kategori tersedia untuk dipinjam secara gratis bagi anggota resmi E-Perpustakaan.</p>
-                          
-                          @guest
-                              <a href="{{ route('register') }}" class="btn btn-warning me-2">Daftar Anggota</a>
-                              <a href="#katalog" class="btn btn-outline-white text-white">Lihat Katalog</a>
-                          @else
-                              <h5 class="text-white">Selamat Datang Kembali, {{ Auth::user()->name }}!</h5>
-                          @endguest
-                      </div>
-                      <div class="col-md-5 text-center">
-                          <img src="{{ asset('assets/img/illustrations/man-with-laptop-light.png') }}" width="250" alt="Hero Image">
-                      </div>
-                  </div>
-              </div>
+              <div class="row">
+                    <div class="col-lg-12 mb-4 order-0">
+                        <div class="card">
+                            <div class="d-flex align-items-end row">
+                                <div class="col-sm-7">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">Selamat Datang, {{ Auth::user()->name }}! 🎉</h5>
+                                        <p class="mb-4">
+                                            Hari ini ada beberapa aktivitas di perpustakaan. Cek ringkasannya di bawah ini.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 text-center text-sm-left">
+                                    <div class="card-body pb-0 px-0 px-md-4">
+                                        <img src="{{ asset('assets/img/illustrations/man-with-laptop-light.png') }}" height="140" alt="View Badge User">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-12 col-6 mb-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="avatar flex-shrink-0 mb-3 mx-auto">
+                                    <span class="badge bg-label-primary p-2"><i class="bx bx-book"></i></span>
+                                </div>
+                                <span class="fw-semibold d-block mb-1">Total Buku</span>
+                                <h3 class="card-title mb-2">{{ $total_buku }}</h3>
+                            </div>
+                        </div>
+                    </div>
 
-              <div id="katalog" class="row mt-5">
-                  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Koleksi /</span> Buku Terbaru</h4>
-                  
-                  @foreach($buku as $item)
-                  <div class="col-md-4 col-lg-3 mb-4">
-                      <div class="card h-100">
-                          <div class="card-body">
-                              <h5 class="card-title">{{ $item->judul }}</h5>
-                              <p class="card-text text-muted small">Kategori: {{ $item->kategori->nama ?? 'Umum' }}</p>
-                              
-                              @auth
-                                  <a href="#" class="btn btn-primary btn-sm w-100">Pinjam Sekarang</a>
-                              @else
-                                  <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm w-100">Login untuk Pinjam</a>
-                              @endauth
-                          </div>
-                      </div>
-                  </div>
-                  @endforeach
-              </div>
-          </div>   
+                    <div class="col-lg-4 col-md-12 col-6 mb-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="avatar flex-shrink-0 mb-3 mx-auto">
+                                    <span class="badge bg-label-success p-2"><i class="bx bx-user"></i></span>
+                                </div>
+                                <span class="fw-semibold d-block mb-1">Anggota</span>
+                                <h3 class="card-title mb-2">{{ $total_anggota }}</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-12 col-6 mb-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="avatar flex-shrink-0 mb-3 mx-auto">
+                                    <span class="badge bg-label-warning p-2"><i class="bx bx-time"></i></span>
+                                </div>
+                                <span class="fw-semibold d-block mb-1">Sedang Dipinjam</span>
+                                <h3 class="card-title mb-2">{{ $total_peminjaman }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- Footer -->
             @include('layouts.partials.footer')

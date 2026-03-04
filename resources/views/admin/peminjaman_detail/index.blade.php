@@ -81,46 +81,83 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="card bg-primary text-white mb-4 overflow-hidden" style="min-height: 300px;">
-                  <div class="d-flex align-items-center row p-4">
-                      <div class="col-md-7">
-                          <h2 class="text-white fw-bold mb-3">Tingkatkan Pengetahuan Tanpa Batas 📚</h2>
-                          <p class="mb-4">Koleksi buku terlengkap dari berbagai kategori tersedia untuk dipinjam secara gratis bagi anggota resmi E-Perpustakaan.</p>
-                          
-                          @guest
-                              <a href="{{ route('register') }}" class="btn btn-warning me-2">Daftar Anggota</a>
-                              <a href="#katalog" class="btn btn-outline-white text-white">Lihat Katalog</a>
-                          @else
-                              <h5 class="text-white">Selamat Datang Kembali, {{ Auth::user()->name }}!</h5>
-                          @endguest
-                      </div>
-                      <div class="col-md-5 text-center">
-                          <img src="{{ asset('assets/img/illustrations/man-with-laptop-light.png') }}" width="250" alt="Hero Image">
-                      </div>
-                  </div>
-              </div>
+                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span>Data Peminjaman Detail</h4>
+                <div class="mb-4">
+                  <a href="{{ route('admin.peminjaman_detail.create') }}" class="btn btn-primary">
+                    Tambah Peminjaman Detail
+                  </a>
+                </div>
+              <!-- Bordered Table -->
+              <div class="card">
+                <h5 class="card-header">Table peminjaman detail</h5>
+                <div class="card-body">
+                  <div class="table text-nowrap">
+                    @if(session('success'))
+                        <div class="alert alert-primary alert-dismissible" role="alert">
+                            <h6 class="alert-heading d-flex align-items-center mb-1">
+                                <i class="bx bx-check-circle me-2"></i>Berhasil!
+                            </h6>
+                            <span>{{ session('success') }}</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <h6 class="alert-heading d-flex align-items-center mb-1">
+                                <i class="bx bx-error-circle me-2"></i>Ups, Ada Kesalahan!
+                            </h6>
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th class="text-center">No</th>
+                          <th class="text-center">Peminjaman</th>
+                          <th>Buku</th>
+                          <th class="text-center">Jumlah</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @php $no = 1; @endphp
+                        @foreach($peminjamanDetails as $item)
+                        <tr>
+                            <td class="text-center">{{ $no++ }}</td>
+                            <td class="text-center">{{ $item->peminjaman->kode_transaksi }}</td>
+                            <td>{{ $item->buku->judul }}</td>
+                            <td class="text-center">{{ $item->jumlah }}</td>
+                            <td>
 
-              <div id="katalog" class="row mt-5">
-                  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Koleksi /</span> Buku Terbaru</h4>
-                  
-                  @foreach($buku as $item)
-                  <div class="col-md-4 col-lg-3 mb-4">
-                      <div class="card h-100">
-                          <div class="card-body">
-                              <h5 class="card-title">{{ $item->judul }}</h5>
-                              <p class="card-text text-muted small">Kategori: {{ $item->kategori->nama ?? 'Umum' }}</p>
-                              
-                              @auth
-                                  <a href="#" class="btn btn-primary btn-sm w-100">Pinjam Sekarang</a>
-                              @else
-                                  <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm w-100">Login untuk Pinjam</a>
-                              @endauth
-                          </div>
-                      </div>
+                            <div class="d-flex flex-row gap-2">
+                                    <a href="{{ route('admin.peminjaman_detail.show', $item->id) }}" class="btn btn-sm btn-outline-info">
+                                        <i class="bx bx-show me-1"></i> Show
+                                    </a>
+                                    <a href="{{ route('admin.peminjaman_detail.edit', $item->id) }}" class="btn btn-sm btn-outline-warning">
+                                        <i class="bx bx-edit-alt me-1"></i> Edit
+                                    </a>
+                                    <form action="{{ route('admin.peminjaman_detail.destroy', $item->id) }}" method="POST" class="d-grid">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus?')">
+                                            <i class="bx bx-trash me-1"></i> Delete
+                                        </button>
+                                    </form>
+                              </div>
+                          </td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
                   </div>
-                  @endforeach
+                </div>
               </div>
-          </div>   
+              <!--/ Bordered Table -->
             </div>
             <!-- Footer -->
             @include('layouts.partials.footer')

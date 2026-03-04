@@ -82,22 +82,21 @@ class RegisterController extends Controller
      * @param array $data Data valid
      * @return \App\Models\User Object user baru
      */
-    protected function create(array $data): User
+    protected function create(array $data)
     {
-        // ================================================
-        // CREATE USER + HASH PASSWORD
-        // ================================================
-        return User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-
-            // SECURITY CRITICAL: Password MENDATORY di-hash!
-            // Jangan pernah menyimpan password plaintext.
-            // Hash::make() menggunakan algoritma Bcrypt (default aman).
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
             'password' => Hash::make($data['password']),
-
-            // Set role default. Pastikan 'customer', jangan 'admin'.
-            'role'     => 'customer',
+            'role' => 'customer',
         ]);
+
+        // Buat "wadah" data anggota meskipun isinya masih minim
+        \App\Models\Anggota::create([
+            'user_id' => $user->id,
+            'nama' => $data['name'], // Nama ambil dari username saat daftar
+        ]);
+
+        return $user;
     }
 }

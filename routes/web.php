@@ -1,42 +1,46 @@
-<?php
+    <?php
 
-use App\Http\Controllers\BukuController;
-use App\Http\Controllers\AnggotaController;
-use App\Http\Controllers\PeminjamanController;
-use App\Http\Controllers\PeminjamanDetailController;
-use App\Http\Controllers\PengembalianController;
-use App\Http\Controllers\HomeController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\Admin\BukuController;
+    use App\Http\Controllers\Admin\AnggotaController;
+    use App\Http\Controllers\Admin\PeminjamanController;
+    use App\Http\Controllers\Admin\PeminjamanDetailController;
+    use App\Http\Controllers\Admin\PengembalianController;
+    use App\Http\Controllers\Admin\KategoriController;
+    use App\Http\Controllers\Admin\RakController;
+    use App\Http\Controllers\HomeController;
+    use App\Http\Controllers\Admin\DashboardController;
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Auth::routes();
+    Auth::routes();
 
-// =========================================================
-// 1. RUTE UNTUK SEMUA USER (Admin & Anggota) yang SUDAH LOGIN
-// =========================================================
-Route::middleware('auth')->group(function () {
+    Route::middleware('auth')->group(function () {
+
+        Route::get('/home', function() {
+            return Auth::user()->role == 'admin' 
+                ? redirect()->route('admin.dashboard') 
+                : redirect()->route('home');
+        });
+        
     
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-    // =========================================================
-    // 2. RUTE KHUSUS ADMIN SAJA
-    // =========================================================
-    Route::middleware('admin')->group(function () {
         
-        // Dashboard Khusus Admin
-        Route::get('/admin/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
+        Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-        // Kelola Data Buku (Hanya Admin yang boleh CRUD)
-        Route::resource('buku', BukuController::class);
-        Route::resource('anggota', AnggotaController::class);
-        Route::resource('peminjaman', PeminjamanController::class);
-        Route::resource('peminjaman_detail', PeminjamanDetailController::class);
-        Route::resource('pengembalian', PengembalianController::class);
-        
-        // Nantinya kamu bisa tambah rute anggota, peminjaman, dll di sini
+        Route::middleware(['auth', 'admin'])->prefix('admin')->as('admin.')->group(function () {
+            
+            Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+            Route::resource('buku', BukuController::class);
+            Route::resource('anggota', AnggotaController::class);
+            Route::resource('peminjaman', PeminjamanController::class);
+            Route::resource('peminjaman_detail', PeminjamanDetailController::class);
+            Route::resource('pengembalian', PengembalianController::class);
+            Route::resource('kategori', KategoriController::class);
+            Route::resource('rak', RakController::class);
+
+            Route::patch('/anggota/update-role/{id}', [AnggotaController::class, 'updateRole'])->name('anggota.updateRole');
+            
+        });
     });
-});
