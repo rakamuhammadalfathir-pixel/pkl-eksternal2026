@@ -75,80 +75,72 @@
         <div class="layout-page">
           <!-- Navbar -->
           @include('layouts.partials.navbar')
-          <!-- / Navbar -->
+          <!-- / Navbar -->   
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-                <!-- Basic Layout & Basic with Icons -->
-              <div class="row">
-                <!-- Basic with Icons -->
-                <div class="col-xxl">
-                  <div class="card mb-4">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="mb-0">Edit Data peminjaman_detail</h5>
-                      <small class="text-muted float-end"></small>
+                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Katalog /</span> Keranjang Pinjaman</h4>
+
+                <div class="card">
+                    <h5 class="card-header">Daftar Buku Antrean</h5>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Buku</th>
+                                    <th>Judul</th>
+                                    <th>Pengarang</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @forelse($keranjang as $id => $details)
+                                <tr>
+                                    <td>
+                                        <img src="{{ $details['foto'] ? asset('storage/buku/' . $details['foto']) : asset('assets/img/elements/18.jpg') }}" 
+                                            alt="Avatar" class="rounded" width="50">
+                                    </td>
+                                    <td><strong>{{ $details['judul'] }}</strong></td>
+                                    <td>{{ $details['pengarang'] }}</td>
+                                    <td>
+                                        <form action="{{ route('keranjang.remove') }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="id" value="{{ $id }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="bx bx-trash me-1"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4" class="text-center">Keranjang masih kosong. <a href="{{ route('katalog.index') }}">Cari buku?</a></td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="card-body">
-                      <form action="{{ route('admin.peminjaman_detail.update', $peminjamanDetail->id) }}" method="POST"> 
-                        @csrf
-                        @method('PUT')
-                        
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label">Peminjaman</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span class="input-group-text"><i class="bx bx-package"></i></span>
-                              <select name="peminjaman_id" class="form-control">
-                                @foreach($peminjamans as $item)
-                                  <option value="{{ $item->id }}" {{ $peminjamanDetail->peminjaman_id == $item->id ? 'selected' : '' }}>
-                                    {{ $item->kode_transaksi }}
-                                  </option>
-                                @endforeach
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label">Buku</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span class="input-group-text"><i class="bx bx-book"></i></span>
-                              <select name="buku_id" class="form-control">
-                                @foreach($bukus as $item)
-                                  <option value="{{ $item->id }}" {{ $peminjamanDetail->buku_id == $item->id ? 'selected' : '' }}>
-                                    {{ $item->judul }}
-                                  </option>
-                                @endforeach
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label">Jumlah</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span class="input-group-text"><i class="bx bx-hash"></i></span>
-                              <input type="number" class="form-control" name="jumlah" value="{{ $peminjamanDetail->jumlah }}"/>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row justify-content-end">
-                          <div class="col-sm-10">
-                            <button type="submit" class="btn btn-primary">Ubah</button>
-                            <a href="{{ route('admin.peminjaman_detail.index') }}" class="btn btn-secondary">Kembali</a>
-                          </div>
-                        </div>
-                      </form>
+                    
+                    @if(count($keranjang) > 0)
+                    <div class="card-footer text-end">
+                        <form action="{{ route('keranjang.clear') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-secondary">Kosongkan Antrean</button>
+                        </form>
+                        <button type="button" onclick="confirmCheckout()" class="btn btn-primary ms-2">
+                            <i class="bx bx-check-double me-1"></i> Pinjam Semua Sekarang
+                        </button>
                     </div>
-                  </div>
+                    @endif
                 </div>
-              </div>
-              <!--/ Bordered Table -->
+            </div>
+
+            <form id="formCheckout" action="{{ route('peminjaman.bulk_store') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
             </div>
             <!-- Footer -->
             @include('layouts.partials.footer')
@@ -165,7 +157,7 @@
     </div>
     <!-- / Layout wrapper -->
 
-
+    
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}" ></script>
@@ -187,5 +179,28 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    function confirmCheckout() {
+        Swal.fire({
+            title: 'Proses Peminjaman?',
+            text: "Semua buku di daftar ini akan diajukan untuk dipinjam.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#696cff',
+            cancelButtonColor: '#8592a3',
+            confirmButtonText: 'Ya, Proses!',
+            customClass: {
+                confirmButton: 'btn btn-primary me-3',
+                cancelButton: 'btn btn-outline-secondary'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('formCheckout').submit();
+            }
+        })
+    }
+    </script>
   </body>
 </html>

@@ -116,6 +116,19 @@
                           </div>
                         </div>
                         <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Buku</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <select name="buku_id" class="form-control">
+                                @foreach($bukus as $buku)
+                                  <option value="{{ $buku->id }}">{{ $buku->judul }}</option>
+                                @endforeach
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Tanggal Pinjam</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">

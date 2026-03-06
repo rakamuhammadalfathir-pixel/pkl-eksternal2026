@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_transaksi')->unique();
             $table->foreignId('anggota_id')->constrained('anggotas');
+            $table->foreignId('buku_id')->constrained('bukus')->onDelete('cascade');
             $table->date('tgl_pinjam');
             $table->date('tgl_harus_kembali');
             $table->enum('status', ['pinjam', 'kembali'])->default('pinjam');

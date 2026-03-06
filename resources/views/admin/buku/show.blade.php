@@ -154,6 +154,12 @@
                           </div>
                           </div>
                         </div>
+                          <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Foto Saat Ini</label>
+                              <div class="col-sm-10">
+                                <img src="{{ $buku->foto ? Storage::url('buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" alt="Cover Buku" class="img-fluid rounded shadow" style="max-height: 350px; object-fit: cover;">
+                              </div>
+                            </div>
                       <div class="row justify-content-end">
                         <div class="col-sm-10">
                           <a href="{{ route('admin.buku.index') }}" class="btn btn-secondary">Kembali</a>

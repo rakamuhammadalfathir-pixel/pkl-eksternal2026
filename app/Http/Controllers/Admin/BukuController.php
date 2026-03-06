@@ -7,6 +7,7 @@ use App\Models\Kategori;
 use App\Models\Rak;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
@@ -42,8 +43,10 @@ class BukuController extends Controller
             'stok' => 'required|integer',
             'kategori_id' => 'required|exists:kategoris,id',
             'rak_id' => 'required|exists:raks,id',
+            'foto'  => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
+        // 1. Buat instance model baru
         $buku = new Buku();
         $buku->judul = $request->input('judul');
         $buku->pengarang = $request->input('pengarang');
@@ -53,9 +56,19 @@ class BukuController extends Controller
         $buku->kategori_id = $request->input('kategori_id');
         $buku->rak_id = $request->input('rak_id');
 
-        $buku->save();
-        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil ditambahkan.');
+       if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $namaFile = time() . '_' . $file->getClientOriginalName();
+            
+            $file->storeAs('buku', $namaFile, 'public');
+            
+            $buku->foto = $namaFile;
+        }
 
+        // 3. Simpan ke database (HANYA SEKALI SAJA)
+        $buku->save(); 
+
+        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil ditambahkan.');
     }
 
     /**
@@ -91,6 +104,7 @@ class BukuController extends Controller
             'stok' => 'required|integer',
             'kategori_id' => 'required|exists:kategoris,id',
             'rak_id' => 'required|exists:raks,id',
+            'foto'  => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
         $buku = Buku::findOrFail($id);
@@ -102,6 +116,20 @@ class BukuController extends Controller
         $buku->kategori_id = $request->input('kategori_id');
         $buku->rak_id = $request->input('rak_id');
 
+        if ($request->hasFile('foto')) {
+
+            if ($buku->foto && Storage::disk('public')->exists('buku/' . $buku->foto)) {
+                Storage::disk('public')->delete('buku/' . $buku->foto);
+            }
+            
+            $file = $request->file('foto');
+            $namaFile = time() . '_' . $file->getClientOriginalName();
+            
+            $file->storeAs('buku', $namaFile, 'public'); 
+            
+            $buku->foto = $namaFile;
+        }
+
         $buku->save();
         return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diperbarui.');
     }
@@ -112,6 +140,11 @@ class BukuController extends Controller
     public function destroy(string $id)
     {
         $buku = Buku::findOrFail($id);
+
+        if ($buku->foto && Storage::disk('public')->exists('buku/' . $buku->foto)) {
+            Storage::disk('public')->delete('buku/' . $buku->foto);
+        }
+
         $buku->delete();
         return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil dihapus.');
     }

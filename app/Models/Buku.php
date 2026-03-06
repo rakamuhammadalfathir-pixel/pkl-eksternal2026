@@ -4,6 +4,7 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Buku extends Model
 {
@@ -19,8 +20,17 @@ class Buku extends Model
         return $this->belongsTo(Rak::class);
     }
 
-    public function peminjamanDetails()
+    function peminjaman()
     {
-        return $this->hasMany(PeminjamanDetail::class);
+        return $this->hasMany(Peminjaman::class);
+    }
+    
+    protected static function booted()
+    {
+        static::deleting(function ($buku) {
+            if ($buku->foto) {
+                Storage::disk('public')->delete('buku/' . $buku->foto);
+            }
+        });
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Peminjaman;
 use App\Models\Anggota;
+use App\Models\Buku;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,8 @@ class PeminjamanController extends Controller
     {
         $peminjamans = Peminjaman::all();
         $anggotas = Anggota::all();
-        return view('admin.peminjaman.create', compact('peminjamans', 'anggotas'));   
+        $bukus = Buku::all();
+        return view('admin.peminjaman.create', compact('peminjamans', 'anggotas', 'bukus'));   
     }
 
     /**
@@ -36,20 +38,26 @@ class PeminjamanController extends Controller
         $request->validate([
             'kode_transaksi' => 'required|string|max:255|unique:peminjamans,kode_transaksi',
             'anggota_id' => 'required|exists:anggotas,id',
+            'buku_id' => 'required|exists:bukus,id',
             'tgl_pinjam' => 'required|date',
             'tgl_harus_kembali' => 'required|date',
-            // Hapus 'status' dari sini karena tidak ada di form
         ]);
 
-        // Tambahkan status secara manual
+        $buku = Buku::findOrFail($request->buku_id);
+
+        if ($buku->stok <= 0) {
+            return redirect()->back()->with('error', 'Maaf, stok buku "' . $buku->judul . '" sudah habis!');
+        }
         Peminjaman::create([
             'kode_transaksi' => $request->kode_transaksi,
             'anggota_id' => $request->anggota_id,
+            'buku_id' => $request->buku_id,
             'tgl_pinjam' => $request->tgl_pinjam,
             'tgl_harus_kembali' => $request->tgl_harus_kembali,
             'status' => 'pinjam', // Default status
         ]);
 
+        $buku->decrement('stok');
         return redirect()->route('admin.peminjaman.index')->with('success', 'Data Berhasil Ditambah');
     }
 
@@ -80,16 +88,25 @@ class PeminjamanController extends Controller
     {
         $request->validate([
             'kode_transaksi' => 'required|string|max:255|unique:peminjamans,kode_transaksi,' . $id,
-            'anggota_id' => 'required|string|max:255',
+            'anggota_id' => 'required|exists:anggotas,id',
             'tgl_pinjam' => 'required|date',
             'tgl_harus_kembali' => 'required|date',
             'status' => 'required|string|max:255',
         ]);
 
         $peminjaman = Peminjaman::findOrFail($id);
+        $buku = Buku::findOrFail($peminjaman->buku_id);
+
+        if ($peminjaman->status == 'pinjam' && $request->status == 'kembali') {
+            $buku->increment('stok'); 
+        } 
+        elseif ($peminjaman->status == 'kembali' && $request->status == 'pinjam') {
+            $buku->decrement('stok'); 
+        }
+
         $peminjaman->update([
             'kode_transaksi' => $request->kode_transaksi,
-            'anggota_id' => $request->anggota_id, // Pastikan ini sesuai dengan nama field di form
+            'anggota_id' => $request->anggota_id,
             'tgl_pinjam' => $request->tgl_pinjam,
             'tgl_harus_kembali' => $request->tgl_harus_kembali,
             'status' => $request->status,
@@ -104,8 +121,15 @@ class PeminjamanController extends Controller
     public function destroy(string $id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
-        $peminjaman->delete();
+        
+        if ($peminjaman->status == 'pinjam') {
+            $buku = Buku::find($peminjaman->buku_id);
+            if ($buku) {
+                $buku->increment('stok');
+            }
+        }
 
-        return redirect()->route('admin.peminjaman.index')->with('success', 'Data Berhasil Dihapus');
+        $peminjaman->delete();
+        return redirect()->route('admin.peminjaman.index')->with('success', 'Data Berhasil Dihapus & Stok Dikembalikan');
     }
 }

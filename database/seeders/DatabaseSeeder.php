@@ -24,10 +24,11 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Administrator',
                 'role' => 'admin',
                 'email_verified_at' => now(),
-                'password' => bcrypt('password'), // Pastikan password terisi
+                'password' => bcrypt('password'), 
             ]
         );
-
+        
         $this->command->info('🎉 Database seeding completed!');
     }
+    
 }

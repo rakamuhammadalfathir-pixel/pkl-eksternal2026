@@ -91,7 +91,7 @@
                       <small class="text-muted float-end"></small>
                     </div>
                     <div class="card-body">
-                      <form action="{{ route('admin.buku.update', $buku->id) }}" method="POST">
+                      <form action="{{ route('admin.buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="row mb-3">
@@ -165,6 +165,18 @@
                             </div>
                           </div>
                         </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Foto Saat Ini</label>
+                            <div class="col-sm-10">
+                                <div class="mb-2">
+                                    <img src="{{ $buku->foto ? Storage::url('buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" alt="Preview" class="d-block rounded" height="150" id="uploadedAvatar"style="object-fit: cover;"/>
+                                </div>
+                                <div class="input-group input-group-merge">
+                                    <input type="file" name="foto" class="form-control" accept="image/*" id="upload">
+                                </div>
+                                <small class="text-muted">Biarkan kosong jika tidak ingin mengubah foto. Format: JPG, PNG. Maks: 2MB</small>
+                            </div>
+                        </div>
                         <div class="row justify-content-end">
                           <div class="col-sm-10">
                             <button type="submit" class="btn btn-primary">Ubah</button>
@@ -214,6 +226,21 @@
     <script src="{{ asset('/assets/js/dashboards-analytics.js') }}" ></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="{{ asset('/assets/js/dashboards-analytics.js') }}" ></script>
+
+    <script>
+      const uploadInput = document.getElementById('upload');
+      const previewImage = document.getElementById('uploadedAvatar');
+
+      uploadInput.onchange = evt => {
+        const [file] = uploadInput.files;
+        if (file) {
+          previewImage.src = URL.createObjectURL(file);
+        }
+      }
+    </script>
+
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
 </html>

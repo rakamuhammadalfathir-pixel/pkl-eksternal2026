@@ -166,6 +166,15 @@
                             </div>
                           </div>
                          </div>
+                         <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Foto</label>
+                            <div class="col-sm-10">
+                              <div class="input-group input-group-merge">
+                                <input type="file" name="foto" class="form-control" accept="image/*">
+                              </div>
+                              <small class="text-muted">Format: JPG, PNG, JPEG. Maks: 2MB</small>
+                            </div>
+                          </div>
                         <div class="row justify-content-end">
                           <div class="col-sm-10">
                             <button type="submit" class="btn btn-primary">Simpan</button>

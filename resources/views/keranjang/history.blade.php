@@ -81,53 +81,46 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-                <!-- Basic Layout & Basic with Icons -->
-              <div class="row">
-                <!-- Basic with Icons -->
-                <div class="col-xxl">
-                  <div class="card mb-4">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="mb-0">Detail Peminjaman Detail</h5>
-                      <small class="text-muted float-end"></small>
-                    </div>
-                    <div class="card-body">
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Peminjaman</label>
-                        <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <span class="input-group-text"><i class="bx bx-package"></i></span>
-                            <input type="text" class="form-control" value="{{ $peminjamanDetail->peminjaman->kode_transaksi }}" readonly/>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Anggota</label>
-                        <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <span class="input-group-text"><i class="bx bx-hash"></i></span>
-                            <input type="text" class="form-control" value="{{ $peminjamanDetail->peminjaman->anggota->nama }}" readonly/>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Jumlah</label>
-                        <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <span class="input-group-text"><i class="bx bx-hash"></i></span>
-                            <input type="text" class="form-control" value="{{ $peminjamanDetail->jumlah }}" readonly/>
-                          </div>
-                        </div>
-                        </div>
-                      <div class="row justify-content-end">
-                        <div class="col-sm-10">
-                          <a href="{{ route('admin.peminjaman_detail.index') }}" class="btn btn-secondary">Kembali</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div class="container">
+                    <h2>Riwayat Peminjaman & Pengembalian</h2>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Buku</th>
+                                <th>Status</th>
+                                <th>Tgl Pinjam</th>
+                                <th>Batas Kembali</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($history as $item)
+                            <tr>
+                                <td>{{ $item->buku->judul }}</td>
+                                <td>
+                                    @if($item->status == 'Pinjam')
+                                        <span class="badge bg-warning text-dark">Masih Dipinjam</span>
+                                    @else
+                                        <span class="badge bg-success">Sudah Dikembalikan</span>
+                                    @endif
+                                </td>
+                                <td>{{ $item->tgl_pinjam }}</td>
+                                <td>{{ $item->tgl_harus_kembali }}</td>
+                                <td>
+                                    @if($item->status == 'Pinjam')
+                                        <form action="{{ route('peminjaman.kembali', $item->id) }}" method="POST">
+                                            @csrf
+                                            <button class="btn btn-sm btn-danger">Kembalikan</button>
+                                        </form>
+                                    @else
+                                        <span class="text-muted">Selesai</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-              </div>
-              <!--/ Bordered Table -->
             </div>
             <!-- Footer -->
             @include('layouts.partials.footer')

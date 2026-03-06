@@ -119,6 +119,21 @@
                           </div>
                         </div>
                         <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label">Buku</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span class="input-group-text"><i class="bx bx-book"></i></span>
+                              <select name="buku_id" class="form-control">
+                                @foreach($bukus as $item)
+                                  <option value="{{ $item->id }}" {{ $peminjaman->buku_id == $item->id ? 'selected' : '' }}>
+                                    {{ $item->judul }}
+                                  </option>
+                                @endforeach
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Tanggal Pinjam</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">

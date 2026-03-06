@@ -120,8 +120,7 @@
                           <th class="text-center">No</th>
                           <th class="text-center">Kode Transaksi</th>
                           <th>Nama Anggota</th>
-                          <th class="text-center">Tgl Pinjam</th>
-                          <th class="text-center">Tgl Harus Kembali</th>
+                          <th>Buku</th>
                           <th>Status</th>
                           <th>Actions</th>
                         </tr>
@@ -133,8 +132,7 @@
                             <td class="text-center">{{ $no++ }}</td>
                             <td class="text-center">{{ $item->kode_transaksi }}</td>
                             <td>{{ $item->anggota->nama }}</td>
-                            <td class="text-center">{{ $item->tgl_pinjam }}</td>
-                            <td class="text-center">{{ $item->tgl_harus_kembali }}</td>
+                            <td>{{ $item->buku->judul }}</td>
                             <td>{{ $item->status }}</td>
                             <td>
 
