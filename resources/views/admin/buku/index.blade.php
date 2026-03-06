@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Data Buku</title>
 
     <meta name="description" content="" />
 
@@ -108,11 +108,6 @@
                             <h6 class="alert-heading d-flex align-items-center mb-1">
                                 <i class="bx bx-error-circle me-2"></i>Ups, Ada Kesalahan!
                             </h6>
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif

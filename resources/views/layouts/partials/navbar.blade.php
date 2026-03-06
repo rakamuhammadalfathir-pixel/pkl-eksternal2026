@@ -26,16 +26,6 @@
                             </a>
                         </li>
                     @endif
-
-                    {{-- 3. Menu Keranjang: Hanya untuk User biasa --}}
-                    @if(Auth::user()->role !== 'admin')
-                        <li class="nav-item me-3">
-                            <a href="{{ route('keranjang.index') }}" class="nav-link">
-                                <i class="menu-icon bx bx-shopping-cart"></i> Keranjang Saya
-                            </a>
-                        </li>
-                    @endif
-
                     {{-- 4. User Dropdown Profile --}}
                     <li class="nav-item navbar-dropdown dropdown-user dropdown">
                         <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -57,6 +47,13 @@
                                             <small class="text-muted">{{ ucfirst(Auth::user()->role) }}</small>
                                         </div>
                                     </div>
+                                </a>
+                            </li>
+                            <li><div class="dropdown-divider"></div></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                    <i class="bx bx-user me-2"></i>
+                                    <span class="align-middle">Profile</span>
                                 </a>
                             </li>
                             <li><div class="dropdown-divider"></div></li>

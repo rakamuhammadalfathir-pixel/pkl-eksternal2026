@@ -7,31 +7,31 @@ use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\Anggota;
 use App\Models\Pengembalian;
-class KeranjangController extends Controller
+class PeminjamanBukuController extends Controller
 {
     public function index()
     {
-        $keranjang = session()->get('keranjang', []);
-        return view('keranjang.index', compact('keranjang'));
+        $peminjamanbuku = session()->get('peminjamanbuku', []);
+        return view('peminjamanbuku.index', compact('peminjamanbuku'));
     }
 
     public function add(Request $request)
     {
         $buku = Buku::findOrFail($request->buku_id);
-        $keranjang = session()->get('keranjang', []);
+        $peminjamanbuku = session()->get('peminjamanbuku', []);
 
-        if(isset($keranjang[$buku->id])) {
+        if(isset($peminjamanbuku[$buku->id])) {
             return redirect()->back()->with('info', 'Buku ini sudah ada di antrean pinjam kamu.');
         }
 
-        $keranjang[$buku->id] = [
+        $peminjamanbuku[$buku->id] = [
             "judul" => $buku->judul,
             "pengarang" => $buku->pengarang,
             "foto" => $buku->foto,
             "id" => $buku->id
         ];
 
-        session()->put('keranjang', $keranjang);
+        session()->put('peminjamanbuku', $peminjamanbuku);
         
         return redirect()->back()->with('success', 'Buku berhasil ditambah ke antrean!');
     }
@@ -39,10 +39,10 @@ class KeranjangController extends Controller
     public function remove(Request $request)
     {
         if($request->id) {
-            $keranjang = session()->get('keranjang');
-            if(isset($keranjang[$request->id])) {
-                unset($keranjang[$request->id]);
-                session()->put('keranjang', $keranjang);
+            $peminjamanbuku = session()->get('peminjamanbuku');
+            if(isset($peminjamanbuku[$request->id])) {
+                unset($peminjamanbuku[$request->id]);
+                session()->put('peminjamanbuku', $peminjamanbuku);
             }
             return redirect()->back()->with('success', 'Buku dihapus dari antrean.');
         }
@@ -50,16 +50,16 @@ class KeranjangController extends Controller
 
     public function clear()
     {
-        session()->forget('keranjang');
+        session()->forget('peminjamanbuku');
         return redirect()->back()->with('success', 'Antrean dikosongkan.');
     }
     
     public function checkout(Request $request)
     {
-        $keranjang = session()->get('keranjang');
+        $peminjamanbuku = session()->get('peminjamanbuku');
 
-        if(!$keranjang) {
-            return redirect()->back()->with('error', 'Keranjang kosong!');
+        if(!$peminjamanbuku) {
+            return redirect()->back()->with('error', 'peminjamanbuku kosong!');
         }
 
         $anggota = Anggota::where('user_id', auth()->id())->first();
@@ -70,7 +70,7 @@ class KeranjangController extends Controller
 
         $kodeTransaksi = 'TRP-' . date('Ymd') . '-' . strtoupper(\Illuminate\Support\Str::random(5));
 
-        foreach($keranjang as $id => $details) {
+        foreach($peminjamanbuku as $id => $details) {
             Peminjaman::create([
                 'anggota_id'     => $anggota->id,
                 'buku_id'        => $id,
@@ -83,9 +83,9 @@ class KeranjangController extends Controller
             Buku::find($id)->decrement('stok');
         }
 
-        session()->forget('keranjang');
+        session()->forget('peminjamanbuku');
 
-        return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil diajukan dengan Kode: ' . $kodeTransaksi);
+        return redirect()->route('peminjamanbuku.index')->with('success', 'Peminjaman berhasil diajukan dengan Kode: ' . $kodeTransaksi);
     }
     public function kembalikanBuku($id)
     {
@@ -115,6 +115,7 @@ class KeranjangController extends Controller
 
         return redirect()->back()->with('success', 'Buku berhasil dikembalikan! Denda Anda: Rp ' . number_format($denda));
     }
+
     public function history()
     {
         $anggota = Anggota::where('user_id', auth()->id())->first();
@@ -123,12 +124,11 @@ class KeranjangController extends Controller
             return redirect()->back()->with('error', 'Data anggota tidak ditemukan.');
         }
 
-        // Mengambil data peminjaman milik user tersebut
-        $history = Peminjaman::with('buku')
+        $history = Peminjaman::with(['buku', 'pengembalian'])
                     ->where('anggota_id', $anggota->id)
                     ->orderBy('created_at', 'desc')
                     ->get();
 
-        return view('peminjaman.history', compact('history'));
+        return view('peminjamanbuku.history', compact('history'));
     }
 }

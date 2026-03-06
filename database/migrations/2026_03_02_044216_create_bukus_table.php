@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('judul');
             $table->string('pengarang');
             $table->string('penerbit');
-            $table->date('tahun');
+            $table->year('tahun');
             $table->integer('stok')->default(0);
             $table->foreignId('kategori_id')->constrained('kategoris')->onDelete('cascade');
             $table->foreignId('rak_id')->constrained('raks')->onDelete('cascade');

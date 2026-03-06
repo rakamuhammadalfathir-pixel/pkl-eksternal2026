@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>E-Perpustakaan</title>
 
     <meta name="description" content="" />
 
@@ -102,26 +102,27 @@
 
               <div id="katalog" class="row mt-5">
                   <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Koleksi /</span> Buku Terbaru</h4>
-                  
                   @foreach($buku as $item)
-                  <div class="col-md-4 col-lg-3 mb-4">
-                      <div class="card h-100">
-                          <div class="card-body">
-                              <h5 class="card-title">{{ $item->judul }}</h5>
-                              <p class="card-text text-muted small">Kategori: {{ $item->kategori->nama ?? 'Umum' }}</p>
-                              
-                              @auth
-                                  <a href="#" class="btn btn-primary btn-sm w-100">Pinjam Sekarang</a>
-                              @else
-                                  <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm w-100">Login untuk Pinjam</a>
-                              @endauth
-                          </div>
-                      </div>
-                  </div>
+                    <div class="col-md-4 col-lg-3 mb-4">
+                        <div class="card h-100">
+                            <div class="card-img-top-wrapper text-center p-2">
+                                <img src="{{ $item->foto ? asset('storage/buku/' . $item->foto) : asset('assets/img/elements/18.jpg') }}" alt="{{ $item->judul }}" class="img-fluid rounded shadow-sm" style="height: 200px; width: 100%; object-fit: cover;"/>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $item->judul }}</h5>
+                                <p class="card-text text-muted small">Kategori: {{ $item->kategori->nama_kategori ?? 'Umum' }}</p>
+                                @auth
+                                    <a href="#" class="btn btn-primary btn-sm w-100">Pinjam Sekarang</a>
+                                @else
+                                    <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm w-100">Login untuk Pinjam</a>
+                                @endauth
+                            </div>
+                        </div>
+                    </div>
                   @endforeach
               </div>
-          </div>   
-            </div>
+            </div>   
+          </div>
             <!-- Footer -->
             @include('layouts.partials.footer')
             <!-- / Footer -->

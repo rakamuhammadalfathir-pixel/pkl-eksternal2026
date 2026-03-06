@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Peminjaman Buku</title>
 
     <meta name="description" content="" />
 
@@ -81,7 +81,7 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Katalog /</span> Keranjang Pinjaman</h4>
+                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span> Peminjaman Buku</h4>
 
                 <div class="card">
                     <h5 class="card-header">Daftar Buku Antrean</h5>
@@ -96,7 +96,7 @@
                                 </tr>
                             </thead>
                             <tbody class="table-border-bottom-0">
-                                @forelse($keranjang as $id => $details)
+                                @forelse($peminjamanbuku as $id => $details)
                                 <tr>
                                     <td>
                                         <img src="{{ $details['foto'] ? asset('storage/buku/' . $details['foto']) : asset('assets/img/elements/18.jpg') }}" 
@@ -105,7 +105,7 @@
                                     <td><strong>{{ $details['judul'] }}</strong></td>
                                     <td>{{ $details['pengarang'] }}</td>
                                     <td>
-                                        <form action="{{ route('keranjang.remove') }}" method="POST">
+                                        <form action="{{ route('peminjamanbuku.remove') }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <input type="hidden" name="id" value="{{ $id }}">
@@ -117,16 +117,16 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="text-center">Keranjang masih kosong. <a href="{{ route('katalog.index') }}">Cari buku?</a></td>
+                                    <td colspan="4" class="text-center">Peminjaman buku masih kosong. <a href="{{ route('katalog.index') }}">Cari buku?</a></td>
                                 </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
                     
-                    @if(count($keranjang) > 0)
+                    @if(count($peminjamanbuku) > 0)
                     <div class="card-footer text-end">
-                        <form action="{{ route('keranjang.clear') }}" method="POST" class="d-inline">
+                        <form action="{{ route('peminjamanbuku.clear') }}" method="POST" class="d-inline">
                             @csrf
                             <button type="submit" class="btn btn-outline-secondary">Kosongkan Antrean</button>
                         </form>

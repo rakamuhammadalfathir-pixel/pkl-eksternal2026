@@ -23,8 +23,7 @@ class PengembalianController extends Controller
      */
     public function create()
     {
-        $peminjamans = Peminjaman::all();
-        return view('admin.pengembalian.create', compact('peminjamans'));
+        //
     }
 
     /**
@@ -32,16 +31,7 @@ class PengembalianController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'peminjaman_id' => 'required|exists:peminjamans,id',
-            'tgl_kembali_aktual' => 'required|date',
-            'denda' => 'nullable|integer|min:0',
-        ]);
-
-        Pengembalian::create($request->all());
-
-        return redirect()->route('admin.pengembalian.index')
-                         ->with('success', 'Pengembalian berhasil ditambahkan.');
+       // 
     }
 
     /**

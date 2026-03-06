@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Detail Buku</title>
 
     <meta name="description" content="" />
 
@@ -95,12 +95,7 @@
                     <div class="row">
                         <div class="col-md-4 mb-4">
                             <div class="bg-light rounded p-3 text-center">
-                                <img 
-                                    src="{{ $buku->foto ? asset('storage/buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" 
-                                    alt="{{ $buku->judul }}" 
-                                    class="img-fluid rounded shadow-sm"
-                                    style="max-height: 450px; object-fit: cover;"
-                                />
+                                <img src="{{ $buku->foto ? asset('storage/buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}"  alt="{{ $buku->judul }}"  class="img-fluid rounded shadow-sm" style="max-height: 450px; object-fit: cover;"  />
                             </div>
                         </div>
 
@@ -138,7 +133,7 @@
                                 </div>
                                 <div class="mt-5 d-grid d-md-flex gap-3">
                                     @if($buku->stok > 0)
-                                        <form action="{{ route('keranjang.add') }}" method="POST">
+                                        <form action="{{ route('peminjamanbuku.add') }}" method="POST">
                                             @csrf
                                             <input type="hidden" name="buku_id" value="{{ $buku->id }}">                                           
                                             <button type="submit" class="btn btn-primary btn-lg px-5">
@@ -146,9 +141,6 @@
                                             </button>
                                         </form>
                                     @endif  
-                                    <button class="btn btn-outline-danger btn-lg px-4">
-                                        <i class="bx bx-heart"></i>
-                                    </button>
                                 </div>
                             </div>
                         </div>

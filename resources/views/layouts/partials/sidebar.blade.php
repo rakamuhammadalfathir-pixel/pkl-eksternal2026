@@ -89,19 +89,22 @@
                     </a>
                 </li>
 
-                {{-- <li class="menu-item {{ request()->is('user/riwayat*') ? 'active' : '' }}">
-                    <a href="#" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-history"></i>
-                        <div>Riwayat Pinjam</div>
+                 <li class="menu-header small text-uppercase">
+                    <span class="menu-header-text">Transaksi</span>
+                </li>
+                
+                 <li class="menu-item {{ request()->routeIs('peminjamanbuku.index') ? 'active' : '' }}">
+                    <a href="{{ route('peminjamanbuku.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-book-open"></i>
+                        <div>Peminjaman Buku</div>
                     </a>
                 </li>
-
-                <li class="menu-item {{ request()->is('user/wishlist*') ? 'active' : '' }}">
-                    <a href="#" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-heart"></i>
-                        <div>Wishlist Saya</div>
+                 <li class="menu-item {{ request()->routeIs('peminjaman.history') ? 'active' : '' }}">
+                    <a href="{{ route('peminjaman.history') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-history"></i>
+                        <div>Riwayat Peminjaman</div>
                     </a>
-                </li> --}}
+                </li>
             @endif
         @endauth
     </ul>

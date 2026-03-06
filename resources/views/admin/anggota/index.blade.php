@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Data Anggota</title>
 
     <meta name="description" content="" />
 
@@ -81,7 +81,7 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span>Data anggota</h4>
+                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span>Data anggota</h4>
               <!-- Bordered Table -->
               <div class="card">
                 <h5 class="card-header">Table anggota</h5>

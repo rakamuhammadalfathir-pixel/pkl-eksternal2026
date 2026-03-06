@@ -24,10 +24,7 @@ class PeminjamanController extends Controller
      */
     public function create()
     {
-        $peminjamans = Peminjaman::all();
-        $anggotas = Anggota::all();
-        $bukus = Buku::all();
-        return view('admin.peminjaman.create', compact('peminjamans', 'anggotas', 'bukus'));   
+        //
     }
 
     /**
@@ -35,30 +32,7 @@ class PeminjamanController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'kode_transaksi' => 'required|string|max:255|unique:peminjamans,kode_transaksi',
-            'anggota_id' => 'required|exists:anggotas,id',
-            'buku_id' => 'required|exists:bukus,id',
-            'tgl_pinjam' => 'required|date',
-            'tgl_harus_kembali' => 'required|date',
-        ]);
-
-        $buku = Buku::findOrFail($request->buku_id);
-
-        if ($buku->stok <= 0) {
-            return redirect()->back()->with('error', 'Maaf, stok buku "' . $buku->judul . '" sudah habis!');
-        }
-        Peminjaman::create([
-            'kode_transaksi' => $request->kode_transaksi,
-            'anggota_id' => $request->anggota_id,
-            'buku_id' => $request->buku_id,
-            'tgl_pinjam' => $request->tgl_pinjam,
-            'tgl_harus_kembali' => $request->tgl_harus_kembali,
-            'status' => 'pinjam', // Default status
-        ]);
-
-        $buku->decrement('stok');
-        return redirect()->route('admin.peminjaman.index')->with('success', 'Data Berhasil Ditambah');
+        //
     }
 
     /**

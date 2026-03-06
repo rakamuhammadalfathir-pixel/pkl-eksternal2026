@@ -6,10 +6,12 @@
     use App\Http\Controllers\Admin\PengembalianController;
     use App\Http\Controllers\Admin\KategoriController;
     use App\Http\Controllers\Admin\RakController;
+    use App\Http\Controllers\Admin\DashboardController;
     use App\Http\Controllers\HomeController;
     use App\Http\Controllers\KatalogController;
-    use App\Http\Controllers\KeranjangController;
-    use App\Http\Controllers\Admin\DashboardController;
+    use App\Http\Controllers\PeminjamanBukuController;
+    use App\Http\Controllers\ProfileController;
+    
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Route;
 
@@ -25,24 +27,22 @@
                 : redirect()->route('home');
         });
             
-        Route::get('/home', [HomeController::class, 'index'])->name('home');
+        // Route::get('/home', [HomeController::class, 'index'])->name('home');
+
             // Katalog
             Route::get('/katalog', [KatalogController::class, 'index'])->name('katalog.index');
             Route::get('/katalog/{id}', [KatalogController::class, 'show'])->name('catalog.show');
 
-            // Keranjang
-            Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang.index');
-            Route::post('/keranjang/add', [KeranjangController::class, 'add'])->name('keranjang.add');
-            Route::delete('/keranjang/remove', [KeranjangController::class, 'remove'])->name('keranjang.remove');
-            Route::post('/keranjang/clear', [KeranjangController::class, 'clear'])->name('keranjang.clear');
-            Route::post('/keranjang/checkout', [KeranjangController::class, 'checkout'])->name('peminjaman.bulk_store');
-            Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
-            Route::get('/history-peminjaman', [KeranjangController::class, 'history'])->name('peminjaman.index');
-            Route::post('/kembalikan/{id}', [KeranjangController::class, 'kembalikanBuku'])->name('peminjaman.kembali');
-
-            // Pengembalian
-            Route::post('/pengembalian/{id}', [PengembalianController::class, 'store'])->name('pengembalian.store');
-
+            // Peminjaman Buku
+            Route::get('/peminjamanbuku', [PeminjamanBukuController::class, 'index'])->name('peminjamanbuku.index');
+            Route::post('/peminjamanbuku/add', [PeminjamanBukuController::class, 'add'])->name('peminjamanbuku.add');
+            Route::delete('/peminjamanbuku/remove', [PeminjamanBukuController::class, 'remove'])->name('peminjamanbuku.remove');
+            Route::post('/peminjamanbuku/clear', [PeminjamanBukuController::class, 'clear'])->name('peminjamanbuku.clear');
+            Route::post('/peminjamanbuku/checkout', [PeminjamanBukuController::class, 'checkout'])->name('peminjaman.bulk_store');
+            Route::get('/history-peminjaman', [PeminjamanBukuController::class, 'history'])->name('peminjaman.history');
+            Route::post('/kembalikan/{id}', [PeminjamanBukuController::class, 'kembalikanBuku'])->name('peminjaman.kembali');
+            Route::post('/peminjaman/kembali/{id}', [PeminjamanBukuController::class, 'kembalikanBuku'])
+                ->name('peminjaman.kembali');
 
         Route::middleware(['auth', 'admin'])->prefix('admin')->as('admin.')->group(function () {
             

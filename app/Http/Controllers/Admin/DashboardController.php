@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $data = [
             'total_buku' => Buku::count(),
             'total_anggota' => Anggota::count(),
-            'total_peminjaman' => Peminjaman::where('status', 'dipinjam')->count(),
+            'total_peminjaman' => Peminjaman::where('status', 'Pinjam')->count(),
         ];
 
         return view('admin.dashboard', $data);

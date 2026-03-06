@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Tambah Data Buku</title>
 
     <meta name="description" content="" />
 
@@ -122,12 +122,18 @@
                         </div>
                         <div class="row mb-3">
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Tahun</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
-                              <input type="date" class="form-control" name="tahun"/>
+                            <div class="col-sm-10">
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                                    <input type="number" class="form-control @error('tahun') is-invalid @enderror" name="tahun" placeholder="Contoh: 2024" min="1900" max="2026"value="{{ old('tahun') }}"/>
+                                    @error('tahun')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <small class="text-muted">Masukkan 4 digit angka tahun (contoh: 2024)</small>
                             </div>
-                          </div>
                         </div>
                         <div class="row mb-3">
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Stok</label>
