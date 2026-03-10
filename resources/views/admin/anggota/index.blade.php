@@ -81,8 +81,48 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-                <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span>Data anggota</h4>
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span>Data anggota</h4>
+              <div class="mb-4">
+                  <a href="{{ route('admin.anggota.export_excel') }}" class="btn btn-success">
+                    <i class="bx bxs-file-export me-1"></i> Export Excel
+                  </a>
+              </div>
+              <div class="row mb-4">
+                  <div class="col-md-4">
+                      <form action="{{ route('admin.anggota.index') }}" method="GET">
+                          <div class="input-group input-group-merge">
+                              <span class="input-group-text"><i class="bx bx-search"></i></span>
+                              <input type="text" name="search" class="form-control" placeholder="Cari nama atau email..." value="{{ request('search') }}" />
+                              @if(request('search'))
+                                  <a href="{{ route('admin.anggota.index') }}" class="btn btn-outline-secondary">
+                                      <i class="bx bx-x"></i>
+                                  </a>
+                              @endif
+                          </div>
+                      </form>
+                  </div>
+              </div>
               <!-- Bordered Table -->
+              @if(session('success'))
+                  <div class="alert alert-primary alert-dismissible" role="alert">
+                      <h6 class="alert-heading d-flex align-items-center mb-1">
+                          <span class="badge badge-center rounded-pill bg-primary p-2 me-2"><i class="bx bx-check-circle"></i></span>
+                          Berhasil!
+                      </h6>
+                      <span>{{ session('success') }}</span>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              @endif
+              @if(session('error'))
+                  <div class="alert alert-danger alert-dismissible" role="alert">
+                      <h6 class="alert-heading d-flex align-items-center mb-1">
+                          <span class="badge badge-center rounded-pill bg-danger p-2 me-2"><i class="bx bx-error-circle"></i></span>
+                          Error!
+                      </h6>
+                      <span>{{ session('error') }}</span>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              @endif
               <div class="card">
                 <h5 class="card-header">Table anggota</h5>
                 <div class="card-body">
@@ -102,7 +142,7 @@
                         @foreach($anggota as $item)
                         <tr>
                           <td class="text-center">{{ $no++ }}</td>
-                          <td>{{ $item->nama }}</td>
+                          <td>{{ $item->user->name ?? 'Tidak ada nama' }}</td>
                           <td>{{ $item->user->email ?? 'Tidak ada akun' }}</td> 
                           <td class="text-center">
                             @if($item->user)

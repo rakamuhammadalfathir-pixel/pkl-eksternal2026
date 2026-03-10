@@ -22,13 +22,13 @@ return new class extends Migration
 
         // KOLOM google_id DIHAPUS DARI SINI
 
-        $table->string('phone', 20)
+        $table->string('telepon', 20)
               ->nullable()
               ->after('avatar'); // Ubah posisi 'after' ke avatar
 
-        $table->text('address')
+        $table->text('alamat')
               ->nullable()
-              ->after('phone');
+              ->after('telepon');
     });
 }
 
@@ -36,7 +36,7 @@ public function down(): void
 {
     Schema::table('users', function (Blueprint $table) {
         // Hapus google_id dari daftar dropColumn
-        $table->dropColumn(['role', 'avatar', 'phone', 'address']);
+        $table->dropColumn(['role', 'avatar', 'telepon', 'alamat']);
     });
 }
 };

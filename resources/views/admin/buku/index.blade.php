@@ -84,10 +84,29 @@
 
             <div class="container-xxl flex-grow-1 container-p-y">
                 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span>Data Buku</h4>
-                <div class="mb-4">
+                <div class="mb-4 d-flex justify-content-between align-items-center">
+                  <div class="d-flex gap-2">
                   <a href="{{ route('admin.buku.create') }}" class="btn btn-primary">
                     Tambah Buku
                   </a>
+                  <a href="{{ route('admin.buku.export_excel') }}" class="btn btn-success">
+                    <i class="bx bxs-file-export me-1"></i> Export Excel
+                  </a>
+                  </div>
+                  
+                  <div class="col-md-4">
+                    <form action="{{ route('admin.buku.index') }}" method="GET">
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-search"></i></span>
+                            <input type="text" name="search" class="form-control" placeholder="Cari judul buku..." aria-label="Cari judul buku..." value="{{ request('search') }}" />
+                            @if(request('search'))
+                                <a href="{{ route('admin.buku.index') }}" class="btn btn-outline-secondary">
+                                    <i class="bx bx-x"></i>
+                                </a>
+                            @endif
+                        </div>
+                    </form>
+                  </div>
                 </div>
               <!-- Bordered Table -->
               <div class="card">

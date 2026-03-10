@@ -43,10 +43,16 @@
             Route::post('/kembalikan/{id}', [PeminjamanBukuController::class, 'kembalikanBuku'])->name('peminjaman.kembali');
             Route::post('/peminjaman/kembali/{id}', [PeminjamanBukuController::class, 'kembalikanBuku'])
                 ->name('peminjaman.kembali');
+                
+            // Profile
+            Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+            Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
         Route::middleware(['auth', 'admin'])->prefix('admin')->as('admin.')->group(function () {
             
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+            Route::get('buku/export-excel', [BukuController::class, 'export_excel'])->name('buku.export_excel');
+            Route::get('anggota/export-excel', [AnggotaController::class, 'export_excel'])->name('anggota.export_excel');
 
             Route::resource('buku', BukuController::class);
             Route::resource('anggota', AnggotaController::class);

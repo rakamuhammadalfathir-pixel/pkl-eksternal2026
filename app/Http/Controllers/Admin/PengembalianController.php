@@ -12,9 +12,22 @@ class PengembalianController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pengembalians = Pengembalian::all();
+        $search = $request->input('search');
+
+        $pengembalians = Pengembalian::with(['peminjaman.anggota'])
+            ->when($search, function ($query, $search) {
+                return $query->whereHas('peminjaman', function ($q) use ($search) {
+                    $q->where('kode_transaksi', 'like', '%' . $search . '%')
+                    ->orWhereHas('anggota', function ($q2) use ($search) {
+                        $q2->where('nama', 'like', '%' . $search . '%');
+                    });
+                });
+            })
+            ->latest()
+            ->get();
+
         return view('admin.pengembalian.index', compact('pengembalians'));
     }
 

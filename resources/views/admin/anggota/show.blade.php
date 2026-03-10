@@ -91,57 +91,37 @@
                       <small class="text-muted float-end"></small>
                     </div>
                     <div class="card-body">
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Nik</label>
-                        <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <span class="input-group-text"><i class="bx bx-package"></i></span>
-                            <input type="text" class="form-control" value="{{ $anggota->nik }}" readonly/>
+                      <div class="row">
+                          <div class="mb-3 col-md-6">
+                              <label class="form-label">Nama Lengkap</label>
+                              <input class="form-control" type="text" value="{{ $anggota->user->name ?? 'Tidak ada nama' }}" readonly />
                           </div>
-                        </div>
+
+                          <div class="mb-3 col-md-6">
+                              <label class="form-label">E-mail</label>
+                              <input class="form-control" type="email" value="{{ $anggota->user->email ?? 'Tidak ada email' }}" readonly />
+                          </div>
+
+                          <div class="mb-3 col-md-6">
+                              <label class="form-label">Nomor Telepon</label>
+                              <input class="form-control" type="text" value="{{ $anggota->user->telepon ?? 'Tidak ada telepon' }}" readonly />
+                          </div>
+                          
+                          <div class="mb-3 col-md-6">
+                              <label class="form-label">Role</label>
+                              <input class="form-control" type="text" value="{{ $anggota->user->role ?? 'Tidak ada role' }}" readonly />
+                          </div>
+
+                          <div class="mb-3 col-md-12">
+                              <label class="form-label">Alamat</label>
+                              <textarea class="form-control" rows="3" readonly>{{ $anggota->user->alamat ?? 'Tidak ada alamat' }}</textarea>
+                          </div>
                       </div>
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Nama</label>
-                        <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <span class="input-group-text"><i class="bx bx-hash"></i></span>
-                            <input type="text" class="form-control" value="{{ $anggota->nama }}" readonly/>
-                          </div>
-                        </div>
-                      </div>
-                        <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label">Alamat</label>
-                            <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text"><i class="bx bx-hash"></i></span>
-                                <input type="text" class="form-control" value="{{ $anggota->alamat }}" readonly/>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Telepon</label>
-                        <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <span class="input-group-text"><i class="bx bx-hash"></i></span>
-                            <input type="text" class="form-control" value="{{ $anggota->telepon }}" readonly/>
-                          </div>
-                        </div>
-                        </div>
-                          <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Jenis Kelamin</label>
-                        <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <span class="input-group-text"><i class="bx bx-hash"></i></span>
-                            <input type="text" class="form-control" value="{{ $anggota->jenis_kelamin }}" readonly/>
-                          </div>
-                        </div>
-                        </div>
-                      <div class="row justify-content-end">
-                        <div class="col-sm-10">
+                      
+                      <div class="mt-2">
                           <a href="{{ route('admin.anggota.index') }}" class="btn btn-secondary">Kembali</a>
-                        </div>
                       </div>
-                    </div>
+                  </div>
                   </div>
                 </div>
               </div>

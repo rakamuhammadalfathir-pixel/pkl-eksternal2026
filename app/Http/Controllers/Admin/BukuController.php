@@ -8,15 +8,25 @@ use App\Models\Rak;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Exports\BukuExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BukuController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $buku = Buku::all();
+        $search = $request->input('search');
+
+        $buku = Buku::with(['kategori', 'rak'])
+            ->when($search, function ($query, $search) {
+                return $query->where('judul', 'like', '%' . $search . '%');
+            })
+            ->latest()
+            ->get();
+
         return view('admin.buku.index', compact('buku'));
     }
 
@@ -147,5 +157,9 @@ class BukuController extends Controller
 
         $buku->delete();
         return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil dihapus.');
+    }
+    public function export_excel()
+    {
+        return Excel::download(new BukuExport, 'laporan-data-buku-' . date('Y-m-d') . '.xlsx');
     }
 }

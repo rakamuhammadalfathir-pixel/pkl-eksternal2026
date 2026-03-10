@@ -6,15 +6,28 @@ use App\Models\User;
 use App\Models\Anggota;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Exports\AnggotaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AnggotaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $anggota = Anggota::all();
+        $search = $request->input('search');
+
+        $anggota = Anggota::with('user')
+            ->when($search, function ($query, $search) {
+                return $query->where('nama', 'like', '%' . $search . '%')
+                            ->orWhereHas('user', function ($q) use ($search) {
+                                $q->where('email', 'like', '%' . $search . '%');
+                            });
+            })
+            ->latest()
+            ->get();
+
         return view('admin.anggota.index', compact('anggota'));
     }
 
@@ -48,8 +61,8 @@ class AnggotaController extends Controller
      */
     public function edit(string $id)
     {
-        $anggota = Anggota::findOrFail($id);
-        return view('admin.anggota.edit', compact('anggota'));
+        $anggota = Anggota::with('user')->findOrFail($id);
+        return view('admin.anggota.show', compact('anggota'));
     }
 
     /**
@@ -58,13 +71,11 @@ class AnggotaController extends Controller
     public function update(Request $request, string $id)
     {
         $anggota = Anggota::findOrFail($id);
-        $anggota->nik = $request->nik;
         $anggota->nama = $request->nama;
         $anggota->alamat = $request->alamat;
         $anggota->telepon = $request->telepon;
-        $anggota->jenis_kelamin = $request->jenis_kelamin;
         $anggota->save();
-        return redirect()->route('admin.anggota.index');
+        return redirect()->route('admin.anggota.index')->with('success', 'Data anggota berhasil diubah!');
     }
 
     /**
@@ -86,5 +97,10 @@ class AnggotaController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'Role user berhasil diubah!');
+    }
+
+    public function export_excel()
+    {
+        return Excel::download(new AnggotaExport, 'data-anggota-' . date('Y-m-d') . '.xlsx');
     }
 }

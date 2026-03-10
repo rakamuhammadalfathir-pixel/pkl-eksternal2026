@@ -95,15 +95,6 @@
                         @csrf
                         @method('PUT')
                         <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">nik</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-package"></i></span>
-                              <input type="text" class="form-control" placeholder="nik" name="nik" value="{{ $anggota->nik }}"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Nama</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
@@ -130,22 +121,10 @@
                             </div>
                           </div>
                         </div>  
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Jenis Kelamin</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
-                              <select name="jenis_kelamin" class="form-control">
-                                <option value="Laki-laki" {{ $anggota->jenis_kelamin == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                                <option value="Perempuan" {{ $anggota->jenis_kelamin == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
                         <div class="row justify-content-end">
                           <div class="col-sm-10">
                             <button type="submit" class="btn btn-primary">Ubah</button>
-                            <a href="{{ route('anggota.index') }}" class="btn btn-secondary">Kembali</a>
+                            <a href="{{ route('admin.anggota.index') }}" class="btn btn-secondary">Kembali</a>
                           </div>
                         </div>
                       </form>

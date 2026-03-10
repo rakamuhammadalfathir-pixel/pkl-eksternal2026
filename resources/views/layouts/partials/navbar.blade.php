@@ -9,7 +9,7 @@
         <ul class="navbar-nav flex-row align-items-center ms-auto">
             @if (Route::has('login'))
                 @auth
-                    {{-- 1. Tombol LIHAT WEBSITE: Muncul HANYA jika Admin sedang di Panel Admin --}}
+                    {{-- 1. Tombol LIHAT WEBSITE --}}
                     @if(Auth::user()->role == 'admin' && request()->is('admin/*'))
                         <li class="nav-item me-3">
                             <a class="btn btn-sm btn-outline-primary" href="{{ route('home') }}">
@@ -18,7 +18,7 @@
                         </li>
                     @endif
 
-                    {{-- 2. Tombol PANEL ADMIN: Muncul HANYA jika Admin sedang di halaman Home/User --}}
+                    {{-- 2. Tombol PANEL ADMIN --}}
                     @if(Auth::user()->role == 'admin' && (request()->is('home') || request()->is('/')))
                         <li class="nav-item me-3">
                             <a class="btn btn-sm btn-primary" href="{{ route('admin.dashboard') }}">
@@ -26,11 +26,13 @@
                             </a>
                         </li>
                     @endif
+
                     {{-- 4. User Dropdown Profile --}}
                     <li class="nav-item navbar-dropdown dropdown-user dropdown">
                         <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                             <div class="avatar avatar-online">
-                                <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                                {{-- PERBAIKAN: Foto di Tombol Lingkaran Kecil --}}
+                                <img src="{{ Auth::user()->avatar ? asset('uploads/avatars/' . Auth::user()->avatar) : asset('assets/img/avatars/1.png') }}"  alt="user-avatar"  class="w-px-40 h-auto rounded-circle avatar-clean" />
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -39,10 +41,12 @@
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar avatar-online">
-                                                <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                                                {{-- PERBAIKAN: Foto di Dalam Menu Dropdown --}}
+                                                <img src="{{ Auth::user()->avatar ? asset('uploads/avatars/' . Auth::user()->avatar) : asset('assets/img/avatars/1.png') }}"  alt="user-avatar"  class="w-px-40 h-auto rounded-circle avatar-clean" />
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
+                                            {{-- Nama otomatis terupdate dari DB --}}
                                             <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
                                             <small class="text-muted">{{ ucfirst(Auth::user()->role) }}</small>
                                         </div>
@@ -67,7 +71,6 @@
                         </ul>
                     </li>
                 @else
-                    {{-- Tombol jika Belum Login --}}
                     <li class="nav-item">
                         <a href="{{ route('login') }}" class="btn btn-sm btn-outline-secondary me-2">Masuk</a>
                         <a href="{{ route('register') }}" class="btn btn-sm btn-primary">Daftar</a>
@@ -76,9 +79,16 @@
             @endif
         </ul>
 
-        {{-- Form Logout (Tetap di luar UL agar tidak merusak layout) --}}
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
             @csrf
         </form>
     </div>
 </nav>
+<style>
+    .avatar-clean {
+        object-fit: cover !important; /* Jaga rasio gambar, potong bagian tepi */
+        object-position: center center !important; /* Fokuskan potongan di tengah */
+        width: 100% !important; /* Ikuti lebar bingkai */
+        height: 100% !important; /* Ikuti tinggi bingkai */
+    }
+</style>

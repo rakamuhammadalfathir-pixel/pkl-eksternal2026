@@ -13,9 +13,23 @@ class PeminjamanController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function index(Request $request)
     {
-        $peminjamans = Peminjaman::all();
+        $search = $request->input('search');
+
+        $peminjamans = Peminjaman::with(['anggota', 'buku'])
+            ->when($search, function ($query, $search) {
+                return $query->where('kode_transaksi', 'like', '%' . $search . '%')
+                    ->orWhereHas('anggota', function ($q) use ($search) {
+                        $q->where('nama', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('buku', function ($q) use ($search) {
+                        $q->where('judul', 'like', '%' . $search . '%');
+                    });
+            })
+            ->latest()
+            ->get();
+
         return view('admin.peminjaman.index', compact('peminjamans'));
     }
 

@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('anggotas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('nik')->nullable();
             $table->string('nama');
             $table->text('alamat')->nullable();
             $table->string('telepon')->nullable();
-            $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan'])->nullable();
             $table->timestamps();
         });
     }
