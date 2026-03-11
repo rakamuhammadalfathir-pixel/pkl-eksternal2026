@@ -54,7 +54,7 @@ class PeminjamanBukuController extends Controller
         return redirect()->back()->with('success', 'Antrean dikosongkan.');
     }
     
-    public function checkout(Request $request)
+   public function checkout(Request $request)
     {
         $peminjamanbuku = session()->get('peminjamanbuku');
 
@@ -71,16 +71,21 @@ class PeminjamanBukuController extends Controller
         $kodeTransaksi = 'TRP-' . date('Ymd') . '-' . strtoupper(\Illuminate\Support\Str::random(5));
 
         foreach($peminjamanbuku as $id => $details) {
+            // 1. Simpan data peminjaman
             Peminjaman::create([
-                'anggota_id'     => $anggota->id,
-                'buku_id'        => $id,
-                'kode_transaksi' => $kodeTransaksi, 
-                'tgl_pinjam'     => now(),
+                'anggota_id'      => $anggota->id,
+                'buku_id'         => $id,
+                'kode_transaksi'  => $kodeTransaksi, 
+                'tgl_pinjam'      => now(),
                 'tgl_harus_kembali'=> now()->addDays(7),
-                'status'         => 'Pinjam'
+                'status'          => 'Pinjam'
             ]);
 
+            // 2. Kurangi stok buku
             Buku::find($id)->decrement('stok');
+
+            // 3. TAMBAHKAN INI: Hapus buku ini dari wishlist user setelah checkout berhasil
+            auth()->user()->wishlist()->detach($id);
         }
 
         session()->forget('peminjamanbuku');

@@ -82,6 +82,11 @@
 
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span>Data Peminjaman</h4>
+              <div class="mb-4 d-flex justify-content-between align-items-center">
+                  <a href="{{ route('admin.peminjaman.export_excel') }}" class="btn btn-success">
+                    <i class="bx bxs-file-export me-1"></i> Export Excel
+                  </a>
+                </div>
                 <div class="row mb-4">
                   <div class="col-md-4">
                       <form action="{{ route('admin.peminjaman.index') }}" method="GET">
@@ -149,9 +154,6 @@
                             <div class="d-flex flex-row gap-2">
                                     <a href="{{ route('admin.peminjaman.show', $item->id) }}" class="btn btn-sm btn-outline-info">
                                         <i class="bx bx-show me-1"></i> Show
-                                    </a>
-                                    <a href="{{ route('admin.peminjaman.edit', $item->id) }}" class="btn btn-sm btn-outline-warning">
-                                        <i class="bx bx-edit-alt me-1"></i> Edit
                                     </a>
                                     <form action="{{ route('admin.peminjaman.destroy', $item->id) }}" method="POST" class="d-grid">
                                         @csrf

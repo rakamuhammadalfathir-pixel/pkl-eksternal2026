@@ -156,9 +156,6 @@
                                             <a href="{{ route('catalog.show', $item->id) }}" class="btn btn-primary btn-sm w-100">
                                                 <i class="bx bx-show me-1"></i> Detail
                                             </a>
-                                            <button class="btn btn-sm btn-outline-danger">
-                                                <i class="bx bx-heart"></i>
-                                            </button>
                                         </div>
                                     </div>
                                 </div>

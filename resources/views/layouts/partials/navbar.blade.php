@@ -9,23 +9,6 @@
         <ul class="navbar-nav flex-row align-items-center ms-auto">
             @if (Route::has('login'))
                 @auth
-                    {{-- 1. Tombol LIHAT WEBSITE --}}
-                    @if(Auth::user()->role == 'admin' && request()->is('admin/*'))
-                        <li class="nav-item me-3">
-                            <a class="btn btn-sm btn-outline-primary" href="{{ route('home') }}">
-                                <i class="bx bx-world me-1"></i> Lihat Website
-                            </a>
-                        </li>
-                    @endif
-
-                    {{-- 2. Tombol PANEL ADMIN --}}
-                    @if(Auth::user()->role == 'admin' && (request()->is('home') || request()->is('/')))
-                        <li class="nav-item me-3">
-                            <a class="btn btn-sm btn-primary" href="{{ route('admin.dashboard') }}">
-                                <i class="bx bx-shield-quarter me-1"></i> Panel Admin
-                            </a>
-                        </li>
-                    @endif
 
                     {{-- 4. User Dropdown Profile --}}
                     <li class="nav-item navbar-dropdown dropdown-user dropdown">

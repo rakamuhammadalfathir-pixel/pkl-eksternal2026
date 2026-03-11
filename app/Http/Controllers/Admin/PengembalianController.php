@@ -6,6 +6,8 @@ use App\Models\Pengembalian;
 use App\Models\Peminjaman;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Exports\PengembalianExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PengembalianController extends Controller
 {
@@ -61,9 +63,7 @@ class PengembalianController extends Controller
      */
     public function edit(string $id)
     {
-        $pengembalian = Pengembalian::findOrFail($id);
-        $peminjamans = Peminjaman::all();
-        return view('admin.pengembalian.edit', compact('pengembalian', 'peminjamans'));
+        //
     }
 
     /**
@@ -71,22 +71,7 @@ class PengembalianController extends Controller
      */
     public function update(Request $request, string $id)
     {
-            $request->validate([
-            'peminjaman_id' => 'required|exists:peminjamans,id',
-            'tgl_kembali_aktual' => 'required|date',
-            'denda' => 'nullable|integer|min:0',
-        ]);
-
-        $pengembalian = Pengembalian::findOrFail($id);
-        
-        // Cara ini lebih pasti karena kita menyebutkan nama kolomnya satu per satu
-        $pengembalian->update([
-            'peminjaman_id' => $request->peminjaman_id,
-            'tgl_kembali_aktual' => $request->tgl_kembali_aktual,
-            'denda' => $request->denda,
-        ]);
-
-        return redirect()->route('admin.pengembalian.index')->with('success', 'Pengembalian berhasil diubah.');
+          //
     }
 
     /**
@@ -99,5 +84,9 @@ class PengembalianController extends Controller
 
         return redirect()->route('admin.pengembalian.index')
                          ->with('success', 'Pengembalian berhasil dihapus.');
+    }
+    public function export_excel()
+    {
+        return Excel::download(new PengembalianExport, 'laporan-pengembalian-' . date('Y-m-d') . '.xlsx');
     }
 }

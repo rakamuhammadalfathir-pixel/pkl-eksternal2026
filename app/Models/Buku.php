@@ -33,4 +33,9 @@ class Buku extends Model
             }
         });
     }
+
+    public function wishedBy() 
+    {
+        return $this->belongsToMany(User::class, 'wishlists', 'buku_id', 'user_id');
+    }
 }

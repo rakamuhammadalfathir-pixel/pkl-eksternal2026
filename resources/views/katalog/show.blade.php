@@ -133,14 +133,30 @@
                                 </div>
                                 <div class="mt-5 d-grid d-md-flex gap-3">
                                     @if($buku->stok > 0)
-                                        <form action="{{ route('peminjamanbuku.add') }}" method="POST">
+                                        <form action="{{ route('peminjamanbuku.add') }}" method="POST" id="formPinjam">
                                             @csrf
-                                            <input type="hidden" name="buku_id" value="{{ $buku->id }}">                                           
-                                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                            <input type="hidden" name="buku_id" value="{{ $buku->id }}">                                          
+                                            <button type="button" class="btn btn-primary btn-lg px-5" onclick="confirmLoan()">
                                                 <i class="bx bx-cart-add me-2"></i> Tambah ke Daftar Pinjam
                                             </button>
                                         </form>
                                     @endif  
+                                    @auth
+                                        <form action="{{ route('wishlist.toggle', $buku->id) }}" method="POST">
+                                            @csrf
+                                            @php
+                                                $isWishlisted = auth()->user()->wishlist->contains($buku->id);
+                                            @endphp
+                                            <button type="submit" class="btn {{ $isWishlisted ? 'btn-danger' : 'btn-outline-danger' }} btn-lg px-4">
+                                                <i class="bx {{ $isWishlisted ? 'bxs-heart' : 'bx-heart' }} me-2"></i>
+                                                {{ $isWishlisted ? 'Hapus dari Wishlist' : 'Tambah ke Wishlist' }}
+                                            </button>
+                                        </form>
+                                    @else
+                                        <a href="{{ route('login') }}" class="btn btn-outline-danger btn-lg px-4">
+                                            <i class="bx bx-heart me-2"></i> Tambah ke Wishlist
+                                        </a>
+                                    @endauth
                                 </div>
                             </div>
                         </div>

@@ -82,11 +82,11 @@
 
             <div class="container-xxl flex-grow-1 container-p-y">
             <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span>Data anggota</h4>
-              <div class="mb-4">
-                  <a href="{{ route('admin.anggota.export_excel') }}" class="btn btn-success">
+              <div class="mb-4 d-flex justify-content-between align-items-center">
+                  <a href="{{ route('admin.buku.export_excel') }}" class="btn btn-success">
                     <i class="bx bxs-file-export me-1"></i> Export Excel
                   </a>
-              </div>
+                </div>
               <div class="row mb-4">
                   <div class="col-md-4">
                       <form action="{{ route('admin.anggota.index') }}" method="GET">
@@ -103,30 +103,28 @@
                   </div>
               </div>
               <!-- Bordered Table -->
-              @if(session('success'))
-                  <div class="alert alert-primary alert-dismissible" role="alert">
-                      <h6 class="alert-heading d-flex align-items-center mb-1">
-                          <span class="badge badge-center rounded-pill bg-primary p-2 me-2"><i class="bx bx-check-circle"></i></span>
-                          Berhasil!
-                      </h6>
-                      <span>{{ session('success') }}</span>
-                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-              @endif
-              @if(session('error'))
-                  <div class="alert alert-danger alert-dismissible" role="alert">
-                      <h6 class="alert-heading d-flex align-items-center mb-1">
-                          <span class="badge badge-center rounded-pill bg-danger p-2 me-2"><i class="bx bx-error-circle"></i></span>
-                          Error!
-                      </h6>
-                      <span>{{ session('error') }}</span>
-                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-              @endif
+
               <div class="card">
                 <h5 class="card-header">Table anggota</h5>
                 <div class="card-body">
                   <div class="table text-nowrap">
+                    @if(session('success'))
+                        <div class="alert alert-primary alert-dismissible" role="alert">
+                            <h6 class="alert-heading d-flex align-items-center mb-1">
+                                <i class="bx bx-check-circle me-2"></i>Berhasil!
+                            </h6>
+                            <span>{{ session('success') }}</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <h6 class="alert-heading d-flex align-items-center mb-1">
+                                <i class="bx bx-error-circle me-2"></i>Ups, Ada Kesalahan!
+                            </h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
                     <table class="table table-bordered">
                       <thead>
                         <tr class="text-center">
@@ -152,36 +150,32 @@
                             @endif
                           </td>
                           <td>
-                            <div class="dropdown">
-                              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                              </button>
-                              <div class="dropdown-menu">
-                                @if($item->user)
-                                <form action="{{ route('admin.anggota.updateRole', $item->user->id) }}" method="POST">
-                                  @csrf
-                                  @method('PATCH')
-                                  <button type="submit" class="dropdown-item">
-                                    <i class="bx bx-sync me-1"></i> Tukar Role
-                                  </button>
-                                </form>
-                                <hr class="dropdown-divider">
-                                @endif
+                            <div class="d-flex justify-content-center gap-2">
+                              @if($item->user)
+                              <form action="{{ route('admin.anggota.updateRole', $item->user->id) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-outline-secondary btn-sm" title="Tukar Role">
+                                  <i class="bx bx-sync">Ubah Role</i>
+                                </button>
+                              </form>
+                              @endif
 
-                                <a class="dropdown-item" href="{{ route('admin.anggota.show', $item->id) }}">
-                                  <i class="bx bx-show me-1"></i> Show
-                                </a>
-                                <a class="dropdown-item" href="{{ route('admin.anggota.edit', $item->id) }}">
-                                  <i class="bx bx-edit-alt me-1"></i> Edit
-                                </a>
-                                <form action="{{ route('admin.anggota.destroy', $item->id) }}" method="POST" style="display: inline;">
-                                  @csrf
-                                  @method('DELETE')
-                                  <button type="submit" class="dropdown-item" onclick="return confirm('Apakah Anda yakin ingin menghapus?')">
-                                    <i class="bx bx-trash me-1"></i> Delete
-                                  </button>
-                                </form>
-                              </div>
+                              <a href="{{ route('admin.anggota.show', $item->id) }}" class="btn btn-outline-info btn-sm">
+                                <i class="bx bx-show me-1"></i> Show
+                              </a>
+
+                              <a href="{{ route('admin.anggota.edit', $item->id) }}" class="btn btn-outline-warning btn-sm">
+                                <i class="bx bx-edit-alt me-1"></i> Edit
+                              </a>
+
+                              <form action="{{ route('admin.anggota.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                  <i class="bx bx-trash me-1"></i> Delete
+                                </button>
+                              </form>
                             </div>
                           </td>
                         </tr>

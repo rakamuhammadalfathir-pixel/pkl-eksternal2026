@@ -108,14 +108,16 @@
                             <div class="card-img-top-wrapper text-center p-2">
                                 <img src="{{ $item->foto ? asset('storage/buku/' . $item->foto) : asset('assets/img/elements/18.jpg') }}" alt="{{ $item->judul }}" class="img-fluid rounded shadow-sm" style="height: 200px; width: 100%; object-fit: cover;"/>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">{{ $item->judul }}</h5>
                                 <p class="card-text text-muted small">Kategori: {{ $item->kategori->nama_kategori ?? 'Umum' }}</p>
-                                @auth
-                                    <a href="#" class="btn btn-primary btn-sm w-100">Pinjam Sekarang</a>
-                                @else
-                                    <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm w-100">Login untuk Pinjam</a>
-                                @endauth
+                                <div class="mt-auto">
+                                  @auth
+                                      <a href="#" class="btn btn-primary btn-sm w-100">Pinjam Sekarang</a>
+                                  @else
+                                      <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm w-100">Login untuk Pinjam</a>
+                                  @endauth
+                                </div>
                             </div>
                         </div>
                     </div>

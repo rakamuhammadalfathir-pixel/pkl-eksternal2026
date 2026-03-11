@@ -11,6 +11,7 @@
     use App\Http\Controllers\KatalogController;
     use App\Http\Controllers\PeminjamanBukuController;
     use App\Http\Controllers\ProfileController;
+    use App\Http\Controllers\WishlistController;
     
     use Illuminate\Support\Facades\Auth;
     use Illuminate\Support\Facades\Route;
@@ -48,11 +49,18 @@
             Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
             Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
+
+            // Wishlist
+            Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+            Route::post('/wishlist/{bukuId}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+
         Route::middleware(['auth', 'admin'])->prefix('admin')->as('admin.')->group(function () {
             
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
             Route::get('buku/export-excel', [BukuController::class, 'export_excel'])->name('buku.export_excel');
             Route::get('anggota/export-excel', [AnggotaController::class, 'export_excel'])->name('anggota.export_excel');
+            Route::get('peminjaman/export_excel', [PeminjamanController::class, 'export_excel'])->name('peminjaman.export_excel');
+            Route::get('pengembalian/export_excel', [PengembalianController::class, 'export_excel'])->name('pengembalian.export_excel');
 
             Route::resource('buku', BukuController::class);
             Route::resource('anggota', AnggotaController::class);

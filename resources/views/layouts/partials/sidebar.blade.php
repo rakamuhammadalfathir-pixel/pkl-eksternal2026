@@ -89,6 +89,13 @@
                     </a>
                 </li>
 
+                <li class="menu-item {{ request()->routeIs('wishlist.index') ? 'active' : '' }}">
+                    <a href="{{ route('wishlist.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-heart"></i>
+                        <div>Wishlist</div>
+                    </a>
+                </li>
+
                  <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Transaksi</span>
                 </li>

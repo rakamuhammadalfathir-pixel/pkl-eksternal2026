@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Edit Data Pengembalian</title>
+    <title>Katalog Buku</title>
 
     <meta name="description" content="" />
 
@@ -75,74 +75,56 @@
         <div class="layout-page">
           <!-- Navbar -->
           @include('layouts.partials.navbar')
-          <!-- / Navbar -->
+          <!-- / Navbar -->   
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-                <!-- Basic Layout & Basic with Icons -->
-              <div class="row">
-                <!-- Basic with Icons -->
-                <div class="col-xxl">
-                  <div class="card mb-4">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="mb-0">Edit Data Pengembalian</h5>
-                      <small class="text-muted float-end"></small>
-                    </div>
-                    <div class="card-body">
-                      <form action="{{ route('admin.pengembalian.update', $pengembalian->id) }}" method="POST"> 
-                          @csrf
-                          @method('PUT')
-                          
-                          <div class="row mb-3">
-                              <label class="col-sm-2 col-form-label">Peminjaman</label>
-                              <div class="col-sm-10">
-                                  <div class="input-group input-group-merge">
-                                      <span class="input-group-text"><i class="bx bx-package"></i></span>
-                                      <select name="peminjaman_id" class="form-control">
-                                          @foreach($peminjamans as $item)
-                                              <option value="{{ $item->id }}" {{ $pengembalian->peminjaman_id == $item->id ? 'selected' : '' }}>
-                                                  {{ $item->kode_transaksi }}
-                                              </option>
-                                          @endforeach
-                                      </select>
-                                  </div>
-                              </div>
-                          </div>
+                <h4 class="fw-bold py-3 mb-4">
+                    <span class="text-muted fw-light">Akun /</span> Daftar Wishlist Saya
+                </h4>
+                <div class="row">
+                    @forelse($wishlist as $item)
+                        <div class="col-md-4 col-lg-3 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="text-center p-3">
+                                    <img src="{{ $item->foto ? asset('storage/buku/' . $item->foto) : asset('assets/img/elements/18.jpg') }}" class="img-fluid rounded" style="height: 200px; width: 100%; object-fit: cover;" alt="{{ $item->judul }}"/>
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <div class="mb-2">
+                                        <span class="badge bg-label-primary">{{ $item->kategori->nama_kategori ?? 'Umum' }}</span>
+                                    </div>
+                                    <h5 class="card-title mb-1 fw-bold text-truncate">{{ $item->judul }}</h5>
+                                    <p class="text-muted small mb-4">
+                                        <i class="bx bx-user me-1"></i>{{ $item->pengarang }}
+                                    </p>
+                                    
+                                    <div class="mt-auto d-flex gap-2">
+                                        {{-- Tombol Pinjam (Lebih Lebar) --}}
+                                        <a href="{{ route('catalog.show', $item->id) }}" class="btn btn-primary btn-sm w-100">
+                                            <i class="bx bx-book-open me-1"></i> Pinjam
+                                        </a>
 
-                          <div class="row mb-3">
-                              <label class="col-sm-2 col-form-label">Tanggal Kembali Aktual</label>
-                              <div class="col-sm-10">
-                                  <div class="input-group input-group-merge">
-                                      <span class="input-group-text"><i class="bx bx-calendar"></i></span>
-                                      <input type="date" class="form-control" name="tgl_kembali_aktual" value="{{ $pengembalian->tgl_kembali_aktual }}"/>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <div class="row mb-3">
-                              <label class="col-sm-2 col-form-label">Denda</label>
-                              <div class="col-sm-10">
-                                  <div class="input-group input-group-merge">
-                                      <span class="input-group-text"><i class="bx bx-money"></i></span>
-                                      <input type="number" class="form-control" name="denda" value="{{ $pengembalian->denda }}"/>
-                                  </div>
-                              </div>
-                          </div>
-
-                          <div class="row justify-content-end">
-                              <div class="col-sm-10">
-                                  <button type="submit" class="btn btn-primary">Ubah</button>
-                                  <a href="{{ route('admin.pengembalian.index') }}" class="btn btn-secondary">Kembali</a>
-                              </div>
-                          </div>
-                      </form>
-                    </div>
-                  </div>
+                                        {{-- Tombol Hapus (Kecil di Samping) --}}
+                                        <form action="{{ route('wishlist.toggle', $item->id) }}" method="POST" class="m-0">
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="bx bx-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12 text-center mt-5">
+                            <i class="bx bx-heart text-muted mb-3" style="font-size: 5rem;"></i>
+                            <h4 class="text-muted">Wishlist masih kosong</h4>
+                            <a href="{{ route('katalog.index') }}" class="btn btn-primary">Lihat Katalog</a>
+                        </div>
+                    @endforelse
                 </div>
-              </div>
-              <!--/ Bordered Table -->
             </div>
             <!-- Footer -->
             @include('layouts.partials.footer')
@@ -159,7 +141,7 @@
     </div>
     <!-- / Layout wrapper -->
 
-
+    
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}" ></script>
