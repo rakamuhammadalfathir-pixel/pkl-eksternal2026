@@ -148,20 +148,48 @@
                             <td class="text-center">{{ $item->kode_transaksi }}</td>
                             <td>{{ $item->anggota->nama }}</td>
                             <td>{{ $item->buku->judul }}</td>
-                            <td>{{ $item->status }}</td>
+                            <td class="text-center">
+                                @if($item->status == 'Pending')
+                                    <span class="badge bg-label-warning">Menunggu Persetujuan</span>
+                                @elseif($item->status == 'Pinjam')
+                                    <span class="badge bg-label-primary">Sedang Dipinjam</span>
+                                @elseif($item->status == 'Kembali')
+                                    <span class="badge bg-label-success">Sudah Kembali</span>
+                                @elseif($item->status == 'Ditolak')
+                                    <span class="badge bg-label-danger">Ditolak</span>
+                                @else
+                                    <span class="badge bg-label-secondary">{{ $item->status }}</span>
+                                @endif
+                            </td>
                             <td>
+                              <div class="d-flex flex-row gap-2">
+                                  @if($item->status == 'Pending')
+                                      <form action="{{ route('admin.peminjaman.approve', $item->id) }}" method="POST">
+                                          @csrf
+                                          <button type="submit" class="btn btn-sm btn-success">
+                                              <i class="bx bx-check me-1"></i> Setujui
+                                          </button>
+                                      </form>
 
-                            <div class="d-flex flex-row gap-2">
-                                    <a href="{{ route('admin.peminjaman.show', $item->id) }}" class="btn btn-sm btn-outline-info">
-                                        <i class="bx bx-show me-1"></i> Show
-                                    </a>
-                                    <form action="{{ route('admin.peminjaman.destroy', $item->id) }}" method="POST" class="d-grid">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus?')">
-                                            <i class="bx bx-trash me-1"></i> Delete
-                                        </button>
-                                    </form>
+                                      <form action="{{ route('admin.peminjaman.reject', $item->id) }}" method="POST">
+                                          @csrf
+                                          <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menolak peminjaman ini?')">
+                                              <i class="bx bx-x me-1"></i> Tolak
+                                          </button>
+                                      </form>
+                                  @endif
+
+                                  <a href="{{ route('admin.peminjaman.show', $item->id) }}" class="btn btn-sm btn-outline-info">
+                                      <i class="bx bx-show me-1"></i>
+                                  </a>
+
+                                  <form action="{{ route('admin.peminjaman.destroy', $item->id) }}" method="POST">
+                                      @csrf
+                                      @method('DELETE')
+                                      <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                          <i class="bx bx-trash me-1"></i>
+                                      </button>
+                                  </form>
                               </div>
                           </td>
                         </tr>

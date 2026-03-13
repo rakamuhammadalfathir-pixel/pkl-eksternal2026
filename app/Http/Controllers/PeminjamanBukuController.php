@@ -71,23 +71,16 @@ class PeminjamanBukuController extends Controller
         $kodeTransaksi = 'TRP-' . date('Ymd') . '-' . strtoupper(\Illuminate\Support\Str::random(5));
 
         foreach($peminjamanbuku as $id => $details) {
-            // 1. Simpan data peminjaman
-            Peminjaman::create([
-                'anggota_id'      => $anggota->id,
-                'buku_id'         => $id,
-                'kode_transaksi'  => $kodeTransaksi, 
-                'tgl_pinjam'      => now(),
-                'tgl_harus_kembali'=> now()->addDays(7),
-                'status'          => 'Pinjam'
-            ]);
-
-            // 2. Kurangi stok buku
-            Buku::find($id)->decrement('stok');
-
-            // 3. TAMBAHKAN INI: Hapus buku ini dari wishlist user setelah checkout berhasil
+        Peminjaman::create([
+            'anggota_id'      => $anggota->id,
+            'buku_id'         => $id,
+            'kode_transaksi'  => $kodeTransaksi, 
+            'tgl_pinjam'      => now(),
+            'tgl_harus_kembali'=> now()->addDays(7),
+            'status'          => 'Pending' // UBAH INI: Dari 'Pinjam' menjadi 'Pending'
+        ]);
             auth()->user()->wishlist()->detach($id);
         }
-
         session()->forget('peminjamanbuku');
 
         return redirect()->route('peminjamanbuku.index')->with('success', 'Peminjaman berhasil diajukan dengan Kode: ' . $kodeTransaksi);

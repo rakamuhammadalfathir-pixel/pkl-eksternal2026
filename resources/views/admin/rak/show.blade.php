@@ -95,7 +95,7 @@
                         <label class="col-sm-2 col-form-label">Nama Rak</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"><i class="bx bx-package"></i></span>
+                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $rak->nama_rak }}" readonly/>
                           </div>
                         </div>
@@ -104,7 +104,7 @@
                         <label class="col-sm-2 col-form-label">Lokasi</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"><i class="bx bx-map"></i></span>
+                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $rak->lokasi }}" readonly/>
                           </div>
                         </div>

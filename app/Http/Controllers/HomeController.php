@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Buku;
+use App\Models\Kategori;
 
 class HomeController extends Controller
 {
@@ -20,8 +21,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $buku = Buku::with('kategori')->latest()->get(); 
-        
-         return view('home', compact('buku'));
+        $kategori = Kategori::withCount('buku')->get();
+
+        $buku = Buku::with('kategori')->latest()->take(8)->get();
+
+        return view('home', compact('kategori', 'buku'));
     }
 }

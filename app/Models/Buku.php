@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Buku extends Model
 {
-    protected $fillable = ['judul', 'pengarang', 'penerbit', 'tahun', 'stok', 'kategori_id', 'rak_id'];
+    protected $fillable = ['judul', 'pengarang','sinopsis', 'penerbit', 'tahun', 'stok', 'kategori_id', 'rak_id', 'foto'];
 
     public function kategori()
     {

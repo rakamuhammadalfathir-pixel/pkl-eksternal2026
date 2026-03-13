@@ -103,10 +103,14 @@
                                     <td>{{ \Carbon\Carbon::parse($item->tgl_pinjam)->format('d M Y') }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->tgl_harus_kembali)->format('d M Y') }}</td>
                                     <td>
-                                        @if($item->status == 'Pinjam')
-                                            <span class="badge bg-label-warning me-1">Pinjam</span>
+                                        @if($item->status == 'Pending')
+                                            <span class="badge bg-label-warning me-1">Menunggu Persetujuan</span>
+                                        @elseif($item->status == 'Pinjam')
+                                            <span class="badge bg-label-primary me-1">Sedang Dipinjam</span>
                                         @elseif($item->status == 'Kembali')
-                                            <span class="badge bg-label-success me-1">Kembali</span>
+                                            <span class="badge bg-label-success me-1">Sudah Kembali</span>
+                                        @elseif($item->status == 'Ditolak')
+                                            <span class="badge bg-label-danger me-1">Ditolak</span>
                                         @else
                                             <span class="badge bg-label-secondary me-1">{{ $item->status }}</span>
                                         @endif
@@ -125,15 +129,19 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($item->status == 'pinjam')
+                                        @if($item->status == 'Pinjam')
                                             <form action="{{ route('peminjaman.kembali', $item->id) }}" method="POST">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda ingin mengembalikan buku ini?')">
                                                     <i class="bx bx-undo me-1"></i> Kembalikan
                                                 </button>
                                             </form>
+                                        @elseif($item->status == 'Pending')
+                                            <small class="text-muted italic">Mohon tunggu konfirmasi admin</small>
+                                        @elseif($item->status == 'Ditolak')
+                                            <span class="text-danger small">Pengajuan Ditolak</span>
                                         @else
-                                            <button class="btn btn-sm btn-secondary" disabled>Terarsip</button>
+                                            <button class="btn btn-sm btn-secondary" disabled>Selesai</button>
                                         @endif
                                     </td>
                                 </tr>

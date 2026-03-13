@@ -95,7 +95,7 @@
                         <label class="col-sm-2 col-form-label">Nama Kategori</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"><i class="bx bx-package"></i></span>
+                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $kategori->nama_kategori }}" readonly/>
                           </div>
                         </div>

@@ -23,7 +23,7 @@
             <li class="menu-item {{ request()->is('admin/dashboard', 'home') ? 'active' : '' }}">
                 <a href="{{ Auth::user()->role == 'admin' ? route('admin.dashboard') : route('home') }}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                    <div>{{ Auth::user()->role == 'admin' ? 'Dashboard' : 'Home' }}</div>
+                    <div>{{ Auth::user()->role == 'admin' ? 'Dashboard' : 'Dashboard' }}</div>
                 </a>
             </li>
 

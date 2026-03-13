@@ -61,8 +61,7 @@ class AnggotaController extends Controller
      */
     public function edit(string $id)
     {
-        $anggota = Anggota::with('user')->findOrFail($id);
-        return view('admin.anggota.show', compact('anggota'));
+        //
     }
 
     /**
@@ -70,12 +69,7 @@ class AnggotaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $anggota = Anggota::findOrFail($id);
-        $anggota->nama = $request->nama;
-        $anggota->alamat = $request->alamat;
-        $anggota->telepon = $request->telepon;
-        $anggota->save();
-        return redirect()->route('admin.anggota.index')->with('success', 'Data anggota berhasil diubah!');
+        //
     }
 
     /**

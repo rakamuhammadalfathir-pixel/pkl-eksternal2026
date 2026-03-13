@@ -97,7 +97,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Judul</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-package"></i></span>
+                              <span id="basic-icon-default-fullname2" class="input-group-text"></span>
                               <input type="text" class="form-control" placeholder="Judul" name="judul"/>
                             </div>
                           </div>
@@ -106,7 +106,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Pengarang</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
                               <input type="text" class="form-control" placeholder="pengarang" name="pengarang"/>
                             </div>
                           </div>
@@ -115,7 +115,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Penerbit</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
                               <input type="text" class="form-control" placeholder="penerbit" name="penerbit"/>
                             </div>
                           </div>
@@ -124,7 +124,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Tahun</label>
                             <div class="col-sm-10">
                                 <div class="input-group input-group-merge">
-                                    <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                                    <span id="basic-icon-default-company2" class="input-group-text"></span>
                                     <input type="number" class="form-control @error('tahun') is-invalid @enderror" name="tahun" placeholder="Contoh: 2024" min="1900" max="2026"value="{{ old('tahun') }}"/>
                                     @error('tahun')
                                         <div class="invalid-feedback">
@@ -139,8 +139,17 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Stok</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
                               <input type="number" class="form-control" name="stok"/>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Sinopsis</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
+                              <textarea class="form-control" name="sinopsis" rows="3"></textarea>
                             </div>
                           </div>
                         </div>
@@ -148,7 +157,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Kategori</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
                               <select name="kategori_id" class="form-control">
                                 <option value="">Pilih Kategori</option>
                                 @foreach($kategoris as $item)
@@ -162,7 +171,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Rak</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
                               <select name="rak_id" class="form-control">
                                 <option value="">Pilih Rak</option>
                                 @foreach($raks as $item)

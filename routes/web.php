@@ -65,6 +65,8 @@
             Route::resource('buku', BukuController::class);
             Route::resource('anggota', AnggotaController::class);
             Route::resource('peminjaman', PeminjamanController::class);
+            Route::post('peminjaman/approve/{id}', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
+            Route::post('peminjaman/reject/{id}', [PeminjamanController::class, 'reject'])->name('peminjaman.reject');            
             Route::resource('pengembalian', PengembalianController::class);
             Route::resource('kategori', KategoriController::class);
             Route::resource('rak', RakController::class);

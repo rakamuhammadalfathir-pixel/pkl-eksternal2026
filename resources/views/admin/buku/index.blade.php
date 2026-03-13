@@ -156,16 +156,16 @@
 
                             <div class="d-flex flex-row gap-2">
                                     <a href="{{ route('admin.buku.show', $item->id) }}" class="btn btn-sm btn-outline-info">
-                                        <i class="bx bx-show me-1"></i> Show
+                                        <i class="bx bx-show me-1"></i>
                                     </a>
                                     <a href="{{ route('admin.buku.edit', $item->id) }}" class="btn btn-sm btn-outline-warning">
-                                        <i class="bx bx-edit-alt me-1"></i> Edit
+                                        <i class="bx bx-edit-alt me-1"></i>
                                     </a>
                                     <form action="{{ route('admin.buku.destroy', $item->id) }}" method="POST" class="d-grid">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus?')">
-                                            <i class="bx bx-trash me-1"></i> Delete
+                                            <i class="bx bx-trash me-1"></i>
                                         </button>
                                     </form>
                               </div>

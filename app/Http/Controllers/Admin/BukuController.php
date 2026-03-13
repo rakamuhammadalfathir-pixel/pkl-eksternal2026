@@ -48,6 +48,7 @@ class BukuController extends Controller
         $request->validate([
             'judul' => 'required',
             'pengarang' => 'required',
+            'sinopsis' => 'nullable',
             'penerbit' => 'required',
             'tahun' => 'required|numeric|digits:4|min:1900|max:' . date('Y'),
             'stok' => 'required|integer|min:0',
@@ -60,6 +61,7 @@ class BukuController extends Controller
         $buku = new Buku();
         $buku->judul = $request->input('judul');
         $buku->pengarang = $request->input('pengarang');
+        $buku->sinopsis = $request->input('sinopsis');
         $buku->penerbit = $request->input('penerbit');
         $buku->tahun = $request->input('tahun');
         $buku->stok = $request->input('stok');
@@ -109,6 +111,7 @@ class BukuController extends Controller
         $request->validate([
             'judul' => 'required',
             'pengarang' => 'required',
+            'sinopsis' => 'nullable',
             'penerbit' => 'required',
             'tahun' => 'required|numeric|digits:4|min:1900|max:' . date('Y'),
             'stok' => 'required|integer|min:0',
@@ -120,6 +123,7 @@ class BukuController extends Controller
         $buku = Buku::findOrFail($id);
         $buku->judul = $request->input('judul');
         $buku->pengarang = $request->input('pengarang');
+        $buku->sinopsis = $request->input('sinopsis');
         $buku->penerbit = $request->input('penerbit');
         $buku->tahun = $request->input('tahun');
         $buku->stok = $request->input('stok');

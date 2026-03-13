@@ -81,50 +81,162 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="card bg-primary text-white mb-4 overflow-hidden" style="min-height: 300px;">
-                  <div class="d-flex align-items-center row p-4">
-                      <div class="col-md-7">
-                          <h2 class="text-white fw-bold mb-3">Tingkatkan Pengetahuan Tanpa Batas 📚</h2>
-                          <p class="mb-4">Koleksi buku terlengkap dari berbagai kategori tersedia untuk dipinjam secara gratis bagi anggota resmi E-Perpustakaan.</p>
-                          
-                          @guest
-                              <a href="{{ route('register') }}" class="btn btn-warning me-2">Daftar Anggota</a>
-                              <a href="#katalog" class="btn btn-outline-white text-white">Lihat Katalog</a>
-                          @else
-                              <h5 class="text-white">Selamat Datang Kembali, {{ Auth::user()->name }}!</h5>
-                          @endguest
-                      </div>
-                      <div class="col-md-5 text-center">
-                          <img src="{{ asset('assets/img/illustrations/man-with-laptop-light.png') }}" width="250" alt="Hero Image">
-                      </div>
-                  </div>
-              </div>
-
-              <div id="katalog" class="row mt-5">
-                  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Koleksi /</span> Buku Terbaru</h4>
-                  @foreach($buku as $item)
-                    <div class="col-md-4 col-lg-3 mb-4">
-                        <div class="card h-100">
-                            <div class="card-img-top-wrapper text-center p-2">
-                                <img src="{{ $item->foto ? asset('storage/buku/' . $item->foto) : asset('assets/img/elements/18.jpg') }}" alt="{{ $item->judul }}" class="img-fluid rounded shadow-sm" style="height: 200px; width: 100%; object-fit: cover;"/>
+              <section class="bg-primary text-white py-5" style="border-radius: 0 0 2rem 2rem;">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <h1 class="display-4 fw-bold mb-3 text-white">
+                                Tingkatkan Pengetahuan Tanpa Batas 📚
+                            </h1>
+                            <p class="lead mb-4 text-white">
+                                Akses ribuan koleksi buku digital dan fisik dengan mudah. 
+                                Pinjam kapan saja, baca di mana saja bersama E-Perpustakaan.
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="#katalog" class="btn btn-warning btn-lg px-4">
+                                    <i class="bx bx-book-reader me-2"></i>Mulai Membaca
+                                </a>
+                                @guest
+                                <a href="{{ route('register') }}" class="btn btn-outline-light btn-lg px-4">
+                                    Daftar Anggota
+                                </a>
+                                @endguest
                             </div>
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ $item->judul }}</h5>
-                                <p class="card-text text-muted small">Kategori: {{ $item->kategori->nama_kategori ?? 'Umum' }}</p>
-                                <div class="mt-auto">
-                                  @auth
-                                      <a href="#" class="btn btn-primary btn-sm w-100">Pinjam Sekarang</a>
-                                  @else
-                                      <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm w-100">Login untuk Pinjam</a>
-                                  @endauth
+                        </div>
+                        <div class="col-lg-6 d-none d-lg-block text-center">
+                            <img src="{{ asset('assets/img/illustrations/man-with-laptop-light.png') }}"
+                                alt="Perpustakaan Digital" class="img-fluid" style="max-height: 350px;">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {{-- Kategori Buku (Lingkaran) --}}
+            <section class="py-5">
+                <div class="container">
+                    <h4 class="fw-bold mb-4">Eksplorasi Kategori</h4>
+                    <div class="row g-4">
+                        {{-- Gunakan data kategori dari controller --}}
+                        @foreach($kategori as $cat)
+                            <div class="col-6 col-md-4 col-lg-2">
+                                <a href="{{ route('katalog.index', ['kategori' => $cat->id]) }}" class="text-decoration-none">
+                                    <div class="card border-0 shadow-sm text-center h-100 py-3">
+                                        <div class="card-body">
+                                            <div class="avatar mx-auto mb-3" style="width: 70px; height: 70px;">
+                                                <span class="avatar-initial rounded-circle bg-label-primary fs-2">
+                                                    <i class="bx bx-category"></i>
+                                                </span>
+                                            </div>
+                                            <h6 class="card-title mb-1 text-dark">{{ $cat->nama_kategori }}</h6>
+                                            <small class="text-muted">{{ $cat->buku_count ?? 0 }} Koleksi</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+
+            {{-- Katalog Buku Terbaru (Card Grid) --}}
+            <section id="katalog" class="py-5 bg-light">
+                <div class="container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="fw-bold mb-0">Buku Terbaru</h2>
+                        <a href="#" class="btn btn-primary">
+                            Lihat Semua <i class="bx bx-right-arrow-alt"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                      @forelse($buku as $item)
+                          <div class="col">
+                              <div class="card h-100 shadow-sm border-0">
+                                  {{-- Bagian Gambar dengan Padding seperti Katalog --}}
+                                  <div class="p-3 pb-0 position-relative"> 
+                                      <img src="{{ $item->foto ? asset('storage/buku/'.$item->foto) : asset('assets/img/elements/18.jpg') }}" 
+                                          class="card-img-top rounded shadow-sm" 
+                                          alt="{{ $item->judul }}" 
+                                          style="height: 250px; object-fit: cover;">
+                                      
+                                      {{-- Badge Status (Tersedia/Kosong) --}}
+                                      <div class="position-absolute top-0 end-0 p-4">
+                                          <span class="badge bg-{{ $item->stok > 0 ? 'success' : 'danger' }} shadow">
+                                              {{ $item->stok > 0 ? 'TERSEDIA' : 'KOSONG' }}
+                                          </span>
+                                      </div>
+                                  </div>
+
+                                  <div class="card-body d-flex flex-column">
+                                      {{-- Label Kategori --}}
+                                      <div class="mb-2">
+                                          <span class="badge bg-label-primary text-uppercase">{{ $item->kategori->nama_kategori ?? 'Umum' }}</span>
+                                      </div>
+
+                                      {{-- Judul Buku --}}
+                                      <h5 class="card-title mb-1 fw-bold text-truncate">{{ $item->judul }}</h5>
+
+                                      {{-- Pengarang dengan Icon User --}}
+                                      <p class="text-muted small mb-4"> 
+                                          <i class="bx bx-user-circle me-1"></i>Penulis: {{ $item->pengarang }}
+                                      </p>
+
+                                      {{-- Tombol Aksi --}}
+                                      <div class="mt-auto">
+                                          @auth
+                                              <a href="{{ route('catalog.show', $item->id) }}" class="btn btn-outline-primary btn-sm w-100">
+                                                  <i class="bx bx-bookmark-plus me-1"></i> Pinjam Buku
+                                              </a>
+                                          @else
+                                              <a href="{{ route('login') }}" class="btn btn-light btn-sm w-100">
+                                                  Login untuk Pinjam
+                                              </a>
+                                          @endauth
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      @empty
+                          <div class="col-12 text-center py-5">
+                              <h5 class="text-muted">Belum ada koleksi buku terbaru.</h5>
+                          </div>
+                      @endforelse
+                  </div>
+                </div>
+            </section>
+
+            {{-- Promo/Informasi Banner --}}
+            {{-- <section class="py-5">
+                <div class="container">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card bg-info text-white border-0 shadow-lg">
+                                <div class="card-body p-4 d-flex align-items-center">
+                                    <div>
+                                        <h3 class="text-white fw-bold">Jadi Anggota Pro?</h3>
+                                        <p>Nikmati batas peminjaman hingga 10 buku sekaligus!</p>
+                                        <a href="#" class="btn btn-light text-info fw-bold">Daftar Sekarang</a>
+                                    </div>
+                                    <i class="bx bx-medal ms-auto display-3 opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-dark text-white border-0 shadow-lg">
+                                <div class="card-body p-4 d-flex align-items-center">
+                                    <div>
+                                        <h3 class="text-white fw-bold">Donasi Buku</h3>
+                                        <p>Punya buku tak terpakai? Donasikan untuk sesama.</p>
+                                        <a href="#" class="btn btn-outline-light">Hubungi Kami</a>
+                                    </div>
+                                    <i class="bx bx-heart ms-auto display-3 opacity-50"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
-                  @endforeach
-              </div>
-            </div>   
-          </div>
+                </div>
+            </section> --}}
+            </div>
             <!-- Footer -->
             @include('layouts.partials.footer')
             <!-- / Footer -->

@@ -130,6 +130,12 @@
                                             <span class="text-danger fw-bold"><i class="bx bx-x-circle me-1"></i>Kosong</span>
                                         @endif
                                     </div>
+                                    <div class="mt-4">
+                                        <h5 class="fw-bold mb-2">Sinopsis</h5>
+                                        <p class="text-muted lh-base" style="text-align: justify;">
+                                            {{ $buku->sinopsis ?? 'Tidak ada sinopsis yang tersedia untuk buku ini.' }}
+                                        </p>
+                                    </div>
                                 </div>
                                 <div class="mt-5 d-grid d-md-flex gap-3">
                                     @if($buku->stok > 0)
@@ -198,32 +204,77 @@
 
     <!-- Page JS -->
     <script src="{{ asset('/assets/js/dashboards-analytics.js') }}" ></script>
+    
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script>
-    function confirmLoan() {
-        Swal.fire({
-            title: 'Konfirmasi Pinjaman',
-            text: "Apakah kamu yakin ingin meminjam buku '{{ $buku->judul }}'?",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#696cff', // Warna ungu primary Sneat
-            cancelButtonColor: '#8592a3', // Warna secondary Sneat
-            confirmButtonText: 'Ya, Pinjam Sekarang!',
-            cancelButtonText: 'Batal',
-            customClass: {
-                confirmButton: 'btn btn-primary me-3',
-                cancelButton: 'btn btn-outline-secondary'
-            },
-            buttonsStyling: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Jika user klik Ya, form akan di-submit otomatis
-                document.getElementById('formPinjam').submit();
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Notifikasi Global untuk Success (Daftar Pinjam & Wishlist)
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 2500,
+                    customClass: {
+                        popup: 'rounded-3'
+                    }
+                });
+            @endif
+
+            // 2. Notifikasi jika Buku Sudah Ada di Antrean
+            @if(session('info'))
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Informasi',
+                    text: "{{ session('info') }}",
+                    confirmButtonColor: '#696cff',
+                    customClass: {
+                        confirmButton: 'btn btn-primary'
+                    },
+                    buttonsStyling: false
+                });
+            @endif
+
+            // 3. Notifikasi Error
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "{{ session('error') }}",
+                    confirmButtonColor: '#ff3e1d',
+                    customClass: {
+                        confirmButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                });
+            @endif
         });
-    }
+
+        // Fungsi Konfirmasi Pinjam yang sudah Anda miliki
+        function confirmLoan() {
+            Swal.fire({
+                title: 'Konfirmasi Pinjaman',
+                text: "Tambahkan '{{ $buku->judul }}' ke antrean pinjam?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#696cff',
+                cancelButtonColor: '#8592a3',
+                confirmButtonText: 'Ya, Tambahkan!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    confirmButton: 'btn btn-primary me-3',
+                    cancelButton: 'btn btn-outline-secondary'
+                },
+                buttonsStyling: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('formPinjam').submit();
+                }
+            });
+        }
     </script>
   </body>
 </html>

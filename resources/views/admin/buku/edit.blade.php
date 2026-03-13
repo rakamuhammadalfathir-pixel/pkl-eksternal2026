@@ -98,7 +98,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Judul Buku</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-package"></i></span>
+                              <span id="basic-icon-default-fullname2" class="input-group-text"></span>
                               <input type="text" class="form-control" placeholder="Judul Buku" name="judul" value="{{ $buku->judul }}"/>
                             </div>
                           </div>
@@ -107,7 +107,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Pengarang</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
                               <input type="text" class="form-control" placeholder="Pengarang" name="pengarang" value="{{ $buku->pengarang }}"/>
                             </div>
                           </div>
@@ -116,7 +116,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Penerbit</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
                               <input type="text" class="form-control" placeholder="Penerbit" name="penerbit" value="{{ $buku->penerbit }}"/>
                             </div>
                           </div>
@@ -125,7 +125,7 @@
                             <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Tahun</label>
                             <div class="col-sm-10">
                                 <div class="input-group input-group-merge">
-                                    <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                                    <span id="basic-icon-default-company2" class="input-group-text"></span>
                                     <input type="number" class="form-control @error('tahun') is-invalid @enderror" name="tahun" placeholder="Contoh: 2024"min="1900" max="2026"value="{{ old('tahun', $buku->tahun) }}" />
                                     @error('tahun')
                                         <div class="invalid-feedback">
@@ -140,8 +140,17 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Stok</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
                               <input type="number" class="form-control" name="stok" value="{{ $buku->stok }}"/>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Sinopsis</label>
+                          <div class="col-sm-10">
+                            <div class="input-group input-group-merge">
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
+                              <textarea class="form-control" name="sinopsis" rows="3">{{ $buku->sinopsis }}</textarea>
                             </div>
                           </div>
                         </div>
@@ -149,7 +158,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Kategori</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
                               <select name="kategori_id" class="form-control">
                                 @foreach($kategoris as $item)
                                   <option value="{{ $item->id }}" {{ $buku->kategori_id == $item->id ? 'selected' : '' }}>{{ $item->nama_kategori }}</option>
@@ -162,7 +171,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Rak</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-hash"></i></span>
+                              <span id="basic-icon-default-company2" class="input-group-text"></span>
                               <select name="rak_id" class="form-control">
                                 @foreach($raks as $item)
                                   <option value="{{ $item->id }}" {{ $buku->rak_id == $item->id ? 'selected' : '' }}>{{ $item->nama_rak }}</option>

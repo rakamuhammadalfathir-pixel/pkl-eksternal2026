@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('judul');
             $table->string('pengarang');
+            $table->text('sinopsis')->nullable();
             $table->string('penerbit');
             $table->year('tahun');
             $table->integer('stok')->default(0);
             $table->foreignId('kategori_id')->constrained('kategoris')->onDelete('cascade');
-            $table->foreignId('rak_id')->constrained('raks')->onDelete('cascade');
+            $table->foreignId('rak_id')->constrained('raks')->onDelete('cascade');        
             $table->timestamps();        
         });
     }

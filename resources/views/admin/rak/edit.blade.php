@@ -98,7 +98,7 @@
                               <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Nama Rak</label>
                               <div class="col-sm-10">
                                   <div class="input-group input-group-merge">
-                                      <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-package"></i></span>
+                                      <span id="basic-icon-default-fullname2" class="input-group-text"></span>
                                       <input type="text" name="nama_rak" class="form-control" placeholder="Masukkan Nama Rak" value="{{ $rak->nama_rak }}"/>
                                   </div>
                               </div>
@@ -107,7 +107,7 @@
                               <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Lokasi</label>
                               <div class="col-sm-10">
                                   <div class="input-group input-group-merge">
-                                      <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-map"></i></span>
+                                      <span id="basic-icon-default-fullname2" class="input-group-text"></span>
                                       <textarea type="text" name="lokasi" class="form-control" placeholder="Masukkan Lokasi">{{ $rak->lokasi }}</textarea>
                                   </div>
                               </div>

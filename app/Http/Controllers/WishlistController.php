@@ -19,6 +19,9 @@ class WishlistController extends Controller
         $user = Auth::user();
         $user->wishlist()->toggle($bukuId);
 
-        return back()->with('success', 'Wishlist diperbarui!');
+        $isWishlisted = auth()->user()->wishlist->contains($bukuId);
+        $msg = $isWishlisted ? 'Buku berhasil ditambahkan ke Wishlist!' : 'Buku dihapus dari Wishlist.';
+        
+        return back()->with('success', $msg);
     }
 }

@@ -156,24 +156,18 @@
                                 @csrf
                                 @method('PATCH')
                                 <button type="submit" class="btn btn-outline-secondary btn-sm" title="Tukar Role">
-                                  <i class="bx bx-sync">Ubah Role</i>
+                                  <i class="bx bx-sync"></i>
                                 </button>
                               </form>
                               @endif
-
                               <a href="{{ route('admin.anggota.show', $item->id) }}" class="btn btn-outline-info btn-sm">
-                                <i class="bx bx-show me-1"></i> Show
-                              </a>
-
-                              <a href="{{ route('admin.anggota.edit', $item->id) }}" class="btn btn-outline-warning btn-sm">
-                                <i class="bx bx-edit-alt me-1"></i> Edit
-                              </a>
-
+                                <i class="bx bx-show me-1"></i>
+                              </a>                 
                               <form action="{{ route('admin.anggota.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-outline-danger btn-sm">
-                                  <i class="bx bx-trash me-1"></i> Delete
+                                  <i class="bx bx-trash me-1"></i> 
                                 </button>
                               </form>
                             </div>

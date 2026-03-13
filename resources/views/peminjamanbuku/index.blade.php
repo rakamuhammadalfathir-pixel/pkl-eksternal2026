@@ -105,11 +105,11 @@
                                     <td><strong>{{ $details['judul'] }}</strong></td>
                                     <td>{{ $details['pengarang'] }}</td>
                                     <td>
-                                        <form action="{{ route('peminjamanbuku.remove') }}" method="POST">
+                                       <form id="formDelete-{{ $id }}" action="{{ route('peminjamanbuku.remove') }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <input type="hidden" name="id" value="{{ $id }}">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <button type="button" onclick="confirmDelete('{{ $id }}', '{{ $details['judul'] }}')" class="btn btn-sm btn-outline-danger">
                                                 <i class="bx bx-trash me-1"></i> Hapus
                                             </button>
                                         </form>
@@ -181,6 +181,7 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+    // 1. Fungsi untuk Checkout
     function confirmCheckout() {
         Swal.fire({
             title: 'Proses Peminjaman?',
@@ -199,8 +200,42 @@
             if (result.isConfirmed) {
                 document.getElementById('formCheckout').submit();
             }
-        })
+        });
     }
+
+    // 2. Fungsi untuk Hapus (Dikeluarkan dari confirmCheckout)
+    function confirmDelete(id, judul) {
+        Swal.fire({
+            title: 'Hapus dari Antrean?',
+            text: "Buku '" + judul + "' akan dihapus dari daftar pinjam.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ff3e1d',
+            cancelButtonColor: '#8592a3',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            customClass: {
+                confirmButton: 'btn btn-danger me-3',
+                cancelButton: 'btn btn-outline-secondary'
+            },
+            buttonsStyling: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('formDelete-' + id).submit();
+            }
+        });
+    }
+
+    // 3. Notifikasi Berhasil (Opsional)
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 2000
+        });
+    @endif
     </script>
   </body>
 </html>

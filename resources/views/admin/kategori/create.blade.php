@@ -97,7 +97,7 @@
                           <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Nama Kategori</label>
                           <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-package"></i></span>
+                              <span id="basic-icon-default-fullname2" class="input-group-text"></i></span>
                               <input type="text" name="nama_kategori" class="form-control" placeholder="Masukkan Nama Kategori"/>
                             </div>
                           </div>

@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard</title>
+    <title>Admin Dashboard</title>
 
     <meta name="description" content="" />
 
@@ -80,65 +80,152 @@
           <div class="content-wrapper">
             <!-- Content -->
 
-            <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="row">
-                    <div class="col-lg-12 mb-4 order-0">
-                        <div class="card">
-                            <div class="d-flex align-items-end row">
-                                <div class="col-sm-7">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-primary">Selamat Datang, {{ Auth::user()->name }}! 🎉</h5>
-                                        <p class="mb-4">
-                                            Hari ini ada beberapa aktivitas di perpustakaan. Cek ringkasannya di bawah ini.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-sm-5 text-center text-sm-left">
-                                    <div class="card-body pb-0 px-0 px-md-4">
-                                        <img src="{{ asset('assets/img/illustrations/man-with-laptop-light.png') }}" height="140" alt="View Badge User">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4 col-md-12 col-6 mb-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <div class="avatar flex-shrink-0 mb-3 mx-auto">
-                                    <span class="badge bg-label-primary p-2"><i class="bx bx-book"></i></span>
-                                </div>
-                                <span class="fw-semibold d-block mb-1">Total Buku</span>
-                                <h3 class="card-title mb-2">{{ $total_buku }}</h3>
-                            </div>
-                        </div>
-                    </div>
+          <div class="container-xxl flex-grow-1 container-p-y">
+                  
+            <div class="row g-4 mb-4">
+              {{-- Total Buku --}}
+              <div class="col-sm-6 col-xl-3">
+                  <div class="card border-0 shadow-sm border-start border-4 border-primary h-100">
+                      <div class="card-body">
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div>
+                                  <p class="text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.8rem">Total Koleksi</p>
+                                  <h4 class="fw-bold mb-0 text-primary">{{ $stats['total_buku'] }}</h4>
+                              </div>
+                              <div class="avatar">
+                                  <span class="avatar-initial rounded bg-label-primary">
+                                      <i class="bx bx-book-open bx-sm"></i>
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
 
-                    <div class="col-lg-4 col-md-12 col-6 mb-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <div class="avatar flex-shrink-0 mb-3 mx-auto">
-                                    <span class="badge bg-label-success p-2"><i class="bx bx-user"></i></span>
-                                </div>
-                                <span class="fw-semibold d-block mb-1">Anggota</span>
-                                <h3 class="card-title mb-2">{{ $total_anggota }}</h3>
-                            </div>
-                        </div>
-                    </div>
+              {{-- Perlu Diproses (Peminjaman Baru) --}}
+              <div class="col-sm-6 col-xl-3">
+                  <div class="card border-0 shadow-sm border-start border-4 border-warning h-100">
+                      <div class="card-body">
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div>
+                                  <p class="text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.8rem">Permintaan Pinjam</p>
+                                  <h4 class="fw-bold mb-0 text-warning">{{ $stats['pending_peminjaman'] }}</h4>
+                              </div>
+                              <div class="avatar">
+                                  <span class="avatar-initial rounded bg-label-warning">
+                                      <i class="bx bx-git-pull-request bx-sm"></i>
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
 
-                    <div class="col-lg-4 col-md-12 col-6 mb-4">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <div class="avatar flex-shrink-0 mb-3 mx-auto">
-                                    <span class="badge bg-label-warning p-2"><i class="bx bx-time"></i></span>
-                                </div>
-                                <span class="fw-semibold d-block mb-1">Sedang Dipinjam</span>
-                                <h3 class="card-title mb-2">{{ $total_peminjaman }}</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+              {{-- Buku Terlambat (Pengganti Low Stock/Danger) --}}
+              <div class="col-sm-6 col-xl-3">
+                  <div class="card border-0 shadow-sm border-start border-4 border-danger h-100">
+                      <div class="card-body">
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div>
+                                  <p class="text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.8rem">Belum Kembali</p>
+                                  <h4 class="fw-bold mb-0 text-danger">{{ $stats['terlambat'] }}</h4>
+                              </div>
+                              <div class="avatar">
+                                  <span class="avatar-initial rounded bg-label-danger">
+                                      <i class="bx bx-error bx-sm"></i>
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              {{-- Total Anggota --}}
+              <div class="col-sm-6 col-xl-3">
+                  <div class="card border-0 shadow-sm border-start border-4 border-success h-100">
+                      <div class="card-body">
+                          <div class="d-flex justify-content-between align-items-center">
+                              <div>
+                                  <p class="text-muted text-uppercase fw-semibold mb-1" style="font-size: 0.8rem">Total Anggota</p>
+                                  <h4 class="fw-bold mb-0 text-success">{{ $stats['total_anggota'] }}</h4>
+                              </div>
+                              <div class="avatar">
+                                  <span class="avatar-initial rounded bg-label-success">
+                                      <i class="bx bx-user bx-sm"></i>
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="row g-4">
+              {{-- 2. Grafik Aktivitas (Mengadaptasi Chart.js kamu) --}}
+              <div class="col-lg-8">
+                  <div class="card border-0 shadow-sm h-100">
+                      <div class="card-header bg-white py-3 d-flex align-items-center justify-content-between">
+                          <h5 class="card-title mb-0">Tren Peminjaman (7 Hari Terakhir)</h5>
+                      </div>
+                      <div class="card-body">
+                          <canvas id="loanChart" height="250"></canvas>
+                      </div>
+                  </div>
+              </div>
+
+              {{-- 3. Transaksi Terbaru (Peminjaman Terbaru) --}}
+              <div class="col-lg-4">
+                  <div class="card border-0 shadow-sm h-100">
+                      <div class="card-header bg-white py-3">
+                          <h5 class="card-title mb-0">Aktivitas Terbaru</h5>
+                      </div>
+                      <div class="card-body p-0">
+                          <div class="list-group list-group-flush">
+                              @foreach($recentLoans as $loan)
+                                  <div class="list-group-item d-flex justify-content-between align-items-center px-4 py-3">
+                                      <div>
+                                          <div class="fw-bold text-primary">{{ $loan->buku->judul }}</div>
+                                          <small class="text-muted">{{ $loan->anggota->nama_anggota ?? 'Anggota Terhapus' }}</small>
+                                      </div>
+                                      <div class="text-end">
+                                          <span class="badge rounded-pill {{ $loan->status == 'pinjam' ? 'bg-label-primary' : 'bg-label-success' }}">
+                                              {{ ucfirst($loan->status) }}
+                                          </span>
+                                      </div>
+                                  </div>
+                              @endforeach
+                          </div>
+                      </div>
+                      <div class="card-footer bg-white text-center py-3">
+                          <a href="{{ route('admin.peminjaman.index') }}" class="text-decoration-none fw-bold">Lihat Semua Transaksi &rarr;</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          {{-- 4. Buku Paling Populer (Adaptasi dari Top Selling Products) --}}
+          <div class="card border-0 shadow-sm mt-4">
+              <div class="card-header bg-white py-3">
+                  <h5 class="card-title mb-0">Buku Paling Sering Dipinjam</h5>
+              </div>
+              <div class="card-body">
+                  <div class="row g-4 text-center">
+                      @foreach($popularBooks as $book)
+                          <div class="col-6 col-md-2">
+                              <div class="card h-100 border-0 shadow-none">
+                                  <img src="{{ $book->foto ? asset('storage/buku/' . $book->foto) : asset('assets/img/elements/18.jpg') }}" 
+                                      class="card-img-top rounded shadow-sm mb-2" 
+                                      style="height: 120px; object-fit: cover;">
+                                  <h6 class="card-title text-truncate mb-0" style="font-size: 0.85rem">{{ $book->judul }}</h6>
+                                  <small class="text-muted">{{ $book->peminjaman_count ?? 0 }}x dipinjam</small>
+                              </div>
+                          </div>
+                      @endforeach
+                  </div>
+              </div>
+          </div>  
+          
+          </div>
             <!-- Footer -->
             @include('layouts.partials.footer')
             <!-- / Footer -->
@@ -176,5 +263,30 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('loanChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($loanChart->pluck('date')) !!},
+                datasets: [{
+                    label: 'Jumlah Peminjaman',
+                    data: {!! json_encode($loanChart->pluck('total')) !!},
+                    borderColor: '#696cff', // Warna Primary Sneat
+                    backgroundColor: 'rgba(105, 108, 255, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } }
+            }
+        });
+    </script>
   </body>
 </html>

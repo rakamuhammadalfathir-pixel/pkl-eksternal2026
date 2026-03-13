@@ -98,4 +98,33 @@ class PeminjamanController extends Controller
     {
         return Excel::download(new PeminjamanExport, 'laporan-peminjaman-' . date('Y-m-d') . '.xlsx');
     }
+
+    // Di Admin/PeminjamanController.php
+    public function approve($id) 
+    {
+        $peminjaman = Peminjaman::findOrFail($id);
+        
+        $buku = Buku::find($peminjaman->buku_id);
+        if($buku->stok <= 0) {
+            return back()->with('error', 'Stok buku habis, tidak bisa disetujui.');
+        }
+
+        $peminjaman->update(['status' => 'Pinjam']);
+
+        $buku->decrement('stok');
+
+        return back()->with('success', 'Peminjaman disetujui, stok buku telah dipotong.');
+    }
+
+    // PeminjamanController (Sisi Admin)
+    public function reject($id)
+    {
+        $peminjaman = Peminjaman::findOrFail($id);
+        
+        $peminjaman->update([
+            'status' => 'Ditolak'
+        ]);
+
+        return back()->with('info', 'Permintaan peminjaman telah ditolak.');
+    }
 }
