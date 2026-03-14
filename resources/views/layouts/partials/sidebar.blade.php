@@ -19,16 +19,15 @@
 
     <ul class="menu-inner py-1">
         @auth
-            {{-- MENU DASHBOARD / HOME --}}
-            <li class="menu-item {{ request()->is('admin/dashboard', 'home') ? 'active' : '' }}">
-                <a href="{{ Auth::user()->role == 'admin' ? route('admin.dashboard') : route('home') }}" class="menu-link">
-                    <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                    <div>{{ Auth::user()->role == 'admin' ? 'Dashboard' : 'Dashboard' }}</div>
-                </a>
-            </li>
-
-            {{-- MENU KHUSUS ADMIN --}}
             @if(Auth::user()->role == 'admin')
+                {{-- MENU DASHBOARD ADMIN --}}
+                <li class="menu-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('admin.dashboard') }}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                        <div>Dashboard</div>
+                    </a>
+                </li>
+
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Data E-Perpustakaan</span>
                 </li>
@@ -75,41 +74,6 @@
                     <a href="{{ route('admin.pengembalian.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-rotate-left"></i>
                         <div>Pengembalian</div>
-                    </a>
-                </li>
-            @else
-                <li class="menu-header small text-uppercase">
-                    <span class="menu-header-text">Menu Anggota</span>
-                </li>
-
-                <li class="menu-item {{ request()->routeIs('katalog.index') ? 'active' : '' }}">
-                    <a href="{{ route('katalog.index') }}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-book-open"></i>
-                        <div>Katalog Buku</div>
-                    </a>
-                </li>
-
-                <li class="menu-item {{ request()->routeIs('wishlist.index') ? 'active' : '' }}">
-                    <a href="{{ route('wishlist.index') }}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-heart"></i>
-                        <div>Wishlist</div>
-                    </a>
-                </li>
-
-                 <li class="menu-header small text-uppercase">
-                    <span class="menu-header-text">Transaksi</span>
-                </li>
-                
-                 <li class="menu-item {{ request()->routeIs('peminjamanbuku.index') ? 'active' : '' }}">
-                    <a href="{{ route('peminjamanbuku.index') }}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-book-open"></i>
-                        <div>Peminjaman Buku</div>
-                    </a>
-                </li>
-                 <li class="menu-item {{ request()->routeIs('peminjaman.history') ? 'active' : '' }}">
-                    <a href="{{ route('peminjaman.history') }}" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-history"></i>
-                        <div>Riwayat Peminjaman</div>
                     </a>
                 </li>
             @endif

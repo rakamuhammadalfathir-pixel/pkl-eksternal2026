@@ -95,7 +95,6 @@
                         <label class="col-sm-2 col-form-label">Kode Transaksi</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $peminjaman->kode_transaksi }}" readonly/>
                           </div>
                         </div>
@@ -104,7 +103,6 @@
                         <label class="col-sm-2 col-form-label">Anggota</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $peminjaman->anggota->nama }}" readonly/>
                           </div>
                         </div>
@@ -121,8 +119,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label">Tanggal Pinjam</label>
                             <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text"></span>
+                            <div class="input-group input-group-merge">                          
                                 <input type="text" class="form-control" value="{{ $peminjaman->tgl_pinjam }}" readonly/>
                             </div>
                             </div>
@@ -131,7 +128,6 @@
                         <label class="col-sm-2 col-form-label">Tanggal Harus Kembali</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $peminjaman->tgl_harus_kembali }}" readonly/>
                           </div>
                         </div>
@@ -139,8 +135,7 @@
                           <div class="row mb-3">
                         <label class="col-sm-2 col-form-label">Status</label>
                         <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
+                          <div class="input-group input-group-merge">            
                             <input type="text" class="form-control" value="{{ $peminjaman->status }}" readonly/>
                           </div>
                         </div>

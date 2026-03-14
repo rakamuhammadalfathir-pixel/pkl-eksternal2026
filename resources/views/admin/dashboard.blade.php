@@ -217,7 +217,7 @@
                                       class="card-img-top rounded shadow-sm mb-2" 
                                       style="height: 120px; object-fit: cover;">
                                   <h6 class="card-title text-truncate mb-0" style="font-size: 0.85rem">{{ $book->judul }}</h6>
-                                  <small class="text-muted">{{ $book->peminjaman_count ?? 0 }}x dipinjam</small>
+                                  <small class="text-muted">{{ $book->peminjaman_count ?? 0 }}x Peminjaman</small>
                               </div>
                           </div>
                       @endforeach

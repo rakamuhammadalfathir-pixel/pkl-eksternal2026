@@ -94,7 +94,7 @@
                               <span class="input-group-text"><i class="bx bx-search"></i></span>
                               <input type="text" name="search" class="form-control" placeholder="Cari nama atau email..." value="{{ request('search') }}" />
                               @if(request('search'))
-                                  <a href="{{ route('admin.anggota.index') }}" class="btn btn-outline-secondary">
+                                  <a href="{{ route('admin.anggota.index') }}" class="btn btn-secondary">
                                       <i class="bx bx-x"></i>
                                   </a>
                               @endif
@@ -107,76 +107,82 @@
               <div class="card">
                 <h5 class="card-header">Table anggota</h5>
                 <div class="card-body">
-                  <div class="table text-nowrap">
                     @if(session('success'))
                         <div class="alert alert-primary alert-dismissible" role="alert">
-                            <h6 class="alert-heading d-flex align-items-center mb-1">
-                                <i class="bx bx-check-circle me-2"></i>Berhasil!
-                            </h6>
                             <span>{{ session('success') }}</span>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
-                    @if($errors->any())
-                        <div class="alert alert-danger alert-dismissible" role="alert">
-                            <h6 class="alert-heading d-flex align-items-center mb-1">
-                                <i class="bx bx-error-circle me-2"></i>Ups, Ada Kesalahan!
-                            </h6>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                    <form id="bulkDeleteForm" action="{{ route('admin.anggota.bulkDelete') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        
+                        <div class="mb-3">
+                            <button type="submit" id="btnDeleteSelected" class="btn btn-danger" onclick="return confirm('Hapus anggota terpilih?')" disabled>
+                                <i class="bx bx-trash me-1"></i> Hapus Terpilih
+                            </button>
                         </div>
-                    @endif
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr class="text-center">
-                          <th>No</th>
-                          <th>Nama</th>
-                          <th>Email</th> 
-                          <th>Role</th> 
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @php $no = 1; @endphp
-                        @foreach($anggota as $item)
-                        <tr>
-                          <td class="text-center">{{ $no++ }}</td>
-                          <td>{{ $item->user->name ?? 'Tidak ada nama' }}</td>
-                          <td>{{ $item->user->email ?? 'Tidak ada akun' }}</td> 
-                          <td class="text-center">
-                            @if($item->user)
-                              <span class="badge {{ $item->user->role == 'admin' ? 'bg-label-success' : 'bg-label-primary' }}">
-                                {{ ucfirst($item->user->role) }}
-                              </span>
-                            @endif
-                          </td>
-                          <td>
-                            <div class="d-flex justify-content-center gap-2">
-                              @if($item->user)
-                              <form action="{{ route('admin.anggota.updateRole', $item->user->id) }}" method="POST">
+
+                        <div class="table-responsive text-nowrap">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th style="width: 50px;">
+                                            <input class="form-check-input" type="checkbox" id="selectAll">
+                                        </th>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $no = 1; @endphp
+                                    @foreach($anggota as $item)
+                                    <tr>
+                                        <td class="text-center">
+                                            <input class="form-check-input item-checkbox" type="checkbox" name="ids[]" value="{{ $item->id }}">
+                                        </td>
+                                        <td class="text-center">{{ $no++ }}</td>
+                                        <td>{{ $item->user->name ?? 'Tidak ada nama' }}</td>
+                                        <td>{{ $item->user->email ?? 'Tidak ada akun' }}</td>
+                                        <td class="text-center">
+                                            @if($item->user)
+                                                <span class="badge {{ $item->user->role == 'admin' ? 'bg-label-success' : 'bg-label-primary' }}">
+                                                    {{ ucfirst($item->user->role) }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-2">
+                                                @if($item->user)
+                                                    <button type="submit" form="form-role-{{ $item->user->id }}" class="btn btn-secondary btn-sm" title="Tukar Role">
+                                                        <i class="bx bx-sync"></i>
+                                                    </button>
+                                                @endif
+                                                <a href="{{ route('admin.anggota.show', $item->id) }}" class="btn btn-info btn-sm">
+                                                    <i class="bx bx-show"></i>
+                                                </a>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+
+                    @foreach($anggota as $item)
+                        @if($item->user)
+                            <form id="form-role-{{ $item->user->id }}" action="{{ route('admin.anggota.updateRole', $item->user->id) }}" method="POST" style="display:none;">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="btn btn-outline-secondary btn-sm" title="Tukar Role">
-                                  <i class="bx bx-sync"></i>
-                                </button>
-                              </form>
-                              @endif
-                              <a href="{{ route('admin.anggota.show', $item->id) }}" class="btn btn-outline-info btn-sm">
-                                <i class="bx bx-show me-1"></i>
-                              </a>                 
-                              <form action="{{ route('admin.anggota.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger btn-sm">
-                                  <i class="bx bx-trash me-1"></i> 
-                                </button>
-                              </form>
-                            </div>
-                          </td>
-                        </tr>
-                        @endforeach
-                      </tbody>
-                    </table>
-                  </div>
+                            </form>
+                        @endif
+                    @endforeach
                 </div>
               </div>
               <!--/ Bordered Table -->
@@ -218,5 +224,34 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            const btnDelete = document.getElementById('btnDeleteSelected');
+
+            function updateButtonStatus() {
+                const checkedCount = document.querySelectorAll('.item-checkbox:checked').length;
+                btnDelete.disabled = checkedCount === 0;
+            }
+
+            selectAll.addEventListener('click', function() {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = selectAll.checked;
+                });
+                updateButtonStatus();
+            });
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (!this.checked) selectAll.checked = false;
+                    if (document.querySelectorAll('.item-checkbox:checked').length === checkboxes.length) {
+                        selectAll.checked = true;
+                    }
+                    updateButtonStatus();
+                });
+            });
+        });
+    </script>
   </body>
 </html>

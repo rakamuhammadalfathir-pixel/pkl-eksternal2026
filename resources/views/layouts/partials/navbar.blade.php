@@ -68,10 +68,39 @@
     </div>
 </nav>
 <style>
+    /* CSS Khusus untuk halaman Landing Page (Tanpa Sidebar) */
+    @media (min-width: 1200px) {
+        /* Kita deteksi jika tidak ada sidebar (layout-menu), maka terapkan sticky */
+        .layout-without-menu #layout-navbar {
+            position: fixed !important;
+            top: 0;
+            right: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1070;
+            margin: 0 !important;
+            border-radius: 0 !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .layout-without-menu .layout-page {
+            padding-top: 76px !important;
+        }
+    }
+
+    /* CSS untuk Admin Dashboard (Agar kembali ke desain asli Sneat) */
+    .layout-menu-fixed #layout-navbar {
+        position: static !important; /* Kembalikan ke posisi default admin */
+        margin: 0.75rem 1.5rem 0 !important; /* Beri jarak seperti semula */
+        width: auto !important;
+    }
+
+    /* Tetap jaga foto profil rapi */
     .avatar-clean {
-        object-fit: cover !important; /* Jaga rasio gambar, potong bagian tepi */
-        object-position: center center !important; /* Fokuskan potongan di tengah */
-        width: 100% !important; /* Ikuti lebar bingkai */
-        height: 100% !important; /* Ikuti tinggi bingkai */
+        object-fit: cover !important;
+        object-position: center;
+        width: 100% !important;
+        height: 100% !important;
     }
 </style>

@@ -97,4 +97,16 @@ class AnggotaController extends Controller
     {
         return Excel::download(new AnggotaExport, 'data-anggota-' . date('Y-m-d') . '.xlsx');
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+        if ($ids && is_array($ids)) {
+          Anggota::whereIn('id', $ids)->delete();
+            
+            return redirect()->back()->with('success', count($ids) . ' data anggota berhasil dihapus.');
+        }
+        
+        return redirect()->back()->with('error', 'Pilih data anggota yang ingin dihapus.');
+    }
 }

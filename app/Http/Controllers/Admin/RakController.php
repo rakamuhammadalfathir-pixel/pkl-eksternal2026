@@ -83,5 +83,14 @@ class RakController extends Controller
         $rak->delete();
 
         return redirect()->route('admin.rak.index')->with('success', 'Rak berhasil dihapus.');
+    } 
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+        if ($ids) {
+            \App\Models\Rak::whereIn('id', $ids)->delete();
+            return redirect()->back()->with('success', 'Data rak terpilih berhasil dihapus.');
+        }
+        return redirect()->back()->with('error', 'Pilih data yang ingin dihapus terlebih dahulu.');
     }
 }

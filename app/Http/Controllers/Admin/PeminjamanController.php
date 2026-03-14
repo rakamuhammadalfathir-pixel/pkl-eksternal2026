@@ -127,4 +127,13 @@ class PeminjamanController extends Controller
 
         return back()->with('info', 'Permintaan peminjaman telah ditolak.');
     }
+
+    public function bulkDelete(Request $request)
+    {
+        if ($request->has('ids')) {
+            Peminjaman::whereIn('id', $request->ids)->delete();
+            return redirect()->back()->with('success', 'Data berhasil dihapus secara massal.');
+        }
+        return redirect()->back()->with('error', 'Pilih data terlebih dahulu.');
+    }
 }

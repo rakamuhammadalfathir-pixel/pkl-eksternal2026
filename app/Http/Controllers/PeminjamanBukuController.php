@@ -9,6 +9,7 @@ use App\Models\Anggota;
 use App\Models\Pengembalian;
 class PeminjamanBukuController extends Controller
 {
+
     public function index()
     {
         $peminjamanbuku = session()->get('peminjamanbuku', []);
@@ -83,7 +84,7 @@ class PeminjamanBukuController extends Controller
         }
         session()->forget('peminjamanbuku');
 
-        return redirect()->route('peminjamanbuku.index')->with('success', 'Peminjaman berhasil diajukan dengan Kode: ' . $kodeTransaksi);
+        return redirect()->route('peminjaman.history')->with('success', 'Peminjaman berhasil diajukan!');    
     }
     public function kembalikanBuku($id)
     {

@@ -88,70 +88,62 @@
                   </a>
                 </div>
               <!-- Bordered Table -->
+              @if(session('success'))
+                  <div class="alert alert-primary alert-dismissible" role="alert">
+                      <span>{{ session('success') }}</span>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              @endif
               <div class="card">
                 <h5 class="card-header">Table Rak</h5>
                 <div class="card-body">
-                  <div class="table text-nowrap">
-                    @if(session('success'))
-                        <div class="alert alert-primary alert-dismissible" role="alert">
-                            <h6 class="alert-heading d-flex align-items-center mb-1">
-                                <i class="bx bx-check-circle me-2"></i>Berhasil!
-                            </h6>
-                            <span>{{ session('success') }}</span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
-                    @if($errors->any())
-                        <div class="alert alert-danger alert-dismissible" role="alert">
-                            <h6 class="alert-heading d-flex align-items-center mb-1">
-                                <i class="bx bx-error-circle me-2"></i>Ups, Ada Kesalahan!
-                            </h6>
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
-                    <table class="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th class="text-center">No</th>
-                          <th>Nama Rak</th>
-                          <th>Lokasi</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @php $no = 1; @endphp
-                        @foreach($raks as $item)
-                        <tr>
-                            <td class="text-center" >{{ $no++ }}</td>
-                            <td>{{ $item->nama_rak }}</td>
+                  <form id="bulkDeleteForm" action="{{ route('admin.rak.bulkDelete') }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="mb-3">
+                      <button type="submit" id="btnDeleteSelected" class="btn btn-danger" onclick="return confirm('Hapus semua data rak yang dipilih?')" disabled>
+                        <i class="bx bx-trash me-1"></i> Hapus yang Terpilih
+                      </button>
+                    </div>                                  
+                    <div class="table-responsive text-nowrap">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th class="text-center" style="width: 50px;">
+                              <input class="form-check-input" type="checkbox" id="selectAll">
+                            </th>
+                            <th class="text-center">No</th>
+                            <th class="text-center">Nama Rak</th>
+                            <th>Lokasi</th>
+                            <th class="text-center">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @php $no = 1; @endphp
+                          @foreach($raks as $item)
+                          <tr>
+                            <td class="text-center">
+                              <input class="form-check-input item-checkbox" type="checkbox" name="ids[]" value="{{ $item->id }}">
+                            </td>
+                            <td class="text-center">{{ $no++ }}</td>
+                            <td class="text-center">{{ $item->nama_rak }}</td>
                             <td>{{ $item->lokasi }}</td>
-                            <td>
-                            <div class="d-flex flex-row gap-2">
-                                    <a href="{{ route('admin.rak.show', $item->id) }}" class="btn btn-sm btn-outline-info">
-                                        <i class="bx bx-show me-1"></i>
-                                    </a>
-                                    <a href="{{ route('admin.rak.edit', $item->id) }}" class="btn btn-sm btn-outline-warning">
-                                        <i class="bx bx-edit-alt me-1"></i>
-                                    </a>
-                                    <form action="{{ route('admin.rak.destroy', $item->id) }}" method="POST" class="d-grid">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus?')">
-                                            <i class="bx bx-trash me-1"></i>
-                                        </button>
-                                    </form>
-                              </div>
-                          </td>
-                        </tr>
-                        @endforeach
-                      </tbody>
-                    </table>
-                  </div>
+                            <td class="text-center">
+                              <div class="d-flex flex-row justify-content-center gap-2">
+                                <a href="{{ route('admin.rak.show', $item->id) }}" class="btn btn-sm btn-info">
+                                  <i class="bx bx-show"></i>
+                                </a>
+                                <a href="{{ route('admin.rak.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                                  <i class="bx bx-edit-alt"></i>
+                                </a>
+                                </div>
+                            </td>
+                          </tr>
+                          @endforeach
+                        </tbody>
+                      </table>
+                    </div>
+                  </form>
                 </div>
               </div>
               <!--/ Bordered Table -->
@@ -193,5 +185,34 @@
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const selectAll = document.getElementById('selectAll');
+        const checkboxes = document.querySelectorAll('.item-checkbox');
+        const btnDelete = document.getElementById('btnDeleteSelected');
+
+        function updateButtonStatus() {
+          const checkedCount = document.querySelectorAll('.item-checkbox:checked').length;
+          btnDelete.disabled = checkedCount === 0;
+        }
+
+        selectAll.addEventListener('click', function() {
+          checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAll.checked;
+          });
+          updateButtonStatus();
+        });
+
+        checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', function() {
+            if (!this.checked) selectAll.checked = false;
+            if (document.querySelectorAll('.item-checkbox:checked').length === checkboxes.length) {
+              selectAll.checked = true;
+            }
+            updateButtonStatus();
+          });
+        });
+      });
+    </script>
   </body>
 </html>

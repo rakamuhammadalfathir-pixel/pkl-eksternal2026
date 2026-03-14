@@ -166,4 +166,17 @@ class BukuController extends Controller
     {
         return Excel::download(new BukuExport, 'laporan-data-buku-' . date('Y-m-d') . '.xlsx');
     }
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+        if ($ids && is_array($ids)) {
+            // Jika Anda menggunakan SoftDeletes, ini akan memindahkan ke sampah
+            // Jika tidak, ini akan menghapus permanen
+            Buku::whereIn('id', $ids)->delete();
+            
+            return redirect()->back()->with('success', count($ids) . ' buku berhasil dihapus sekaligus.');
+        }
+        
+        return redirect()->back()->with('error', 'Pilih buku yang ingin dihapus.');
+    }
 }

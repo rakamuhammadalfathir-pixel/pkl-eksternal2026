@@ -89,4 +89,18 @@ class PengembalianController extends Controller
     {
         return Excel::download(new PengembalianExport, 'laporan-pengembalian-' . date('Y-m-d') . '.xlsx');
     }
+    public function bulkDelete(Request $request)
+    {
+        if (!$request->has('ids') || empty($request->ids)) {
+            return redirect()->back()->with('error', 'Silakan pilih data yang ingin dihapus terlebih dahulu.');
+        }
+
+        try {
+            Pengembalian::whereIn('id', $request->ids)->delete();
+
+            return redirect()->back()->with('success', 'Data pengembalian terpilih berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 }

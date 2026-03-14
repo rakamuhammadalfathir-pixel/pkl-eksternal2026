@@ -95,7 +95,6 @@
                         <label class="col-sm-2 col-form-label">Judul Buku</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $buku->judul }}" readonly/>
                           </div>
                         </div>
@@ -104,7 +103,6 @@
                         <label class="col-sm-2 col-form-label">Pengarang</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $buku->pengarang }}" readonly/>
                           </div>
                         </div>
@@ -113,7 +111,7 @@
                             <label class="col-sm-2 col-form-label">Penerbit</label>
                             <div class="col-sm-10">
                             <div class="input-group input-group-merge">
-                                <span class="input-group-text"></span>
+  
                                 <input type="text" class="form-control" value="{{ $buku->penerbit }}" readonly/>
                             </div>
                             </div>
@@ -122,7 +120,6 @@
                         <label class="col-sm-2 col-form-label">Tahun</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $buku->tahun }}" readonly/>
                           </div>
                         </div>
@@ -131,7 +128,6 @@
                           <label class="col-sm-2 col-form-label">Stok</label>
                           <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="number" class="form-control" value="{{ $buku->stok }}" readonly/>
                           </div>
                           </div>
@@ -140,7 +136,6 @@
                           <label class="col-sm-2 col-form-label">Sinopsis</label>
                           <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <textarea class="form-control" rows="3" readonly>{{ $buku->sinopsis }}</textarea>
                           </div>
                           </div>
@@ -149,7 +144,6 @@
                           <label class="col-sm-2 col-form-label">Kategori</label>
                           <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $buku->kategori->nama_kategori }}" readonly/>
                           </div>
                           </div>
@@ -158,7 +152,6 @@
                           <label class="col-sm-2 col-form-label">Rak</label>
                           <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $buku->rak->nama_rak }}" readonly/>
                           </div>
                           </div>

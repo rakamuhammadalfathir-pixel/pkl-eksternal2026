@@ -95,27 +95,22 @@
                         <label class="col-sm-2 col-form-label">Peminjaman</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $pengembalian->peminjaman->kode_transaksi }}" readonly/>
                           </div>
                         </div>
                       </div>
-                      
                       <div class="row mb-3">
                         <label class="col-sm-2 col-form-label">Tanggal Kembali Aktual</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ $pengembalian->tgl_kembali_aktual }}" readonly/>
                           </div>
                         </div>
                       </div>
-                      
                       <div class="row mb-3">
                         <label class="col-sm-2 col-form-label">Denda</label>
                         <div class="col-sm-10">
                           <div class="input-group input-group-merge">
-                            <span class="input-group-text"></span>
                             <input type="text" class="form-control" value="{{ number_format($pengembalian->denda, 0, ',', '.') }}" readonly/>
                           </div>
                         </div>

@@ -57,11 +57,23 @@
         Route::middleware(['auth', 'admin'])->prefix('admin')->as('admin.')->group(function () {
             
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+            //export excel
             Route::get('buku/export-excel', [BukuController::class, 'export_excel'])->name('buku.export_excel');
             Route::get('anggota/export-excel', [AnggotaController::class, 'export_excel'])->name('anggota.export_excel');
             Route::get('peminjaman/export_excel', [PeminjamanController::class, 'export_excel'])->name('peminjaman.export_excel');
             Route::get('pengembalian/export_excel', [PengembalianController::class, 'export_excel'])->name('pengembalian.export_excel');
 
+            //Bulk delete
+            Route::delete('buku/bulk-delete', [BukuController::class, 'bulkDelete'])->name('buku.bulkDelete');
+            Route::delete('anggota/bulk-delete', [AnggotaController::class, 'bulkDelete'])->name('anggota.bulkDelete');
+            Route::delete('peminjaman/bulk-delete', [PeminjamanController::class, 'bulkDelete'])->name('peminjaman.bulkDelete');
+            Route::delete('pengembalian/bulk-delete', [PengembalianController::class, 'bulkDelete'])->name('pengembalian.bulkDelete');
+            Route::delete('kategori/bulk-delete', [KategoriController::class, 'bulkDelete'])->name('kategori.bulkDelete');
+            Route::delete('rak/bulk-delete', [RakController::class, 'bulkDelete'])->name('rak.bulkDelete');
+            
+
+            // Resource routes
             Route::resource('buku', BukuController::class);
             Route::resource('anggota', AnggotaController::class);
             Route::resource('peminjaman', PeminjamanController::class);
