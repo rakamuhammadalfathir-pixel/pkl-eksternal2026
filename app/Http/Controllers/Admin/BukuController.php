@@ -22,7 +22,13 @@ class BukuController extends Controller
 
         $buku = Buku::with(['kategori', 'rak'])
             ->when($search, function ($query, $search) {
-                return $query->where('judul', 'like', '%' . $search . '%');
+                return $query->where('judul', 'like', '%' . $search . '%')
+                            // Mencari di relasi kategori
+                            ->orWhereHas('kategori', function ($q) use ($search) {
+                                $q->where('nama_kategori', 'like', '%' . $search . '%'); // Sesuaikan kolom ini
+                            })
+                            // Bonus: Mencari berdasarkan pengarang juga
+                            ->orWhere('pengarang', 'like', '%' . $search . '%');
             })
             ->latest()
             ->get();
@@ -162,10 +168,14 @@ class BukuController extends Controller
         $buku->delete();
         return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil dihapus.');
     }
-    public function export_excel()
+    
+    public function export_excel(Request $request)
     {
-        return Excel::download(new BukuExport, 'laporan-data-buku-' . date('Y-m-d') . '.xlsx');
+        $search = $request->query('search');
+        // Kirim variabel search ke dalam class BukuExport
+        return Excel::download(new BukuExport($search), 'laporan-buku-' . date('Y-m-d') . '.xlsx');
     }
+
     public function bulkDelete(Request $request)
     {
         $ids = $request->ids;

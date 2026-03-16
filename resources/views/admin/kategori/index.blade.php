@@ -129,10 +129,10 @@
                             <td>{{ $item->nama_kategori }}</td>
                             <td class="text-center">
                               <div class="d-flex flex-row justify-content-center gap-2">
-                                <a href="{{ route('admin.kategori.show', $item->id) }}" class="btn btn-sm btn-info">
+                                <a href="{{ route('admin.kategori.show', $item->id) }}" class="btn btn-sm btn-info" title="Show Kategori" data-bs-toggle="tooltip" data-bs-placement="top">
                                   <i class="bx bx-show"></i>
                                 </a>
-                                <a href="{{ route('admin.kategori.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('admin.kategori.edit', $item->id) }}" class="btn btn-sm btn-warning" title="Edit Kategori" data-bs-toggle="tooltip" data-bs-placement="top">
                                   <i class="bx bx-edit-alt"></i>
                                 </a>
                                 </div>

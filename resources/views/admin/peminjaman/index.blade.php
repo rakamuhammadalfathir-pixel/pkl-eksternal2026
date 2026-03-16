@@ -83,9 +83,9 @@
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span>Data Peminjaman</h4>
               <div class="mb-4 d-flex justify-content-between align-items-center">
-                  <a href="{{ route('admin.peminjaman.export_excel') }}" class="btn btn-success">
-                    <i class="bx bxs-file-export me-1"></i> Export Excel
-                  </a>
+                    <a href="{{ route('admin.peminjaman.export_excel', ['search' => request('search')]) }}" class="btn btn-success">
+                        <i class="bx bxs-file-export me-1"></i> Export Excel
+                    </a>
                 </div>
                 <div class="row mb-4">
                   <div class="col-md-4">
@@ -162,19 +162,16 @@
                                           <td class="text-center">
                                               <div class="d-flex flex-row justify-content-center gap-2">
                                                   @if($item->status == 'Pending')
-                                                      <button type="submit" form="form-approve-{{ $item->id }}" class="btn btn-sm btn-success">
+                                                      <button type="submit" form="form-approve-{{ $item->id }}" class="btn btn-sm btn-success" onclick="return confirm('Setujui peminjaman?')" title="Setujui Peminjaman" data-bs-toggle="tooltip" data-bs-placement="top">
                                                           <i class="bx bx-check"></i>
                                                       </button>
-                                                      <button type="submit" form="form-reject-{{ $item->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Tolak peminjaman?')">
+                                                      <button type="submit" form="form-reject-{{ $item->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Tolak peminjaman?')" title="Tolak Peminjaman" data-bs-toggle="tooltip" data-bs-placement="top">
                                                           <i class="bx bx-x"></i>
                                                       </button>
                                                   @endif
-                                                  <a href="{{ route('admin.peminjaman.show', $item->id) }}" class="btn btn-sm btn-info">
+                                                  <a href="{{ route('admin.peminjaman.show', $item->id) }}" class="btn btn-sm btn-info" title="Show Peminjaman" data-bs-toggle="tooltip" data-bs-placement="top">
                                                       <i class="bx bx-show"></i>
                                                   </a>
-                                                  <button type="submit" form="form-delete-{{ $item->id }}" class="btn btn-sm btn-danger" onclick="return confirm('Hapus data ini?')">
-                                                      <i class="bx bx-trash"></i>
-                                                  </button>
                                               </div>
                                           </td>
                                       </tr>

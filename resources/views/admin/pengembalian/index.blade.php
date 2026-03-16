@@ -83,9 +83,9 @@
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span>Data Pengembalian</h4>
               <div class="mb-4 d-flex justify-content-between align-items-center">
-                  <a href="{{ route('admin.peminjaman.export_excel') }}" class="btn btn-success">
-                    <i class="bx bxs-file-export me-1"></i> Export Excel
-                  </a>
+                    <a href="{{ route('admin.pengembalian.export_excel', ['search' => request('search')]) }}" class="btn btn-success">
+                        <i class="bx bxs-file-export me-1"></i> Export Excel
+                    </a>
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-4">
@@ -153,12 +153,9 @@
                                   </td>
                                   <td class="text-center">
                                     <div class="d-flex flex-row justify-content-center gap-2">
-                                        <a href="{{ route('admin.pengembalian.show', $item->id) }}" class="btn btn-sm btn-info">
+                                        <a href="{{ route('admin.pengembalian.show', $item->id) }}" class="btn btn-sm btn-info" title="Show Pengembalian" data-bs-toggle="tooltip" data-bs-placement="top">
                                             <i class="bx bx-show"></i>
                                         </a>
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteSingle('{{ $item->id }}')">
-                                            <i class="bx bx-trash"></i>
-                                        </button>
                                     </div>
                                   </td>
                               </tr>

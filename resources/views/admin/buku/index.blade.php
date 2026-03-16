@@ -89,8 +89,8 @@
                   <a href="{{ route('admin.buku.create') }}" class="btn btn-primary">
                     Tambah Buku
                   </a>
-                  <a href="{{ route('admin.buku.export_excel') }}" class="btn btn-success">
-                    <i class="bx bxs-file-export me-1"></i> Export Excel
+                  <a href="{{ route('admin.buku.export_excel', ['search' => request('search')]) }}" class="btn btn-success">
+                      <i class="bx bxs-file-export me-1"></i> Export Excel
                   </a>
                   </div>
                   
@@ -98,7 +98,7 @@
                     <form action="{{ route('admin.buku.index') }}" method="GET">
                         <div class="input-group input-group-merge">
                             <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-search"></i></span>
-                            <input type="text" name="search" class="form-control" placeholder="Cari judul buku..." aria-label="Cari judul buku..." value="{{ request('search') }}" />
+                            <input type="text" name="search" class="form-control" placeholder="Cari judul buku...kategori..." aria-label="Cari judul buku...kategori..." value="{{ request('search') }}" />
                             @if(request('search'))
                                 <a href="{{ route('admin.buku.index') }}" class="btn btn-secondary">
                                     <i class="bx bx-x"></i>
@@ -157,10 +157,10 @@
                                     <td class="text-center">{{ $item->stok }}</td>
                                     <td class="text-center">
                                         <div class="d-flex flex-row justify-content-center gap-2"> 
-                                            <a href="{{ route('admin.buku.show', $item->id) }}" class="btn btn-sm btn-info">
+                                            <a href="{{ route('admin.buku.show', $item->id) }}" class="btn btn-sm btn-info" data-bs-toggle="tooltip" data-bs-placement="top" title="Show Buku">
                                                 <i class="bx bx-show"></i>
                                             </a>
-                                            <a href="{{ route('admin.buku.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                                            <a href="{{ route('admin.buku.edit', $item->id) }}" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Buku"> 
                                                 <i class="bx bx-edit-alt"></i>
                                             </a>
                                         </div>

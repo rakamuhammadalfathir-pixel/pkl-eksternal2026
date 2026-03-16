@@ -94,9 +94,10 @@ class PeminjamanController extends Controller
         return redirect()->route('admin.peminjaman.index')->with('success', 'Data Berhasil Dihapus & Stok Dikembalikan');
     }
 
-    public function export_excel()
+    public function export_excel(Request $request) 
     {
-        return Excel::download(new PeminjamanExport, 'laporan-peminjaman-' . date('Y-m-d') . '.xlsx');
+        $search = $request->query('search');
+        return Excel::download(new PeminjamanExport($search), 'laporan-peminjaman-' . date('Y-m-d') . '.xlsx');
     }
 
     // Di Admin/PeminjamanController.php

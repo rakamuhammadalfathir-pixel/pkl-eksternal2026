@@ -3,16 +3,35 @@
 namespace App\Exports;
 
 use App\Models\Pengembalian;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery; // Ubah ke FromQuery
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class PengembalianExport implements FromCollection, WithHeadings, WithMapping
+class PengembalianExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function collection()
+    protected $search;
+
+    // Constructor untuk menangkap kata kunci pencarian
+    public function __construct($search = null)
     {
-        // Eager loading: ambil pengembalian beserta data pinjam, anggota, dan buku
-        return Pengembalian::with(['peminjaman.anggota', 'peminjaman.buku'])->latest()->get();
+        $this->search = $search;
+    }
+
+    public function query()
+    {
+        $search = $this->search;
+
+        // Gunakan logic query yang sama persis dengan index di Controller
+        return Pengembalian::query()->with(['peminjaman.anggota', 'peminjaman.buku'])
+            ->when($search, function ($query, $search) {
+                return $query->whereHas('peminjaman', function ($q) use ($search) {
+                    $q->where('kode_transaksi', 'like', '%' . $search . '%')
+                    ->orWhereHas('anggota', function ($q2) use ($search) {
+                        $q2->where('nama', 'like', '%' . $search . '%');
+                    });
+                });
+            })
+            ->latest();
     }
 
     public function headings(): array

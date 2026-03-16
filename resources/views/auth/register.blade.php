@@ -72,6 +72,10 @@
         <div class="authentication-inner">
           <!-- Register Card -->
           <div class="card">
+            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" />
+@error('email')
+  <div class="text-danger small mt-1">{{ $message }}</div>
+@enderror
             <div class="card-body">
               <!-- Logo -->
               <div class="app-brand justify-content-center">

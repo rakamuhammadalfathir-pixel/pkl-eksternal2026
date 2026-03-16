@@ -83,9 +83,9 @@
             <div class="container-xxl flex-grow-1 container-p-y">
             <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light"></span>Data anggota</h4>
               <div class="mb-4 d-flex justify-content-between align-items-center">
-                  <a href="{{ route('admin.buku.export_excel') }}" class="btn btn-success">
-                    <i class="bx bxs-file-export me-1"></i> Export Excel
-                  </a>
+                    <a href="{{ route('admin.anggota.export_excel', ['search' => request('search')]) }}" class="btn btn-success">
+                        <i class="bx bxs-file-export me-1"></i> Export Excel
+                    </a>
                 </div>
               <div class="row mb-4">
                   <div class="col-md-4">
@@ -158,11 +158,11 @@
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-2">
                                                 @if($item->user)
-                                                    <button type="submit" form="form-role-{{ $item->user->id }}" class="btn btn-secondary btn-sm" title="Tukar Role">
+                                                    <button type="submit" form="form-role-{{ $item->user->id }}" class="btn btn-secondary btn-sm" title="Tukar Role" data-bs-toggle="tooltip" data-bs-placement="top">
                                                         <i class="bx bx-sync"></i>
                                                     </button>
                                                 @endif
-                                                <a href="{{ route('admin.anggota.show', $item->id) }}" class="btn btn-info btn-sm">
+                                                <a href="{{ route('admin.anggota.show', $item->id) }}" class="btn btn-info btn-sm" title="Show Anggota" data-bs-toggle="tooltip" data-bs-placement="top">
                                                     <i class="bx bx-show"></i>
                                                 </a>
 

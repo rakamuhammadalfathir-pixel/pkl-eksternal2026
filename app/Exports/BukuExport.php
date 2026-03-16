@@ -3,46 +3,61 @@
 namespace App\Exports;
 
 use App\Models\Buku;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class BukuExport implements FromCollection, WithHeadings, WithMapping
+class BukuExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function collection()
+    protected $search;
+
+    // Constructor untuk menerima data search dari Controller
+    public function __construct($search = null)
     {
-        // Mengambil data buku beserta relasinya
-        return Buku::with(['kategori', 'rak'])->get();
+        $this->search = $search;
     }
 
-    // Menentukan judul kolom di baris pertama Excel
+    public function query()
+    {
+        $search = $this->search;
+
+        return Buku::query()->with(['kategori', 'rak'])
+            ->when($search, function ($query, $search) {
+                return $query->where('judul', 'like', '%' . $search . '%')
+                             ->orWhereHas('kategori', function ($q) use ($search) {
+                                 $q->where('nama_kategori', 'like', '%' . $search . '%');
+                             })
+                             ->orWhere('pengarang', 'like', '%' . $search . '%');
+            });
+    }
+
     public function headings(): array
     {
+        // Tambahkan semua kolom yang Anda inginkan di sini
         return [
-            'No',
-            'Judul Buku',
-            'Pengarang',
-            'Penerbit',
-            'Tahun',
-            'Stok',
-            'Kategori',
-            'Lokasi Rak',
+            "Judul", 
+            "Pengarang", 
+            "Penerbit", 
+            "Tahun", 
+            "Kategori", 
+            "Rak", 
+            "Stok", 
+            "Sinopsis"
         ];
     }
 
-    // Memetakan data dari model ke kolom Excel
     public function map($buku): array
     {
-        static $no = 1;
+        // Urutan data di sini HARUS SAMA dengan urutan di headings()
         return [
-            $no++,
             $buku->judul,
             $buku->pengarang,
-            $buku->penerbit,
-            $buku->tahun,
+            $buku->penerbit, // Kolom tambahan
+            $buku->tahun,    // Kolom tambahan
+            $buku->kategori->nama_kategori,
+            $buku->rak->nama_rak,
             $buku->stok,
-            $buku->kategori->nama_kategori ?? '-',
-            $buku->rak->nama_rak ?? '-',
+            $buku->sinopsis, // Kolom tambahan
         ];
     }
 }

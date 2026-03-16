@@ -130,10 +130,10 @@
                             <td>{{ $item->lokasi }}</td>
                             <td class="text-center">
                               <div class="d-flex flex-row justify-content-center gap-2">
-                                <a href="{{ route('admin.rak.show', $item->id) }}" class="btn btn-sm btn-info">
+                                <a href="{{ route('admin.rak.show', $item->id) }}" class="btn btn-sm btn-info" title="Show Rak" data-bs-toggle="tooltip" data-bs-placement="top">
                                   <i class="bx bx-show"></i>
                                 </a>
-                                <a href="{{ route('admin.rak.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                                <a href="{{ route('admin.rak.edit', $item->id) }}" class="btn btn-sm btn-warning" title="Edit Rak" data-bs-toggle="tooltip" data-bs-placement="top">
                                   <i class="bx bx-edit-alt"></i>
                                 </a>
                                 </div>

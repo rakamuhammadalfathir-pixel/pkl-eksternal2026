@@ -3,19 +3,38 @@
 namespace App\Exports;
 
 use App\Models\Peminjaman;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery; // Ubah ke FromQuery
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class PeminjamanExport implements FromCollection, WithHeadings, WithMapping
+class PeminjamanExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function collection()
+    protected $search;
+
+    // Constructor untuk menerima parameter search
+    public function __construct($search = null)
     {
-        // Menggunakan with agar tidak terjadi N+1 query (Eager Loading)
-        return Peminjaman::with(['anggota', 'buku'])->latest()->get();
+        $this->search = $search;
     }
 
-    // Header untuk file Excel
+    public function query()
+    {
+        $search = $this->search;
+
+        // Gunakan logic query yang sama dengan index di Controller
+        return Peminjaman::query()->with(['anggota', 'buku'])
+            ->when($search, function ($query, $search) {
+                return $query->where('kode_transaksi', 'like', '%' . $search . '%')
+                    ->orWhereHas('anggota', function ($q) use ($search) {
+                        $q->where('nama', 'like', '%' . $search . '%');
+                    })
+                    ->orWhereHas('buku', function ($q) use ($search) {
+                        $q->where('judul', 'like', '%' . $search . '%');
+                    });
+            })
+            ->latest();
+    }
+
     public function headings(): array
     {
         return [
@@ -28,7 +47,6 @@ class PeminjamanExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
-    // Memetakan data dari model ke kolom Excel
     public function map($peminjaman): array
     {
         return [

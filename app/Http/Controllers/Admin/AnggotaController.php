@@ -93,9 +93,10 @@ class AnggotaController extends Controller
         return redirect()->back()->with('success', 'Role user berhasil diubah!');
     }
 
-    public function export_excel()
+    public function export_excel(Request $request)
     {
-        return Excel::download(new AnggotaExport, 'data-anggota-' . date('Y-m-d') . '.xlsx');
+        $search = $request->query('search');
+        return Excel::download(new AnggotaExport($search), 'data-anggota-' . date('Y-m-d') . '.xlsx');
     }
 
     public function bulkDelete(Request $request)

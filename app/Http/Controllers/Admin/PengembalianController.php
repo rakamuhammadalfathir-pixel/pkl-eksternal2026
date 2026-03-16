@@ -31,7 +31,7 @@ class PengembalianController extends Controller
             ->get();
 
         return view('admin.pengembalian.index', compact('pengembalians'));
-    }
+    }   
 
     /**
      * Show the form for creating a new resource.
@@ -85,10 +85,14 @@ class PengembalianController extends Controller
         return redirect()->route('admin.pengembalian.index')
                          ->with('success', 'Pengembalian berhasil dihapus.');
     }
-    public function export_excel()
+
+   public function export_excel(Request $request) 
     {
-        return Excel::download(new PengembalianExport, 'laporan-pengembalian-' . date('Y-m-d') . '.xlsx');
+        $search = $request->query('search');
+        
+        return Excel::download(new PengembalianExport($search), 'laporan-pengembalian-' . date('Y-m-d') . '.xlsx');
     }
+
     public function bulkDelete(Request $request)
     {
         if (!$request->has('ids') || empty($request->ids)) {

@@ -3,21 +3,35 @@
 namespace App\Exports;
 
 use App\Models\Anggota;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery; // Ubah ke FromQuery
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class AnggotaExport implements FromCollection, WithHeadings, WithMapping
+class AnggotaExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function collection()
+    protected $search;
+
+    // Constructor untuk menangkap kata kunci pencarian
+    public function __construct($search = null)
     {
-        // Mengambil data anggota dengan relasi user agar bisa mengambil email
-        return Anggota::with('user')->get();
+        $this->search = $search;
+    }
+
+    public function query()
+    {
+        $search = $this->search;
+
+        return Anggota::with('user')
+            ->when($search, function ($query, $search) {
+                return $query->where('nama', 'like', '%' . $search . '%')
+                             ->orWhereHas('user', function ($q) use ($search) {
+                                 $q->where('email', 'like', '%' . $search . '%');
+                             });
+            });
     }
 
     public function headings(): array
     {
-        // Definisi judul kolom di baris pertama Excel
         return [
             'No',
             'User ID',
@@ -30,8 +44,9 @@ class AnggotaExport implements FromCollection, WithHeadings, WithMapping
 
     public function map($anggota): array
     {
+        // Gunakan variabel static untuk nomor urut
         static $no = 1;
-        // Memastikan properti alamat dan telepon dipanggil sesuai Migration
+
         return [
             $no++,
             $anggota->user_id,
