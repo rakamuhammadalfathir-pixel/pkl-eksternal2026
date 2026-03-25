@@ -4,7 +4,7 @@
         <div class="navbar-nav align-items-center">
             <a href="{{ route('home') }}" class="app-brand-link gap-2">
                 <span class="app-brand-logo demo">
-                    <i class="bx bx-book-reader text-primary" style="font-size: 1.75rem;"></i>
+                    <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="height: 30px; width: auto;">
                 </span>
                 <span class="app-brand-text demo menu-text fw-bolder text-capitalize text-dark ms-2">E-Perpus</span>
             </a>
@@ -132,4 +132,14 @@
     .avatar img {
         object-fit: cover;
     }   
+    /* Tambahkan ini di dalam tag <style> yang sudah ada */
+    .app-brand-logo img {
+        display: block;
+        transition: all 0.2s ease-in-out;
+    }
+
+    /* Jika ingin logo sedikit membesar saat dihover */
+    .app-brand-link:hover .app-brand-logo img {
+        transform: scale(1.1);
+    }
 </style>

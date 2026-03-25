@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Register Basic - Pages | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Register</title>
 
     <meta name="description" content="" />
 
@@ -72,10 +72,6 @@
         <div class="authentication-inner">
           <!-- Register Card -->
           <div class="card">
-            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" />
-@error('email')
-  <div class="text-danger small mt-1">{{ $message }}</div>
-@enderror
             <div class="card-body">
               <!-- Logo -->
               <div class="app-brand justify-content-center">

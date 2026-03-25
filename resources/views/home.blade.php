@@ -6,7 +6,7 @@
 
     <title>E-Perpustakaan</title>
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('/assets/img/favicon/favicon.ico') }} ?v=1" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('/assets/img/favicon/favicon.ico') }}?v=2" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
