@@ -30,7 +30,7 @@ class PeminjamanController extends Controller
                     });
             })
             ->latest()
-            ->get();
+            ->paginate(15);
 
         return view('admin.peminjaman.index', compact('peminjamans'));
     }

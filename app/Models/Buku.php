@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Buku extends Model
 {
+    use HasFactory;
     protected $fillable = ['judul', 'pengarang','sinopsis', 'penerbit', 'tahun', 'stok', 'kategori_id', 'rak_id', 'foto'];
 
     public function kategori()

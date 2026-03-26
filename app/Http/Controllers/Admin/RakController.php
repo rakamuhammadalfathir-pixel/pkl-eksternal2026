@@ -13,7 +13,7 @@ class RakController extends Controller
      */
     public function index()
     {
-        $raks = Rak::all();
+        $raks = Rak::paginate(10    );
         return view('admin.rak.index', compact('raks'));
     }
 

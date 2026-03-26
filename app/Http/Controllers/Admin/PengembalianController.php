@@ -28,7 +28,7 @@ class PengembalianController extends Controller
                 });
             })
             ->latest()
-            ->get();
+            ->paginate(15);
 
         return view('admin.pengembalian.index', compact('pengembalians'));
     }   

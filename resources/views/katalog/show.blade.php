@@ -1,13 +1,5 @@
 <!DOCTYPE html>
-<html
-  lang="en"
-  /* 1. UBAH: Gunakan class layout-without-menu agar tidak ada ruang kosong sidebar */
-  class="light-style layout-without-menu"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free"
->
+<html lang="en" /* 1. UBAH: Gunakan class layout-without-menu agar tidak ada ruang kosong sidebar */ class="light-style layout-without-menu" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free" >
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
@@ -71,10 +63,7 @@
                         <div class="row">
                             <div class="col-md-4 mb-4">
                                 <div class="img-container shadow-sm">
-                                    <img src="{{ $buku->foto ? asset('storage/buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" 
-                                         alt="{{ $buku->judul }}" 
-                                         class="img-fluid rounded shadow" 
-                                         style="max-height: 500px; width: 100%; object-fit: cover;" />
+                                    <img src="{{ $buku->foto ? asset('storage/buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" alt="{{ $buku->judul }}" class="img-fluid rounded shadow" style="max-height: 500px; width: 100%; object-fit: cover;" />
                                 </div>
                             </div>
 
@@ -94,16 +83,19 @@
                                             <span class="fw-bold">{{ $buku->tahun }}</span>
                                         </div>
                                         <div class="col-6 col-sm-4">
-                                            <small class="text-muted d-block text-uppercase small">Lokasi Rak</small>
-                                            <span class="badge bg-label-info">{{ $buku->rak->nama_rak }}</span>
-                                        </div>
-                                        <div class="col-6 col-sm-4">
                                             <small class="text-muted d-block text-uppercase small">Status Stok</small>
                                             @if($buku->stok > 0)
-                                                <span class="text-success fw-bold"><i class="bx bx-check-circle me-1"></i>Tersedia ({{ $buku->stok }})</span>
+                                                <span class="text-success fw-bold d-block"><i class="bx bx-check-circle me-1"></i>Tersedia ({{ $buku->stok }})</span>
                                             @else
-                                                <span class="text-danger fw-bold"><i class="bx bx-x-circle me-1"></i>Habis</span>
+                                                <span class="text-danger fw-bold d-block"><i class="bx bx-x-circle me-1"></i>Habis</span>
                                             @endif
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="p-3 bg-light rounded-3 d-inline-block border">
+                                                <small class="text-muted d-block text-uppercase small mb-1">Posisi Buku di Perpustakaan</small>
+                                                <span class="badge bg-primary me-2">{{ $buku->rak->nama_rak }}</span>
+                                                <span class="text-dark fw-semibold"><i class="bx bx-map me-1"></i>{{ $buku->rak->lokasi ?? 'Hubungi Petugas' }}</span>
+                                            </div>
                                         </div>
                                     </div>
 

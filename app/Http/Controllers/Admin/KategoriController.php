@@ -13,7 +13,7 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategoris = Kategori::all();
+        $kategoris = Kategori::paginate(5);
         return view('admin.kategori.index', compact('kategoris'));
     }
 
@@ -71,7 +71,7 @@ class KategoriController extends Controller
         $kategori->update($request->all());
 
         return redirect()->route('admin.kategori.index')
-                         ->with('success', 'Kategori berhasil diperbarui.');
+                        ->with('success', 'Kategori berhasil diperbarui.');
     }
 
     /**
@@ -83,7 +83,7 @@ class KategoriController extends Controller
         $kategori->delete();
 
         return redirect()->route('admin.kategori.index')
-                         ->with('success', 'Kategori berhasil dihapus.');
+                        ->with('success', 'Kategori berhasil dihapus.');
     }
 
     public function bulkDelete(Request $request)

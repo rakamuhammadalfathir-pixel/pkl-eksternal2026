@@ -31,7 +31,7 @@ class BukuController extends Controller
                             ->orWhere('pengarang', 'like', '%' . $search . '%');
             })
             ->latest()
-            ->get();
+            ->paginate(15);
 
         return view('admin.buku.index', compact('buku'));
     }

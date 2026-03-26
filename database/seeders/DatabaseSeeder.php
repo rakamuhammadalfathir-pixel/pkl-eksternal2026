@@ -27,6 +27,9 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('password'), 
             ]
         );
+        \App\Models\Kategori::factory(5)->create();
+        \App\Models\Rak::factory(10)->create();
+        \App\Models\Buku::factory(50)->create();
         
         $this->command->info('🎉 Database seeding completed!');
     }

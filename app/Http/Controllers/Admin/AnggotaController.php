@@ -26,7 +26,7 @@ class AnggotaController extends Controller
                             });
             })
             ->latest()
-            ->get();
+            ->paginate(10);
 
         return view('admin.anggota.index', compact('anggota'));
     }
@@ -103,7 +103,7 @@ class AnggotaController extends Controller
     {
         $ids = $request->ids;
         if ($ids && is_array($ids)) {
-          Anggota::whereIn('id', $ids)->delete();
+        Anggota::whereIn('id', $ids)->delete();
             
             return redirect()->back()->with('success', count($ids) . ' data anggota berhasil dihapus.');
         }
