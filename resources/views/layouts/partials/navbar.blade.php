@@ -6,16 +6,14 @@
     </div>
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+
         <ul class="navbar-nav flex-row align-items-center ms-auto">
             @if (Route::has('login'))
                 @auth
-
-                    {{-- 4. User Dropdown Profile --}}
                     <li class="nav-item navbar-dropdown dropdown-user dropdown">
                         <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                             <div class="avatar avatar-online">
-                                {{-- PERBAIKAN: Foto di Tombol Lingkaran Kecil --}}
-                                <img src="{{ Auth::user()->avatar ? asset('uploads/avatars/' . Auth::user()->avatar) : asset('assets/img/avatars/1.png') }}"  alt="user-avatar"  class="w-px-40 h-auto rounded-circle avatar-clean" />
+                                <img src="{{ Auth::user()->avatar ? asset('uploads/avatars/' . Auth::user()->avatar) : asset('assets/img/avatars/1.png') }}" alt="user-avatar" class="w-px-40 h-auto rounded-circle avatar-clean" />
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -24,12 +22,10 @@
                                     <div class="d-flex">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar avatar-online">
-                                                {{-- PERBAIKAN: Foto di Dalam Menu Dropdown --}}
-                                                <img src="{{ Auth::user()->avatar ? asset('uploads/avatars/' . Auth::user()->avatar) : asset('assets/img/avatars/1.png') }}"  alt="user-avatar"  class="w-px-40 h-auto rounded-circle avatar-clean" />
+                                                <img src="{{ Auth::user()->avatar ? asset('uploads/avatars/' . Auth::user()->avatar) : asset('assets/img/avatars/1.png') }}" alt="user-avatar" class="w-px-40 h-auto rounded-circle avatar-clean" />
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
-                                            {{-- Nama otomatis terupdate dari DB --}}
                                             <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
                                             <small class="text-muted">{{ ucfirst(Auth::user()->role) }}</small>
                                         </div>
@@ -46,7 +42,7 @@
                             <li><div class="dropdown-divider"></div></li>
                             <li>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="bx bx-power-off me-2"></i>
                                     <span class="align-middle">Log Out</span>
                                 </a>
@@ -55,7 +51,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a href="{{ route('login') }}" class="btn btn-sm btn-outline-secondary me-2">Masuk</a>
+                        <a href="{{ route('login') }}" class="btn btn-sm btn-outline-primary me-2">Masuk</a>
                         <a href="{{ route('register') }}" class="btn btn-sm btn-primary">Daftar</a>
                     </li>
                 @endauth
@@ -67,40 +63,29 @@
         </form>
     </div>
 </nav>
+
 <style>
-    /* CSS Khusus untuk halaman Landing Page (Tanpa Sidebar) */
-    @media (min-width: 1200px) {
-        /* Kita deteksi jika tidak ada sidebar (layout-menu), maka terapkan sticky */
-        .layout-without-menu #layout-navbar {
-            position: fixed !important;
-            top: 0;
-            right: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1070;
-            margin: 0 !important;
-            border-radius: 0 !important;
-            background-color: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px);
-        }
-
-        .layout-without-menu .layout-page {
-            padding-top: 76px !important;
-        }
-    }
-
-    /* CSS untuk Admin Dashboard (Agar kembali ke desain asli Sneat) */
+    /* CSS Gabungan agar rapi */
     .layout-menu-fixed #layout-navbar {
-        position: static !important; /* Kembalikan ke posisi default admin */
-        margin: 0.75rem 1.5rem 0 !important; /* Beri jarak seperti semula */
+        position: static !important;
+        margin: 0.75rem 1.5rem 0 !important;
         width: auto !important;
     }
 
-    /* Tetap jaga foto profil rapi */
     .avatar-clean {
         object-fit: cover !important;
         object-position: center;
-        width: 100% !important;
-        height: 100% !important;
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    /* Penyesuaian search bar agar tidak terlalu lebar di mobile */
+    .navbar-nav .nav-item .form-control {
+        width: 150px;
+    }
+    @media (min-width: 768px) {
+        .navbar-nav .nav-item .form-control {
+            width: 250px;
+        }
     }
 </style>

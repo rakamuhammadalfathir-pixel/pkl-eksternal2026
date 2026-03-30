@@ -39,16 +39,15 @@
 
 <body>
     <div class="layout-wrapper layout-content-navbar layout-without-menu">
-      <div class="layout-container">
+        <div class="layout-container">
         
         {{-- @include('layouts.partials.sidebar') --}}
 
-        <div class="layout-page">
-          
-          @include('layouts.partials.navbar-landing')
+        <div class="layout-page">        
+            @include('layouts.partials.navbar-landing')
 
-          <div class="content-wrapper">
-            <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="content-wrapper">
+                <div class="container-xxl flex-grow-1 container-p-y">
                 
                 <div class="row">
                     {{-- 4. FILTER KATALOG (Tetap di sini sebagai filter konten) --}}
@@ -134,10 +133,10 @@
                 </div>
             </div>
             @include('layouts.partials.footer')
-          </div>
+            </div>
         </div>
-      </div>
-      <div class="layout-overlay layout-menu-toggle"></div>
+        </div>
+        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
 
     <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}"></script>

@@ -7,12 +7,20 @@ use App\Models\Kategori;
 use App\Models\Rak;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Exports\BukuExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Services\BukuService; // Import Service
 
 class BukuController extends Controller
 {
+    protected $bukuService;
+
+    // Inject Service melalui Constructor
+    public function __construct(BukuService $bukuService)
+    {
+        $this->bukuService = $bukuService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -23,12 +31,10 @@ class BukuController extends Controller
         $buku = Buku::with(['kategori', 'rak'])
             ->when($search, function ($query, $search) {
                 return $query->where('judul', 'like', '%' . $search . '%')
-                            // Mencari di relasi kategori
-                            ->orWhereHas('kategori', function ($q) use ($search) {
-                                $q->where('nama_kategori', 'like', '%' . $search . '%'); // Sesuaikan kolom ini
-                            })
-                            // Bonus: Mencari berdasarkan pengarang juga
-                            ->orWhere('pengarang', 'like', '%' . $search . '%');
+                             ->orWhereHas('kategori', function ($q) use ($search) {
+                                 $q->where('nama_kategori', 'like', '%' . $search . '%');
+                             })
+                             ->orWhere('pengarang', 'like', '%' . $search . '%');
             })
             ->latest()
             ->paginate(15);
@@ -36,9 +42,6 @@ class BukuController extends Controller
         return view('admin.buku.index', compact('buku'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $kategoris = Kategori::all();
@@ -63,44 +66,22 @@ class BukuController extends Controller
             'foto'  => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
-        // 1. Buat instance model baru
-        $buku = new Buku();
-        $buku->judul = $request->input('judul');
-        $buku->pengarang = $request->input('pengarang');
-        $buku->sinopsis = $request->input('sinopsis');
-        $buku->penerbit = $request->input('penerbit');
-        $buku->tahun = $request->input('tahun');
-        $buku->stok = $request->input('stok');
-        $buku->kategori_id = $request->input('kategori_id');
-        $buku->rak_id = $request->input('rak_id');
-
-       if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
-            $namaFile = time() . '_' . $file->getClientOriginalName();
+        try {
+            // Memanggil Service untuk logika penyimpanan
+            $this->bukuService->upsertBuku($request->all(), $request->file('foto'));
             
-            $file->storeAs('buku', $namaFile, 'public');
-            
-            $buku->foto = $namaFile;
+            return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menambahkan buku: ' . $e->getMessage());
         }
-
-        // 3. Simpan ke database (HANYA SEKALI SAJA)
-        $buku->save(); 
-
-        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $buku = Buku::findOrFail($id);
         return view('admin.buku.show', compact('buku'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         $buku = Buku::findOrFail($id);
@@ -126,32 +107,13 @@ class BukuController extends Controller
             'foto'  => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
-        $buku = Buku::findOrFail($id);
-        $buku->judul = $request->input('judul');
-        $buku->pengarang = $request->input('pengarang');
-        $buku->sinopsis = $request->input('sinopsis');
-        $buku->penerbit = $request->input('penerbit');
-        $buku->tahun = $request->input('tahun');
-        $buku->stok = $request->input('stok');
-        $buku->kategori_id = $request->input('kategori_id');
-        $buku->rak_id = $request->input('rak_id');
-
-        if ($request->hasFile('foto')) {
-
-            if ($buku->foto && Storage::disk('public')->exists('buku/' . $buku->foto)) {
-                Storage::disk('public')->delete('buku/' . $buku->foto);
-            }
+        try {
+            $this->bukuService->upsertBuku($request->all(), $request->file('foto'), $id);
             
-            $file = $request->file('foto');
-            $namaFile = time() . '_' . $file->getClientOriginalName();
-            
-            $file->storeAs('buku', $namaFile, 'public'); 
-            
-            $buku->foto = $namaFile;
+            return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui buku: ' . $e->getMessage());
         }
-
-        $buku->save();
-        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diperbarui.');
     }
 
     /**
@@ -159,20 +121,18 @@ class BukuController extends Controller
      */
     public function destroy(string $id)
     {
-        $buku = Buku::findOrFail($id);
-
-        if ($buku->foto && Storage::disk('public')->exists('buku/' . $buku->foto)) {
-            Storage::disk('public')->delete('buku/' . $buku->foto);
+        try {
+            $this->bukuService->deleteBuku($id);
+            
+            return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil dihapus.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menghapus buku: ' . $e->getMessage());
         }
-
-        $buku->delete();
-        return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil dihapus.');
     }
     
     public function export_excel(Request $request)
     {
         $search = $request->query('search');
-        // Kirim variabel search ke dalam class BukuExport
         return Excel::download(new BukuExport($search), 'laporan-buku-' . date('Y-m-d') . '.xlsx');
     }
 
@@ -180,9 +140,9 @@ class BukuController extends Controller
     {
         $ids = $request->ids;
         if ($ids && is_array($ids)) {
-            // Jika Anda menggunakan SoftDeletes, ini akan memindahkan ke sampah
-            // Jika tidak, ini akan menghapus permanen
-            Buku::whereIn('id', $ids)->delete();
+            Buku::whereIn('id', $ids)->get()->each(function($buku) {
+                $this->bukuService->deleteBuku($buku->id);
+            });
             
             return redirect()->back()->with('success', count($ids) . ' buku berhasil dihapus sekaligus.');
         }

@@ -1,214 +1,115 @@
 <!DOCTYPE html>
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default">
 
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
-
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
-
-=========================================================
- -->
-<!-- beautify ignore:start -->
-<html
-  lang="en"
-  class="light-style layout-menu-fixed"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free"
->
-  <head>
+<head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>Detail Buku | E-Perpus</title>
 
-    <title>Detail Buku</title>
-
-    <meta name="description" content="" />
-
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('/assets/img/favicon/favicon.ico') }}" />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Icons. Uncomment required icon fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('/assets/vendor/fonts/boxicons.css') }}" />
 
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/core.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/theme-default.css') }}" />
     <link rel="stylesheet" href="{{ asset('/assets/css/demo.css') }}" />
-
-    <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
 
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
+    <script src="{{ asset('/assets/vendor/js/helpers.js') }}"></script>
+    <script src="{{ asset('/assets/js/config.js') }}"></script>
+</head>
 
-    <!-- Page CSS -->
-
-    <!-- Helpers -->
-    <script src="{{ asset('/assets/vendor/js/helpers.js') }}" ></script>
-
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="{{ asset('/assets/js/config.js') }}" ></script>
-  </head>
-
-  <body>
-    <!-- Layout wrapper -->
+<body>
     <div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-        <!-- Menu -->
-        @include('layouts.partials.sidebar')
-        <!-- Layout container -->
-        <div class="layout-page">
-          <!-- Navbar -->
-          @include('layouts.partials.navbar')
-          <!-- / Navbar -->   
-          <!-- Content wrapper -->
-          <div class="content-wrapper">
-            <!-- Content -->
+        <div class="layout-container">
+            @include('layouts.partials.sidebar')
 
-            <div class="container-xxl flex-grow-1 container-p-y">
-                <!-- Basic Layout & Basic with Icons -->
-              <div class="row">
-                <!-- Basic with Icons -->
-                <div class="col-xxl">
-                  <div class="card mb-4">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="mb-0">Detail Buku</h5>
-                      <small class="text-muted float-end"></small>
+            <div class="layout-page">
+                @include('layouts.partials.navbar')
+
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold mb-0"><span class="text-muted fw-light">Buku /</span> Detail Informasi</h4>
+                            <a href="{{ route('admin.buku.index') }}" class="btn btn-secondary btn-sm">
+                                <i class="bx bx-arrow-back me-1"></i> Kembali
+                            </a>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 col-lg-3">
+                                <div class="card mb-4">
+                                    <div class="card-body text-center">
+                                        <img src="{{ $buku->foto ? Storage::url('buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" alt="Cover Buku" class="img-fluid rounded shadow-sm mb-3" style="width: 100%; height: 350px; object-fit: cover;">
+                                        <div class="badge bg-label-primary fs-6">{{ $buku->kategori->nama_kategori }}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-8 col-lg-9">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-between align-items-center border-bottom mb-3">
+                                        <h5 class="mb-0">Informasi Lengkap</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3 fw-bold">Judul Buku</div>
+                                            <div class="col-sm-9 text-primary fw-bold fs-5">{{ $buku->judul }}</div>
+                                        </div>
+                                        <hr class="m-0 mb-3">
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3 fw-bold">Pengarang</div>
+                                            <div class="col-sm-9">{{ $buku->pengarang }}</div>
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3 fw-bold">Penerbit</div>
+                                            <div class="col-sm-9">{{ $buku->penerbit }} ({{ $buku->tahun }})</div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3 fw-bold">Posisi Rak</div>
+                                            <div class="col-sm-9"><span class="badge bg-label-info">{{ $buku->rak->nama_rak }}</span></div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3 fw-bold">Stok Tersedia</div>
+                                            <div class="col-sm-9">
+                                                <span class="badge {{ $buku->stok > 0 ? 'bg-success' : 'bg-danger' }}">
+                                                    {{ $buku->stok }} Eksemplar
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="col-sm-3 fw-bold">Sinopsis</div>
+                                            <div class="col-sm-9 text-muted italic" style="line-height: 1.6;">
+                                                {{ $buku->sinopsis ?: 'Tidak ada sinopsis untuk buku ini.' }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Judul Buku</label>
-                        <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <input type="text" class="form-control" value="{{ $buku->judul }}" readonly/>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Pengarang</label>
-                        <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <input type="text" class="form-control" value="{{ $buku->pengarang }}" readonly/>
-                          </div>
-                        </div>
-                      </div>
-                        <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label">Penerbit</label>
-                            <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-  
-                                <input type="text" class="form-control" value="{{ $buku->penerbit }}" readonly/>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label">Tahun</label>
-                        <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <input type="text" class="form-control" value="{{ $buku->tahun }}" readonly/>
-                          </div>
-                        </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label">Stok</label>
-                          <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <input type="number" class="form-control" value="{{ $buku->stok }}" readonly/>
-                          </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label">Sinopsis</label>
-                          <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <textarea class="form-control" rows="3" readonly>{{ $buku->sinopsis }}</textarea>
-                          </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label">Kategori</label>
-                          <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <input type="text" class="form-control" value="{{ $buku->kategori->nama_kategori }}" readonly/>
-                          </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label">Rak</label>
-                          <div class="col-sm-10">
-                          <div class="input-group input-group-merge">
-                            <input type="text" class="form-control" value="{{ $buku->rak->nama_rak }}" readonly/>
-                          </div>
-                          </div>
-                        </div>
-                          <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label">Foto Saat Ini</label>
-                              <div class="col-sm-10">
-                                <img src="{{ $buku->foto ? Storage::url('buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" alt="Cover Buku" class="img-fluid rounded shadow" style="max-height: 350px; object-fit: cover;">
-                              </div>
-                            </div>
-                      <div class="row justify-content-end">
-                        <div class="col-sm-10">
-                          <a href="{{ route('admin.buku.index') }}" class="btn btn-secondary">Kembali</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
+                    @include('layouts.partials.footer')
+                    <div class="content-backdrop fade"></div>
                 </div>
-              </div>
-              <!--/ Bordered Table -->
             </div>
-            <!-- Footer -->
-            @include('layouts.partials.footer')
-            <!-- / Footer -->
-            <div class="content-backdrop fade"></div>
-          </div>
-          <!-- Content wrapper -->
         </div>
-        <!-- / Layout page -->
-      </div>
-
-      <!-- Overlay -->
-      <div class="layout-overlay layout-menu-toggle"></div>
+        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
-    <!-- / Layout wrapper -->
 
-    
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}" ></script>
-    <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }}" ></script>
-    <script src="{{ asset('/assets/vendor/js/bootstrap.js') }}" ></script>
-    <script src="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}" ></script>
-
-    <script src="{{ asset('/assets/vendor/js/menu.js') }}" ></script>
-    <!-- endbuild -->
-
-    <!-- Vendors JS -->
-    <script src="{{ asset('/assets/vendor/libs/apex-charts/apexcharts.js') }}" ></script>
-
-    <!-- Main JS -->
-    <script src="{{ asset('/assets/js/main.js') }}" ></script>
-
-    <!-- Page JS -->
-    <script src="{{ asset('/assets/js/dashboards-analytics.js') }}" ></script>
-
-    <!-- Place this tag in your head or just before your close body tag. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-  </body>
+    <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/js/menu.js') }}"></script>
+    <script src="{{ asset('/assets/js/main.js') }}"></script>
+</body>
 </html>

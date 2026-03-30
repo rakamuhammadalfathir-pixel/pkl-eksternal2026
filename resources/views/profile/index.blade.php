@@ -107,7 +107,7 @@
                                                 </div>
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Konfirmasi Kata Sandi Baru</label>
-                                                    <input class="form-control" type="password" name="password_confirmation" placeholder="············" />
+                                                    <input class="form-control" type="password" name="password_confirmation" placeholder="············" autocomplete="new-password"/>
                                                 </div>
                                             </div>
                                             <div class="mt-2">

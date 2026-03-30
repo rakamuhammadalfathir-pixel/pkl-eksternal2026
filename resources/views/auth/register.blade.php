@@ -16,6 +16,18 @@
     <style>
         .app-brand img { max-width: 80px; margin-bottom: 1rem; }
         .authentication-inner { max-width: 450px !important; }
+        .authentication-wrapper.authentication-basic::before,
+        .authentication-wrapper.authentication-basic::after {
+            content: none !important;
+            display: none !important;
+        }
+
+        /* Beberapa versi Sneat menggunakan elemen mask-bg */
+        .authentication-basic .authentication-inner::before,
+        .authentication-basic .authentication-inner::after {
+            content: none !important;
+            display: none !important;
+        }
     </style>
 </head>
 

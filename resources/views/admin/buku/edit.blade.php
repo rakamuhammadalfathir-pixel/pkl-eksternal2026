@@ -1,261 +1,195 @@
 <!DOCTYPE html>
 
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
 
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
-
-=========================================================
- -->
-<!-- beautify ignore:start -->
-<html
-  lang="en"
-  class="light-style layout-menu-fixed"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free"
->
-  <head>
+<head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <title>Edit Data Buku</title>
 
     <meta name="description" content="" />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('/assets/img/favicon/favicon.ico') }}" />
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
 
-    <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="{{ asset('/assets/vendor/fonts/boxicons.css') }}" />
 
-    <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
     <link rel="stylesheet" href="{{ asset('/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{ asset('/assets/css/demo.css') }}" />
 
-    <!-- Vendors CSS -->
     <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
-
     <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
 
-    <!-- Page CSS -->
+    <script src="{{ asset('/assets/vendor/js/helpers.js') }}"></script>
+    <script src="{{ asset('/assets/js/config.js') }}"></script>
+</head>
 
-    <!-- Helpers -->
-    <script src="{{ asset('/assets/vendor/js/helpers.js') }}" ></script>
-
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="{{ asset('/assets/js/config.js') }}" ></script>
-  </head>
-
-  <body>
-    <!-- Layout wrapper -->
+<body>
     <div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-        <!-- Menu -->
-        @include('layouts.partials.sidebar')
-        <!-- Layout container -->
-        <div class="layout-page">
-          <!-- Navbar -->
-          @include('layouts.partials.navbar')
-          <!-- / Navbar -->
-          <!-- Content wrapper -->
-          <div class="content-wrapper">
-            <!-- Content -->
+        <div class="layout-container">
+            @include('layouts.partials.sidebar')
 
-            <div class="container-xxl flex-grow-1 container-p-y">
-                <!-- Basic Layout & Basic with Icons -->
-              <div class="row">
-                <!-- Basic with Icons -->
-                <div class="col-xxl">
-                  <div class="card mb-4">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                      <h5 class="mb-0">Edit Data Buku</h5>
-                      <small class="text-muted float-end"></small>
+            <div class="layout-page">
+                @include('layouts.partials.navbar')
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <div class="row">
+                            <div class="col-xxl">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex align-items-center justify-content-between">
+                                        <h5 class="mb-0">Edit Data Buku</h5>
+                                        <small class="text-muted float-end">Perbarui Informasi Buku</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <form action="{{ route('admin.buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PUT')
+
+                                            <div class="row mb-3">
+                                                <label class="col-sm-2 col-form-label">Judul Buku</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group input-group-merge">
+                                                        <span class="input-group-text"><i class="bx bx-book"></i></span>
+                                                        <input type="text" class="form-control" placeholder="Judul Buku" name="judul" value="{{ $buku->judul }}" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-sm-2 col-form-label">Pengarang</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group input-group-merge">
+                                                        <span class="input-group-text"><i class="bx bx-user"></i></span>
+                                                        <input type="text" class="form-control" placeholder="Pengarang" name="pengarang" value="{{ $buku->pengarang }}" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-sm-2 col-form-label">Penerbit</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group input-group-merge">
+                                                        <span class="input-group-text"><i class="bx bx-buildings"></i></span>
+                                                        <input type="text" class="form-control" placeholder="Penerbit" name="penerbit" value="{{ $buku->penerbit }}" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-sm-2 col-form-label">Tahun</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group input-group-merge">
+                                                        <span class="input-group-text"><i class="bx bx-calendar"></i></span>
+                                                        <input type="number" class="form-control @error('tahun') is-invalid @enderror" name="tahun" placeholder="Contoh: 2024" min="1900" max="2026" value="{{ old('tahun', $buku->tahun) }}" required />
+                                                        @error('tahun')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                    <small class="text-muted">Format: 4 digit angka tahun.</small>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-sm-2 col-form-label">Stok</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group input-group-merge">
+                                                        <span class="input-group-text"><i class="bx bx-archive"></i></span>
+                                                        <input type="number" class="form-control" name="stok" value="{{ $buku->stok }}" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-sm-2 col-form-label">Sinopsis</label>
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" name="sinopsis" rows="3">{{ $buku->sinopsis }}</textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-sm-2 col-form-label">Kategori</label>
+                                                <div class="col-sm-10">
+                                                    <select name="kategori_id" class="form-select" required>
+                                                        @foreach($kategoris as $item)
+                                                        <option value="{{ $item->id }}" {{ $buku->kategori_id == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->nama_kategori }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-sm-2 col-form-label">Rak</label>
+                                                <div class="col-sm-10">
+                                                    <select name="rak_id" class="form-select" required>
+                                                        @foreach($raks as $item)
+                                                        <option value="{{ $item->id }}" {{ $buku->rak_id == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->nama_rak }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-sm-2 col-form-label">Foto Sampul</label>
+                                                <div class="col-sm-10">
+                                                    <div class="mb-3">
+                                                        <img src="{{ $buku->foto ? Storage::url('buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" alt="Preview" class="d-block rounded" height="150" id="uploadedAvatar" style="object-fit: cover;" />
+                                                    </div>
+                                                    <input type="file" name="foto" class="form-control" accept="image/*" id="upload">
+                                                    <small class="text-muted">Biarkan kosong jika tidak ingin mengubah foto. Format: JPG, PNG. Maks: 2MB</small>
+                                                </div>
+                                            </div>
+
+                                            <div class="row justify-content-end">
+                                                <div class="col-sm-10">
+                                                    <button type="submit" class="btn btn-primary">Update Data</button>
+                                                    <a href="{{ route('admin.buku.index') }}" class="btn btn-outline-secondary">Kembali</a>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                      <form action="{{ route('admin.buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Judul Buku</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-fullname2" class="input-group-text"></span>
-                              <input type="text" class="form-control" placeholder="Judul Buku" name="judul" value="{{ $buku->judul }}"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Pengarang</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"></span>
-                              <input type="text" class="form-control" placeholder="Pengarang" name="pengarang" value="{{ $buku->pengarang }}"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Penerbit</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"></span>
-                              <input type="text" class="form-control" placeholder="Penerbit" name="penerbit" value="{{ $buku->penerbit }}"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Tahun</label>
-                            <div class="col-sm-10">
-                                <div class="input-group input-group-merge">
-                                    <span id="basic-icon-default-company2" class="input-group-text"></span>
-                                    <input type="number" class="form-control @error('tahun') is-invalid @enderror" name="tahun" placeholder="Contoh: 2024"min="1900" max="2026"value="{{ old('tahun', $buku->tahun) }}" />
-                                    @error('tahun')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <small class="text-muted">Format: 4 digit angka tahun.</small>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Stok</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"></span>
-                              <input type="number" class="form-control" name="stok" value="{{ $buku->stok }}"/>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Sinopsis</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"></span>
-                              <textarea class="form-control" name="sinopsis" rows="3">{{ $buku->sinopsis }}</textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Kategori</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"></span>
-                              <select name="kategori_id" class="form-control">
-                                @foreach($kategoris as $item)
-                                  <option value="{{ $item->id }}" {{ $buku->kategori_id == $item->id ? 'selected' : '' }}>{{ $item->nama_kategori }}</option>
-                                @endforeach
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="col-sm-2 col-form-label" for="basic-icon-default-company">Rak</label>
-                          <div class="col-sm-10">
-                            <div class="input-group input-group-merge">
-                              <span id="basic-icon-default-company2" class="input-group-text"></span>
-                              <select name="rak_id" class="form-control">
-                                @foreach($raks as $item)
-                                  <option value="{{ $item->id }}" {{ $buku->rak_id == $item->id ? 'selected' : '' }}>{{ $item->nama_rak }}</option>
-                                @endforeach
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label">Foto Saat Ini</label>
-                            <div class="col-sm-10">
-                                <div class="mb-2">
-                                    <img src="{{ $buku->foto ? Storage::url('buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" alt="Preview" class="d-block rounded" height="150" id="uploadedAvatar"style="object-fit: cover;"/>
-                                </div>
-                                <div class="input-group input-group-merge">
-                                    <input type="file" name="foto" class="form-control" accept="image/*" id="upload">
-                                </div>
-                                <small class="text-muted">Biarkan kosong jika tidak ingin mengubah foto. Format: JPG, PNG. Maks: 2MB</small>
-                            </div>
-                        </div>
-                        <div class="row justify-content-end">
-                          <div class="col-sm-10">
-                            <button type="submit" class="btn btn-primary">Ubah</button>
-                            <a href="{{ route('admin.buku.index') }}" class="btn btn-secondary">Kembali</a>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
+                    @include('layouts.partials.footer')
+                    <div class="content-backdrop fade"></div>
                 </div>
-              </div>
-              <!--/ Bordered Table -->
+                </div>
             </div>
-            <!-- Footer -->
-            @include('layouts.partials.footer')
-            <!-- / Footer -->
-            <div class="content-backdrop fade"></div>
-          </div>
-          <!-- Content wrapper -->
-        </div>
-        <!-- / Layout page -->
-      </div>
 
-      <!-- Overlay -->
-      <div class="layout-overlay layout-menu-toggle"></div>
+        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
-    <!-- / Layout wrapper -->
 
+    <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/js/menu.js') }}"></script>
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}" ></script>
-    <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }}" ></script>
-    <script src="{{ asset('/assets/vendor/js/bootstrap.js') }}" ></script>
-    <script src="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}" ></script>
-
-    <script src="{{ asset('/assets/vendor/js/menu.js') }}" ></script>
-    <!-- endbuild -->
-
-    <!-- Vendors JS -->
-    <script src="{{ asset('/assets/vendor/libs/apex-charts/apexcharts.js') }}" ></script>
-
-    <!-- Main JS -->
-    <script src="{{ asset('/assets/js/main.js') }}" ></script>
-
-    <!-- Page JS -->
-    <script src="{{ asset('/assets/js/dashboards-analytics.js') }}" ></script>
-
-    <!-- Place this tag in your head or just before your close body tag. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <script src="{{ asset('/assets/js/dashboards-analytics.js') }}" ></script>
+    <script src="{{ asset('/assets/js/main.js') }}"></script>
 
     <script>
-      const uploadInput = document.getElementById('upload');
-      const previewImage = document.getElementById('uploadedAvatar');
+        const uploadInput = document.getElementById('upload');
+        const previewImage = document.getElementById('uploadedAvatar');
 
-      uploadInput.onchange = evt => {
-        const [file] = uploadInput.files;
-        if (file) {
-          previewImage.src = URL.createObjectURL(file);
+        uploadInput.onchange = evt => {
+            const [file] = uploadInput.files;
+            if (file) {
+                previewImage.src = URL.createObjectURL(file);
+            }
         }
-      }
     </script>
 
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-  </body>
+</body>
+
 </html>

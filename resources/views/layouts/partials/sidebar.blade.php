@@ -17,11 +17,11 @@
     <ul class="menu-inner py-1">
         @auth
             @if(Auth::user()->role == 'admin')
-                {{-- MENU DASHBOARD ADMIN --}}
+                
                 <li class="menu-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <a href="{{ route('admin.dashboard') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                        <div>Dashboard</div>
+                        <div data-i18n="Dashboards">Dashboard</div>
                     </a>
                 </li>
 
@@ -46,14 +46,14 @@
                 <li class="menu-item {{ request()->routeIs('admin.buku.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.buku.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-book"></i>
-                        <div>Buku</div>
+                        <div>Data Buku</div>
                     </a>
                 </li>
 
                 <li class="menu-item {{ request()->routeIs('admin.anggota.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.anggota.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-user"></i>
-                        <div>Anggota</div>
+                        <div>Data Anggota</div>
                     </a>
                 </li>
 
@@ -67,24 +67,32 @@
                         <div>Peminjaman</div>
                     </a>
                 </li>
+
                 <li class="menu-item {{ request()->routeIs('admin.pengembalian.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.pengembalian.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-rotate-left"></i>
                         <div>Pengembalian</div>
                     </a>
                 </li>
+
             @endif
         @endauth
     </ul>
 </aside>
+
 <style>
+    /* Styling agar logo dan teks sejajar rapi */
     .app-brand-link {
         display: flex;
         align-items: center;
+        text-decoration: none;
     }
     .app-brand-logo img {
-        /* Sesuaikan ukuran jika logo Anda terlalu besar/kecil */
         max-height: 35px; 
         object-fit: contain;
+    }
+    /* Menambah sedikit margin antar header menu */
+    .menu-header {
+        margin-top: 1.25rem !important;
     }
 </style>
