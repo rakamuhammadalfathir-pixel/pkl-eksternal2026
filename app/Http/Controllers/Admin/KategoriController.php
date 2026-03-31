@@ -2,97 +2,82 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Kategori;
 use App\Http\Controllers\Controller;
+use App\Services\KategoriService;
+use App\Models\Kategori; // Tetap di-import untuk type-hinting jika perlu
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $kategoriService;
+
+    public function __construct(KategoriService $kategoriService)
+    {
+        $this->kategoriService = $kategoriService;
+    }
+
     public function index()
     {
-        $kategoris = Kategori::paginate(5);
+        $kategoris = $this->kategoriService->getAllPaginated(5);
         return view('admin.kategori.index', compact('kategoris'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.kategori.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'nama_kategori' => 'required|string|max:255',
         ]);
 
-        Kategori::create($request->all());
+        $this->kategoriService->storeKategori($data);
 
         return redirect()->route('admin.kategori.index')
                          ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
         $kategori = Kategori::findOrFail($id);
         return view('admin.kategori.show', compact('kategori'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
         $kategori = Kategori::findOrFail($id);
         return view('admin.kategori.edit', compact('kategori'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $request->validate([
+        $data = $request->validate([
             'nama_kategori' => 'required|string|max:255',
         ]);
 
-        $kategori = Kategori::findOrFail($id);
-        $kategori->update($request->all());
+        $this->kategoriService->updateKategori($id, $data);
 
         return redirect()->route('admin.kategori.index')
-                        ->with('success', 'Kategori berhasil diperbarui.');
+                         ->with('success', 'Kategori berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $kategori = Kategori::findOrFail($id);
-        $kategori->delete();
-
+        $this->kategoriService->deleteKategori($id);
         return redirect()->route('admin.kategori.index')
-                        ->with('success', 'Kategori berhasil dihapus.');
+                         ->with('success', 'Kategori berhasil dihapus.');
     }
 
     public function bulkDelete(Request $request)
     {
-        $ids = $request->ids; // Mengambil array ID yang dicentang
-        if ($ids) {
-            Kategori::whereIn('id', $ids)->delete();
+        $ids = $request->ids;
+        if ($ids && is_array($ids)) {
+            $this->kategoriService->bulkDeleteKategori($ids);
             return redirect()->back()->with('success', 'Data terpilih berhasil dihapus.');
         }
+        
         return redirect()->back()->with('error', 'Tidak ada data yang dipilih.');
     }
 }

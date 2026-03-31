@@ -2,139 +2,72 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Peminjaman;
-use App\Models\Anggota;
-use App\Models\Buku;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Services\PeminjamanService;
+use App\Models\Peminjaman;
 use App\Exports\PeminjamanExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
+use Exception;
 
 class PeminjamanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-   public function index(Request $request)
+    protected $peminjamanService;
+
+    public function __construct(PeminjamanService $peminjamanService)
     {
-        $search = $request->input('search');
+        $this->peminjamanService = $peminjamanService;
+    }
 
-        $peminjamans = Peminjaman::with(['anggota', 'buku'])
-            ->when($search, function ($query, $search) {
-                return $query->where('kode_transaksi', 'like', '%' . $search . '%')
-                    ->orWhereHas('anggota', function ($q) use ($search) {
-                        $q->where('nama', 'like', '%' . $search . '%');
-                    })
-                    ->orWhereHas('buku', function ($q) use ($search) {
-                        $q->where('judul', 'like', '%' . $search . '%');
-                    });
-            })
-            ->latest()
-            ->paginate(15);
-
+    public function index(Request $request)
+    {
+        $peminjamans = $this->peminjamanService->getPaginatedPeminjaman($request->input('search'));
         return view('admin.peminjaman.index', compact('peminjamans'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
         return view('admin.peminjaman.show', compact('peminjaman'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
+        $this->peminjamanService->deletePeminjaman($id);
+        return redirect()->route('admin.peminjaman.index')
+                         ->with('success', 'Data Berhasil Dihapus & Stok Dikembalikan');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function approve($id) 
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $peminjaman = Peminjaman::findOrFail($id);
-        
-        if ($peminjaman->status == 'pinjam') {
-            $buku = Buku::find($peminjaman->buku_id);
-            if ($buku) {
-                $buku->increment('stok');
-            }
+        try {
+            $this->peminjamanService->approvePeminjaman($id);
+            return back()->with('success', 'Peminjaman disetujui, stok buku telah dipotong.');
+        } catch (Exception $e) {
+            return back()->with('error', $e->getMessage());
         }
+    }
 
-        $peminjaman->delete();
-        return redirect()->route('admin.peminjaman.index')->with('success', 'Data Berhasil Dihapus & Stok Dikembalikan');
+    public function reject($id)
+    {
+        $this->peminjamanService->rejectPeminjaman($id);
+        return back()->with('info', 'Permintaan peminjaman telah ditolak.');
+    }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->ids;
+        if ($ids && is_array($ids)) {
+            $this->peminjamanService->bulkDeletePeminjaman($ids);
+            return redirect()->back()->with('success', 'Data berhasil dihapus secara massal.');
+        }
+        
+        return redirect()->back()->with('error', 'Pilih data terlebih dahulu.');
     }
 
     public function export_excel(Request $request) 
     {
         $search = $request->query('search');
         return Excel::download(new PeminjamanExport($search), 'laporan-peminjaman-' . date('Y-m-d') . '.xlsx');
-    }
-
-    // Di Admin/PeminjamanController.php
-    public function approve($id) 
-    {
-        $peminjaman = Peminjaman::findOrFail($id);
-        
-        $buku = Buku::find($peminjaman->buku_id);
-        if($buku->stok <= 0) {
-            return back()->with('error', 'Stok buku habis, tidak bisa disetujui.');
-        }
-
-        $peminjaman->update(['status' => 'Pinjam']);
-
-        $buku->decrement('stok');
-
-        return back()->with('success', 'Peminjaman disetujui, stok buku telah dipotong.');
-    }
-
-    // PeminjamanController (Sisi Admin)
-    public function reject($id)
-    {
-        $peminjaman = Peminjaman::findOrFail($id);
-        
-        $peminjaman->update([
-            'status' => 'Ditolak'
-        ]);
-
-        return back()->with('info', 'Permintaan peminjaman telah ditolak.');
-    }
-
-    public function bulkDelete(Request $request)
-    {
-        if ($request->has('ids')) {
-            Peminjaman::whereIn('id', $request->ids)->delete();
-            return redirect()->back()->with('success', 'Data berhasil dihapus secara massal.');
-        }
-        return redirect()->back()->with('error', 'Pilih data terlebih dahulu.');
     }
 }

@@ -2,95 +2,81 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Rak;
 use App\Http\Controllers\Controller;
+use App\Services\RakService;
+use App\Models\Rak;
 use Illuminate\Http\Request;
 
 class RakController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $rakService;
+
+    public function __construct(RakService $rakService)
+    {
+        $this->rakService = $rakService;
+    }
+
     public function index()
     {
-        $raks = Rak::paginate(10    );
+        $raks = $this->rakService->getPaginatedRak(10);
         return view('admin.rak.index', compact('raks'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.rak.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_rak' => 'required',
-            'lokasi' => 'required',
+        $data = $request->validate([
+            'nama_rak' => 'required|string|max:255',
+            'lokasi'   => 'required|string|max:255',
         ]);
 
-        Rak::create($request->all());
+        $this->rakService->storeRak($data);
 
         return redirect()->route('admin.rak.index')->with('success', 'Rak berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
         $rak = Rak::findOrFail($id);
         return view('admin.rak.show', compact('rak'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit($id)
     {
         $rak = Rak::findOrFail($id);
         return view('admin.rak.edit', compact('rak'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama_rak' => 'required',
-            'lokasi' => 'required',
+        $data = $request->validate([
+            'nama_rak' => 'required|string|max:255',
+            'lokasi'   => 'required|string|max:255',
         ]);
 
-        $rak = Rak::findOrFail($id);
-        $rak->update($request->all());
+        $this->rakService->updateRak($id, $data);
 
         return redirect()->route('admin.rak.index')->with('success', 'Rak berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $rak = Rak::findOrFail($id);
-        $rak->delete();
-
+        $this->rakService->deleteRak($id);
         return redirect()->route('admin.rak.index')->with('success', 'Rak berhasil dihapus.');
-    } 
+    }
+
     public function bulkDelete(Request $request)
     {
         $ids = $request->ids;
-        if ($ids) {
-            \App\Models\Rak::whereIn('id', $ids)->delete();
+        if ($ids && is_array($ids)) {
+            $this->rakService->bulkDeleteRak($ids);
             return redirect()->back()->with('success', 'Data rak terpilih berhasil dihapus.');
         }
+
         return redirect()->back()->with('error', 'Pilih data yang ingin dihapus terlebih dahulu.');
     }
 }

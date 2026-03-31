@@ -2,112 +2,60 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
-use App\Models\Anggota;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Services\AnggotaService;
 use App\Exports\AnggotaExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
 
 class AnggotaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $anggotaService;
+
+    // Inject service melalui constructor
+    public function __construct(AnggotaService $anggotaService)
+    {
+        $this->anggotaService = $anggotaService;
+    }
+
     public function index(Request $request)
     {
-        $search = $request->input('search');
-
-        $anggota = Anggota::with('user')
-            ->when($search, function ($query, $search) {
-                return $query->where('nama', 'like', '%' . $search . '%')
-                            ->orWhereHas('user', function ($q) use ($search) {
-                                $q->where('email', 'like', '%' . $search . '%');
-                            });
-            })
-            ->latest()
-            ->paginate(10);
-
+        $anggota = $this->anggotaService->getPaginatedAnggota($request->input('search'));
         return view('admin.anggota.index', compact('anggota'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        $anggota = Anggota::findOrFail($id);
+        $anggota = \App\Models\Anggota::findOrFail($id);
         return view('admin.anggota.show', compact('anggota'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
+        $this->anggotaService->deleteAnggota($id);
+        return redirect()->route('admin.anggota.index')->with('success', 'Data berhasil dihapus');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $anggota = Anggota::findOrFail($id);
-        $anggota->delete();
-        return redirect()->route('admin.anggota.index');
-    }
     public function updateRole($id)
     {
-        // Cari user berdasarkan ID yang terhubung dengan anggota
-        $user = User::findOrFail($id);
-        
-        // Switch role
-        $user->role = ($user->role == 'admin') ? 'customer' : 'admin';
-        $user->save();
-
+        $this->anggotaService->toggleUserRole($id);
         return redirect()->back()->with('success', 'Role user berhasil diubah!');
-    }
-
-    public function export_excel(Request $request)
-    {
-        $search = $request->query('search');
-        return Excel::download(new AnggotaExport($search), 'data-anggota-' . date('Y-m-d') . '.xlsx');
     }
 
     public function bulkDelete(Request $request)
     {
         $ids = $request->ids;
         if ($ids && is_array($ids)) {
-        Anggota::whereIn('id', $ids)->delete();
-            
-            return redirect()->back()->with('success', count($ids) . ' data anggota berhasil dihapus.');
+            $count = $this->anggotaService->bulkDeleteAnggota($ids);
+            return redirect()->back()->with('success', "$count data anggota berhasil dihapus.");
         }
         
         return redirect()->back()->with('error', 'Pilih data anggota yang ingin dihapus.');
+    }
+
+    public function export_excel(Request $request)
+    {
+        $search = $request->query('search');
+        return Excel::download(new AnggotaExport($search), 'data-anggota-' . date('Y-m-d') . '.xlsx');
     }
 }

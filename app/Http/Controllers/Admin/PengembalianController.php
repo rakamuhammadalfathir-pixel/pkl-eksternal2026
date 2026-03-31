@@ -2,109 +2,61 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Pengembalian;
-use App\Models\Peminjaman;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Services\PengembalianService;
+use App\Models\Pengembalian;
 use App\Exports\PengembalianExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
+use Exception;
 
 class PengembalianController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $pengembalianService;
+
+    public function __construct(PengembalianService $pengembalianService)
+    {
+        $this->pengembalianService = $pengembalianService;
+    }
+
     public function index(Request $request)
     {
-        $search = $request->input('search');
-
-        $pengembalians = Pengembalian::with(['peminjaman.anggota'])
-            ->when($search, function ($query, $search) {
-                return $query->whereHas('peminjaman', function ($q) use ($search) {
-                    $q->where('kode_transaksi', 'like', '%' . $search . '%')
-                    ->orWhereHas('anggota', function ($q2) use ($search) {
-                        $q2->where('nama', 'like', '%' . $search . '%');
-                    });
-                });
-            })
-            ->latest()
-            ->paginate(15);
-
+        $pengembalians = $this->pengembalianService->getPaginatedPengembalian($request->input('search'));
         return view('admin.pengembalian.index', compact('pengembalians'));
-    }   
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-       // 
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show($id)
     {
         $pengembalian = Pengembalian::findOrFail($id);
         return view('admin.pengembalian.show', compact('pengembalian'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-          //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $pengembalian = Pengembalian::findOrFail($id);
-        $pengembalian->delete();
-
+        $this->pengembalianService->deletePengembalian($id);
         return redirect()->route('admin.pengembalian.index')
                          ->with('success', 'Pengembalian berhasil dihapus.');
     }
 
-   public function export_excel(Request $request) 
-    {
-        $search = $request->query('search');
-        
-        return Excel::download(new PengembalianExport($search), 'laporan-pengembalian-' . date('Y-m-d') . '.xlsx');
-    }
-
     public function bulkDelete(Request $request)
     {
-        if (!$request->has('ids') || empty($request->ids)) {
+        $ids = $request->ids;
+        
+        if (!$ids || !is_array($ids)) {
             return redirect()->back()->with('error', 'Silakan pilih data yang ingin dihapus terlebih dahulu.');
         }
 
         try {
-            Pengembalian::whereIn('id', $request->ids)->delete();
-
+            $this->pengembalianService->bulkDeletePengembalian($ids);
             return redirect()->back()->with('success', 'Data pengembalian terpilih berhasil dihapus.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    public function export_excel(Request $request) 
+    {
+        $search = $request->query('search');
+        return Excel::download(new PengembalianExport($search), 'laporan-pengembalian-' . date('Y-m-d') . '.xlsx');
     }
 }
