@@ -6,6 +6,7 @@ use App\Models\Buku;
 use App\Models\Kategori;
 use App\Models\Rak;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BukuRequest;
 use Illuminate\Http\Request;
 use App\Exports\BukuExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -52,23 +53,10 @@ class BukuController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {        
-        $request->validate([
-            'judul' => 'required',
-            'pengarang' => 'required',
-            'sinopsis' => 'nullable',
-            'penerbit' => 'required',
-            'tahun' => 'required|numeric|digits:4|min:1900|max:' . date('Y'),
-            'stok' => 'required|integer|min:0',
-            'kategori_id' => 'required|exists:kategoris,id',
-            'rak_id' => 'required|exists:raks,id',
-            'foto'  => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
-        ]);
-
+    public function store(BukuRequest $request) 
+    {
         try {
-            // Memanggil Service untuk logika penyimpanan
-            $this->bukuService->upsertBuku($request->all(), $request->file('foto'));
+            $this->bukuService->upsertBuku($request->validated(), $request->file('foto'));
             
             return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil ditambahkan.');
         } catch (\Exception $e) {
@@ -93,22 +81,10 @@ class BukuController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(BukuRequest $request, string $id)
     {
-        $request->validate([
-            'judul' => 'required',
-            'pengarang' => 'required',
-            'sinopsis' => 'nullable',
-            'penerbit' => 'required',
-            'tahun' => 'required|numeric|digits:4|min:1900|max:' . date('Y'),
-            'stok' => 'required|integer|min:0',
-            'kategori_id' => 'required|exists:kategoris,id',
-            'rak_id' => 'required|exists:raks,id',
-            'foto'  => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
-        ]);
-
         try {
-            $this->bukuService->upsertBuku($request->all(), $request->file('foto'), $id);
+            $this->bukuService->upsertBuku($request->validated(), $request->file('foto'), $id);
             
             return redirect()->route('admin.buku.index')->with('success', 'Buku berhasil diperbarui.');
         } catch (\Exception $e) {

@@ -52,9 +52,13 @@
                                                 <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Nama Kategori</label>
                                                 <div class="col-sm-10">
                                                     <div class="input-group input-group-merge">
-                                                        <span id="basic-icon-default-fullname2" class="input-group-text"></span>
-                                                        <input type="text" name="nama_kategori" class="form-control" placeholder="Masukkan Nama Kategori" />
+                                                        <input type="text" name="nama_kategori" class="form-control @error('nama_kategori') is-invalid @enderror" placeholder="Masukkan Nama Kategori" value="{{ old('nama_kategori') }}" />
                                                     </div>
+                                                    @error('nama_kategori')
+                                                        <div class="text-danger mt-1" style="font-size: 0.85rem;">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <div class="row justify-content-end">

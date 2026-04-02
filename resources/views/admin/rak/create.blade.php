@@ -52,18 +52,26 @@
                                                 <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Nama Rak</label>
                                                 <div class="col-sm-10">
                                                     <div class="input-group input-group-merge">
-                                                        <span id="basic-icon-default-fullname2" class="input-group-text"></span>
-                                                        <input type="text" name="nama_rak" class="form-control" placeholder="Masukkan Nama Rak" />
+                                                        <input type="text" name="nama_rak" class="form-control @error('nama_rak') is-invalid @enderror" placeholder="Masukkan Nama Rak" value="{{ old('nama_rak') }}" />
                                                     </div>
+                                                    @error('nama_rak')
+                                                        <div class="text-danger mt-1" style="font-size: 0.85rem;">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <label class="col-sm-2 col-form-label" for="basic-icon-default-fullname">Lokasi</label>
                                                 <div class="col-sm-10">
                                                     <div class="input-group input-group-merge">
-                                                        <span id="basic-icon-default-fullname2" class="input-group-text"></span>
-                                                        <textarea name="lokasi" class="form-control" placeholder="Masukkan Lokasi"></textarea>
+                                                        <textarea name="lokasi" class="form-control @error('lokasi') is-invalid @enderror" placeholder="Masukkan Lokasi">{{ old('lokasi') }}</textarea>
                                                     </div>
+                                                    @error('lokasi')
+                                                        <div class="text-danger mt-1" style="font-size: 0.85rem;">
+                                                            {{ $message }}
+                                                        </div>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <div class="row justify-content-end">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Services\RakService;
 use App\Models\Rak;
+use App\Http\Requests\RakRequest;
 use Illuminate\Http\Request;
 
 class RakController extends Controller
@@ -27,14 +28,10 @@ class RakController extends Controller
         return view('admin.rak.create');
     }
 
-    public function store(Request $request)
+    public function store(RakRequest $request)
     {
-        $data = $request->validate([
-            'nama_rak' => 'required|string|max:255',
-            'lokasi'   => 'required|string|max:255',
-        ]);
-
-        $this->rakService->storeRak($data);
+        
+        $this->rakService->storeRak($request->validated());
 
         return redirect()->route('admin.rak.index')->with('success', 'Rak berhasil ditambahkan.');
     }
@@ -51,14 +48,10 @@ class RakController extends Controller
         return view('admin.rak.edit', compact('rak'));
     }
 
-    public function update(Request $request, $id)
+    public function update(RakRequest $request, $id)
     {
-        $data = $request->validate([
-            'nama_rak' => 'required|string|max:255',
-            'lokasi'   => 'required|string|max:255',
-        ]);
 
-        $this->rakService->updateRak($id, $data);
+        $this->rakService->updateRak($id, $request->validated());
 
         return redirect()->route('admin.rak.index')->with('success', 'Rak berhasil diperbarui.');
     }

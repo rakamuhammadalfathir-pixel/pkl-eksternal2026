@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Services\KategoriService;
 use App\Models\Kategori; // Tetap di-import untuk type-hinting jika perlu
+use App\Http\Requests\KategoriRequest;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -27,16 +28,13 @@ class KategoriController extends Controller
         return view('admin.kategori.create');
     }
 
-    public function store(Request $request)
+    public function store(KategoriRequest $request)
     {
-        $data = $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-        ]);
 
-        $this->kategoriService->storeKategori($data);
+        $this->kategoriService->storeKategori($request->validated());
 
         return redirect()->route('admin.kategori.index')
-                         ->with('success', 'Kategori berhasil ditambahkan.');
+                            ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
     public function show($id)
@@ -51,16 +49,13 @@ class KategoriController extends Controller
         return view('admin.kategori.edit', compact('kategori'));
     }
 
-    public function update(Request $request, $id)
+    public function update(KategoriRequest $request, $id)
     {
-        $data = $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-        ]);
-
-        $this->kategoriService->updateKategori($id, $data);
+    
+        $this->kategoriService->updateKategori($id, $request->validated());
 
         return redirect()->route('admin.kategori.index')
-                         ->with('success', 'Kategori berhasil diperbarui.');
+                            ->with('success', 'Kategori berhasil diperbarui.');
     }
 
     public function destroy($id)
