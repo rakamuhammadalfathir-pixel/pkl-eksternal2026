@@ -1,115 +1,121 @@
-<!DOCTYPE html>
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Detail Buku | E-Perpus</title>
+@section('title', 'Detail Buku - ' . $buku->judul)
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('/assets/img/favicon/favicon.ico') }}" />
+@section('content')
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/fonts/boxicons.css') }}" />
-
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/core.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/theme-default.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/assets/css/demo.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
-
-    <script src="{{ asset('/assets/vendor/js/helpers.js') }}"></script>
-    <script src="{{ asset('/assets/js/config.js') }}"></script>
-</head>
-
-<body>
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            @include('layouts.partials.sidebar')
-
-            <div class="layout-page">
-                @include('layouts.partials.navbar')
-
-                <div class="content-wrapper">
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h4 class="fw-bold mb-0"><span class="text-muted fw-light">Buku /</span> Detail Informasi</h4>
-                            <a href="{{ route('admin.buku.index') }}" class="btn btn-secondary btn-sm">
-                                <i class="bx bx-arrow-back me-1"></i> Kembali
-                            </a>
+<div class="row">
+    <div class="col-xxl">
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center justify-content-between border-bottom">
+                <h5 class="mb-0">Informasi Lengkap Buku</h5>
+                <small class="text-muted float-end">Mode Lihat Data</small>
+            </div>
+            <div class="card-body mt-4">
+                
+                {{-- Judul Buku --}}
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="judul">Judul Buku</label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text"><i class="bx bx-book"></i></span>
+                            <input type="text" class="form-control" value="{{ $buku->judul }}" readonly />
                         </div>
+                    </div>
+                </div>
 
-                        <div class="row">
-                            <div class="col-md-4 col-lg-3">
-                                <div class="card mb-4">
-                                    <div class="card-body text-center">
-                                        <img src="{{ $buku->foto ? Storage::url('buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" alt="Cover Buku" class="img-fluid rounded shadow-sm mb-3" style="width: 100%; height: 350px; object-fit: cover;">
-                                        <div class="badge bg-label-primary fs-6">{{ $buku->kategori->nama_kategori }}</div>
-                                    </div>
-                                </div>
-                            </div>
+                {{-- Pengarang --}}
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="pengarang">Pengarang</label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text"><i class="bx bx-user"></i></span>
+                            <input type="text" class="form-control" value="{{ $buku->pengarang }}" readonly />
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="col-md-8 col-lg-9">
-                                <div class="card mb-4">
-                                    <div class="card-header d-flex justify-content-between align-items-center border-bottom mb-3">
-                                        <h5 class="mb-0">Informasi Lengkap</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row mb-3">
-                                            <div class="col-sm-3 fw-bold">Judul Buku</div>
-                                            <div class="col-sm-9 text-primary fw-bold fs-5">{{ $buku->judul }}</div>
-                                        </div>
-                                        <hr class="m-0 mb-3">
-                                        
-                                        <div class="row mb-3">
-                                            <div class="col-sm-3 fw-bold">Pengarang</div>
-                                            <div class="col-sm-9">{{ $buku->pengarang }}</div>
-                                        </div>
-                                        
-                                        <div class="row mb-3">
-                                            <div class="col-sm-3 fw-bold">Penerbit</div>
-                                            <div class="col-sm-9">{{ $buku->penerbit }} ({{ $buku->tahun }})</div>
-                                        </div>
+                {{-- Penerbit --}}
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="penerbit">Penerbit</label>
+                    <div class="col-sm-10">
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text"><i class="bx bx-buildings"></i></span>
+                            <input type="text" class="form-control" value="{{ $buku->penerbit }}" readonly />
+                        </div>
+                    </div>
+                </div>
 
-                                        <div class="row mb-3">
-                                            <div class="col-sm-3 fw-bold">Posisi Rak</div>
-                                            <div class="col-sm-9"><span class="badge bg-label-info">{{ $buku->rak->nama_rak }}</span></div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <div class="col-sm-3 fw-bold">Stok Tersedia</div>
-                                            <div class="col-sm-9">
-                                                <span class="badge {{ $buku->stok > 0 ? 'bg-success' : 'bg-danger' }}">
-                                                    {{ $buku->stok }} Eksemplar
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <div class="col-sm-3 fw-bold">Sinopsis</div>
-                                            <div class="col-sm-9 text-muted italic" style="line-height: 1.6;">
-                                                {{ $buku->sinopsis ?: 'Tidak ada sinopsis untuk buku ini.' }}
-                                            </div>
-                                        </div>
-                                    </div>
+                {{-- Tahun & Stok --}}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label" for="tahun">Tahun</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text"><i class="bx bx-calendar"></i></span>
+                                    <input type="text" class="form-control" value="{{ $buku->tahun }}" readonly />
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    @include('layouts.partials.footer')
-                    <div class="content-backdrop fade"></div>
+                    <div class="col-md-6">
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label" for="stok">Stok</label>
+                            <div class="col-sm-8">
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text"><i class="bx bx-archive"></i></span>
+                                    <input type="text" class="form-control" value="{{ $buku->stok }}" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                {{-- Sinopsis --}}
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="sinopsis">Sinopsis</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" rows="4" readonly>{{ $buku->sinopsis }}</textarea>
+                    </div>
+                </div>
+
+                {{-- Kategori & Rak --}}
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Kategori & Rak</label>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" value="{{ $buku->kategori->nama_kategori }}" readonly />
+                    </div>
+                    <div class="col-sm-5">
+                        <input type="text" class="form-control" value="{{ $buku->rak->nama_rak }}" readonly />
+                    </div>
+                </div>
+
+                {{-- Foto Sampul --}}
+                <div class="row mb-4">
+                    <label class="col-sm-2 col-form-label">Foto Sampul</label>
+                    <div class="col-sm-10">
+                        <div class="mt-2">
+                            <img src="{{ $buku->foto ? asset('storage/'.$buku->foto) : asset('assets/img/elements/18.jpg') }}" 
+                                 alt="Sampul Buku" class="d-block rounded shadow" height="200" />
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Tombol Aksi --}}
+                <div class="row">
+                    <div class="col-sm-10 offset-sm-2">
+                        <a href="{{ route('admin.buku.index') }}" class="btn btn-secondary me-2">
+                            <i class="bx bx-chevron-left me-1"></i> Kembali
+                        </a>
+                        <a href="{{ route('admin.buku.edit', $buku->id) }}" class="btn btn-warning">
+                            <i class="bx bx-edit-alt me-1"></i> Edit Data
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
-        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
-
-    <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/js/menu.js') }}"></script>
-    <script src="{{ asset('/assets/js/main.js') }}"></script>
-</body>
-</html>
+</div>
+@endsection

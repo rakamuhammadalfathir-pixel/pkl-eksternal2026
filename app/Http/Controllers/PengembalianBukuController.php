@@ -8,7 +8,7 @@ use App\Models\Buku;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
-class PengembalianController extends Controller
+class PengembalianBukuController extends Controller
 {
     public function store(Request $request, $id)
     {

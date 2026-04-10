@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" class="light-style layout-without-menu" dir="ltr" data-theme="theme-default" data-assets-path="{{ asset('/assets/') }}/" data-template="vertical-menu-template-free">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>@yield('title') | MyLibrary</title>
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('/assets/img/favicon/favicon.ico') }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="{{ asset('/assets/vendor/fonts/boxicons.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('/assets/css/demo.css') }}" />
+    <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+    
+    <style>
+        body { padding-top: 70px !important; }
+        .layout-page { padding-left: 0 !important; }
+        /* Tambahan style untuk avatar agar tetap square/proposional */
+        #uploadedAvatar { object-fit: cover; }
+    </style>
+
+    <script src="{{ asset('/assets/vendor/js/helpers.js') }}"></script>
+    <script src="{{ asset('/assets/js/config.js') }}"></script>
+    @yield('page-style')
+</head>
+
+<body>
+    <div class="layout-wrapper layout-content-navbar layout-without-menu">
+        <div class="layout-container">
+            <div class="layout-page">
+                @include('layouts.partials.navbar-landing')
+
+                <div class="content-wrapper">
+                    @yield('content')
+
+                    @include('layouts.partials.footer')
+                    <div class="content-backdrop fade"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+    <script src="{{ asset('/assets/vendor/js/menu.js') }}"></script>
+    <script src="{{ asset('/assets/js/main.js') }}"></script>
+    
+    @yield('page-script')
+</body>
+</html>

@@ -1,106 +1,27 @@
-<!DOCTYPE html>
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+@section('title', 'Detail Anggota')
 
-    <title>Detail Anggota</title>
+@section('content')
 
-    <meta name="description" content="" />
+<div class="row">
+    <div class="col-xxl">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header d-flex align-items-center justify-content-between border-bottom mb-3">
+                <h5 class="mb-0">Informasi Lengkap Anggota</h5>
+                <small class="text-muted float-end">ID: #{{ $anggota->id }}</small>
+            </div>
+            <div class="card-body">
+                {{-- Memanggil form inputan --}}
+                @include('admin.anggota._form', ['readonly' => true])
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('/assets/img/favicon/favicon.ico') }}" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/fonts/boxicons.css') }}" />
-
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="{{ asset('/assets/css/demo.css') }}" />
-
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
-
-    <script src="{{ asset('/assets/vendor/js/helpers.js') }}"></script>
-    <script src="{{ asset('/assets/js/config.js') }}"></script>
-</head>
-
-<body>
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            @include('layouts.partials.sidebar')
-
-            <div class="layout-page">
-                @include('layouts.partials.navbar')
-
-                <div class="content-wrapper">
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        <div class="row">
-                            <div class="col-xxl">
-                                <div class="card mb-4">
-                                    <div class="card-header d-flex align-items-center justify-content-between">
-                                        <h5 class="mb-0">Detail Anggota</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="mb-3 col-md-6">
-                                                <label class="form-label">Nama Lengkap</label>
-                                                <input class="form-control" type="text" value="{{ $anggota->user->name ?? 'Tidak ada nama' }}" readonly />
-                                            </div>
-
-                                            <div class="mb-3 col-md-6">
-                                                <label class="form-label">E-mail</label>
-                                                <input class="form-control" type="email" value="{{ $anggota->user->email ?? 'Tidak ada email' }}" readonly />
-                                            </div>
-
-                                            <div class="mb-3 col-md-6">
-                                                <label class="form-label">Nomor Telepon</label>
-                                                <input class="form-control" type="text" value="{{ $anggota->user->telepon ?? 'Tidak ada telepon' }}" readonly />
-                                            </div>
-
-                                            <div class="mb-3 col-md-6">
-                                                <label class="form-label">Role</label>
-                                                <input class="form-control" type="text" value="{{ $anggota->user->role ?? 'Tidak ada role' }}" readonly />
-                                            </div>
-
-                                            <div class="mb-3 col-md-12">
-                                                <label class="form-label">Alamat</label>
-                                                <textarea class="form-control" rows="3" readonly>{{ $anggota->user->alamat ?? 'Tidak ada alamat' }}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="mt-2">
-                                            <a href="{{ route('admin.anggota.index') }}" class="btn btn-secondary">Kembali</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @include('layouts.partials.footer')
-                    <div class="content-backdrop fade"></div>
-                </div>
+                <div class="mt-4 pt-3 border-top d-flex gap-2">
+                    <a href="{{ route('admin.anggota.index') }}" class="btn btn-label-secondary">
+                        <i class="bx bx-chevron-left me-1"></i> Kembali
+                    </a>
                 </div>
             </div>
-
-        <div class="layout-overlay layout-menu-toggle"></div>
+        </div>
     </div>
-    <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/js/menu.js') }}"></script>
-
-    <script src="{{ asset('/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
-
-    <script src="{{ asset('/assets/js/main.js') }}"></script>
-
-    <script src="{{ asset('/assets/js/dashboards-analytics.js') }}"></script>
-
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-</body>
-
-</html>
+</div>
+@endsection

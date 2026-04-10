@@ -3,131 +3,153 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Buku; 
-use App\Models\Peminjaman;
-use App\Models\Anggota;
-use App\Models\Pengembalian;
+use App\Models\Peminjaman; 
+use App\Services\MidtransService;
+use App\Services\PeminjamanBukuService;
+
 class PeminjamanBukuController extends Controller
 {
+    protected $peminjamanService;
+
+    public function __construct(PeminjamanBukuService $peminjamanService)
+    {
+        $this->peminjamanService = $peminjamanService;
+    }
 
     public function index()
     {
-        $peminjamanbuku = session()->get('peminjamanbuku', []);
+        $peminjamanbuku = $this->peminjamanService->getAntrean();
         return view('peminjamanbuku.index', compact('peminjamanbuku'));
     }
 
     public function add(Request $request)
     {
-        $buku = Buku::findOrFail($request->buku_id);
-        $peminjamanbuku = session()->get('peminjamanbuku', []);
-
-        if(isset($peminjamanbuku[$buku->id])) {
-            return redirect()->back()->with('info', 'Buku ini sudah ada di antrean pinjam kamu.');
-        }
-
-        $peminjamanbuku[$buku->id] = [
-            "judul" => $buku->judul,
-            "pengarang" => $buku->pengarang,
-            "foto" => $buku->foto,
-            "id" => $buku->id
-        ];
-
-        session()->put('peminjamanbuku', $peminjamanbuku);
-        
-        return redirect()->back()->with('success', 'Buku berhasil ditambah ke antrean!');
+        $result = $this->peminjamanService->tambahkanKeAntrean($request->buku_id);
+        return redirect()->back()->with($result['status'], $result['pesan']);
     }
 
     public function remove(Request $request)
     {
-        if($request->id) {
-            $peminjamanbuku = session()->get('peminjamanbuku');
-            if(isset($peminjamanbuku[$request->id])) {
-                unset($peminjamanbuku[$request->id]);
-                session()->put('peminjamanbuku', $peminjamanbuku);
-            }
-            return redirect()->back()->with('success', 'Buku dihapus dari antrean.');
-        }
+        $this->peminjamanService->hapusDariAntrean($request->id);
+        return redirect()->back()->with('success', 'Buku dihapus dari antrean.');
     }
 
     public function clear()
     {
-        session()->forget('peminjamanbuku');
+        $this->peminjamanService->kosongkanAntrean();
         return redirect()->back()->with('success', 'Antrean dikosongkan.');
     }
     
-   public function checkout(Request $request)
+    public function checkout()
     {
-        $peminjamanbuku = session()->get('peminjamanbuku');
-
-        if(!$peminjamanbuku) {
-            return redirect()->back()->with('error', 'peminjamanbuku kosong!');
+        $result = $this->peminjamanService->prosesCheckout(auth()->id());
+        
+        if ($result['status'] === 'error') {
+            return redirect()->back()->with('error', $result['pesan']);
         }
 
-        $anggota = Anggota::where('user_id', auth()->id())->first();
-
-        if (!$anggota) {
-            return redirect()->back()->with('error', 'Anda belum terdaftar sebagai anggota perpustakaan!');
-        }
-
-        $kodeTransaksi = 'TRP-' . date('Ymd') . '-' . strtoupper(\Illuminate\Support\Str::random(5));
-
-        foreach($peminjamanbuku as $id => $details) {
-        Peminjaman::create([
-            'anggota_id'      => $anggota->id,
-            'buku_id'         => $id,
-            'kode_transaksi'  => $kodeTransaksi, 
-            'tgl_pinjam'      => now(),
-            'tgl_harus_kembali'=> now()->addDays(7),
-            'status'          => 'Pending' // UBAH INI: Dari 'Pinjam' menjadi 'Pending'
-        ]);
-            auth()->user()->wishlist()->detach($id);
-        }
-        session()->forget('peminjamanbuku');
-
-        return redirect()->route('peminjaman.history')->with('success', 'Peminjaman berhasil diajukan!');    
+        return redirect()->route('peminjaman.history')->with('success', $result['pesan']);
     }
+
     public function kembalikanBuku($id)
     {
-
-        $peminjaman = Peminjaman::findOrFail($id);
-
-        $tglHarusKembali = \Carbon\Carbon::parse($peminjaman->tgl_harus_kembali);
-        $tglSekarang = now();
-        $denda = 0;
-
-        if ($tglSekarang->gt($tglHarusKembali)) {
-            $selisihHari = $tglSekarang->diffInDays($tglHarusKembali);
-            $denda = $selisihHari * 1000; 
-        }
-
-        Pengembalian::create([
-            'peminjaman_id'      => $peminjaman->id,
-            'tgl_kembali_aktual' => $tglSekarang,
-            'denda'              => $denda,
-        ]);
-
-        $peminjaman->update([
-            'status' => 'Kembali' 
-        ]);
-
-        Buku::find($peminjaman->buku_id)->increment('stok');
-
-        return redirect()->back()->with('success', 'Buku berhasil dikembalikan! Denda Anda: Rp ' . number_format($denda));
+        $result = $this->peminjamanService->prosesPengembalian($id);
+        return redirect()->back()->with('success', $result['pesan']);
     }
 
     public function history()
     {
-        $anggota = Anggota::where('user_id', auth()->id())->first();
+        $history = $this->peminjamanService->getRiwayatUser(auth()->id());
 
-        if (!$anggota) {
+        if ($history === null) {
             return redirect()->back()->with('error', 'Data anggota tidak ditemukan.');
         }
 
-        $history = Peminjaman::with(['buku', 'pengembalian'])
-                    ->where('anggota_id', $anggota->id)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-
         return view('peminjamanbuku.history', compact('history'));
+    }
+
+    public function bayarDenda($id)
+    {
+        // Mengambil data peminjaman beserta relasi anggota (user) dan buku
+        $peminjaman = Peminjaman::with(['anggota', 'buku'])->findOrFail($id);
+        
+        // Keamanan: Cek apakah denda memang ada dan belum dibayar
+        if ($peminjaman->total_denda <= 0 || $peminjaman->status_pembayaran === 'settlement') {
+            return redirect()->route('peminjaman.history')->with('error', 'Tidak ada denda yang perlu dibayar.');
+        }
+
+        // Jika belum ada snap_token di database, buat baru ke Midtrans
+        if (!$peminjaman->snap_token) {
+            $midtransService = new MidtransService();
+            try {
+                $token = $midtransService->createDendaToken($peminjaman);
+                $peminjaman->update(['snap_token' => $token]);
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Gagal terhubung ke Midtrans: ' . $e->getMessage());
+            }
+        }
+
+        return view('peminjamanbuku.pembayaran', [
+            'snapToken' => $peminjaman->snap_token,
+            'peminjaman' => $peminjaman
+        ]);
+    }
+
+    public function bayar($id)
+    {
+        $peminjaman = Peminjaman::with('pengembalian', 'buku')->findOrFail($id);
+        $denda = abs($peminjaman->pengembalian->denda);
+
+        // Konfigurasi Midtrans
+        \Midtrans\Config::$serverKey = 'Mid-server-Yt9YG4WnH1kNNHqlFgj-eUPw';
+        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'DENDA-' . $peminjaman->kode_transaksi . '-' . time(),
+                'gross_amount' => $denda,
+            ],
+            'customer_details' => [
+                'first_name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+            ],
+            'item_details' => [
+                [
+                    'id' => $peminjaman->id,
+                    'price' => $denda,
+                    'quantity' => 1,
+                    'name' => 'Denda Keterlambatan: ' . $peminjaman->buku->judul,
+                ]
+            ]
+        ];
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+        // Arahkan ke view pembayaran atau kirim token ke view
+        return view('peminjamanbuku.bayar', compact('peminjaman', 'snapToken', 'denda'));
+    }
+
+    public function callback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+        $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
+
+        if ($hashed == $request->signature_key) {
+            if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+                
+                // Cari data peminjaman berdasarkan order_id yang dikirim Midtrans
+                $peminjaman = \App\Models\Peminjaman::find($request->order_id);
+
+                if ($peminjaman && $peminjaman->pengembalian) {
+                    // Update kolom yang baru kita buat tadi
+                    $peminjaman->pengembalian->update([
+                        'status_denda' => 'Lunas',
+                        'tanggal_bayar' => now()
+                    ]);
+                }
+            }
+        }
     }
 }

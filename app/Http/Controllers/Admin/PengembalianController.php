@@ -27,7 +27,7 @@ class PengembalianController extends Controller
 
     public function show($id)
     {
-        $pengembalian = Pengembalian::findOrFail($id);
+        $pengembalian = Pengembalian::with('peminjaman')->findOrFail($id);
         return view('admin.pengembalian.show', compact('pengembalian'));
     }
 

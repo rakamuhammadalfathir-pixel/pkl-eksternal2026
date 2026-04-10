@@ -1,8 +1,4 @@
 <?php
-// ========================================
-// FILE: bootstrap/app.php
-// FUNGSI: Konfigurasi utama aplikasi Laravel
-// ========================================
 
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,16 +11,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // ================================================
-        // DAFTARKAN MIDDLEWARE ALIAS
-        // ================================================
-        // Alias adalah "nama pendek" untuk middleware
-        // Setelah didaftarkan, bisa dipakai dengan nama 'admin'
-        // ================================================
+        // --- TAMBAHKAN BAGIAN INI ---
+        $middleware->validateCsrfTokens(except: [
+            '/midtrans/callback', // Jalur ini akan diizinkan tanpa token CSRF
+        ]);
+        // ----------------------------
+
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
-            // ↑ 'admin' adalah nama alias
-            // ↑ AdminMiddleware::class adalah class yang dijalankan
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

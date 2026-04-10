@@ -30,9 +30,29 @@
             
         // Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+            // routes/web.php
+Route::get('/debug-perpus-midtrans', function () {
+    try {
+        $service = new \App\Services\MidtransService();
+        
+        // Simulasi data peminjaman
+        $dummyPeminjaman = (object) [
+            'id' => 99,
+            'total_denda' => 5000,
+            'user' => (object) ['name' => 'Siswa Perpus', 'email' => 'siswa@perpus.com'],
+            'buku' => (object) ['judul' => 'Laskar Pelangi']
+        ];
+
+        $token = $service->createDendaToken($dummyPeminjaman);
+        return "Berhasil! Token Midtrans E-Perpus: " . $token;
+    } catch (\Exception $e) {
+        return "Gagal: " . $e->getMessage();
+    }
+});
+
             // Katalog
             Route::get('/katalog', [KatalogController::class, 'index'])->name('katalog.index');
-            Route::get('/katalog/{id}', [KatalogController::class, 'show'])->name('catalog.show');
+            Route::get('/katalog/{id}', [KatalogController::class, 'show'])->name('katalog.show');
 
             // Peminjaman Buku
             Route::get('/peminjamanbuku', [PeminjamanBukuController::class, 'index'])->name('peminjamanbuku.index');
@@ -44,6 +64,7 @@
             Route::post('/kembalikan/{id}', [PeminjamanBukuController::class, 'kembalikanBuku'])->name('peminjaman.kembali');
             Route::post('/peminjaman/kembali/{id}', [PeminjamanBukuController::class, 'kembalikanBuku'])
                 ->name('peminjaman.kembali');
+            Route::get('/peminjaman/bayar/{id}', [PeminjamanBukuController::class, 'bayar'])->name('peminjaman.bayar');    
                 
             // Profile
             Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
@@ -87,3 +108,5 @@
             
         });
     });
+
+    Route::post('/midtrans/callback', [PeminjamanBukuController::class, 'callback']);

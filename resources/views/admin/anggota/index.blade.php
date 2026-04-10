@@ -1,172 +1,111 @@
-<!DOCTYPE html>
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
+@extends('layouts.admin')
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+@section('title', 'Data Anggota')
 
-    <title>Data Anggota</title>
+@section('content')
 
-    <meta name="description" content="" />
-
-    <link rel="icon" type="image/x-icon" href="{{ asset('/assets/img/favicon/favicon.ico') }}" />
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/fonts/boxicons.css') }}" />
-
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="{{ asset('/assets/css/demo.css') }}" />
-
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
-    <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/apex-charts/apex-charts.css') }}" />
-
-    <script src="{{ asset('/assets/vendor/js/helpers.js') }}"></script>
-    <script src="{{ asset('/assets/js/config.js') }}"></script>
-</head>
-
-<body>
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            @include('layouts.partials.sidebar')
-
-            <div class="layout-page">
-                @include('layouts.partials.navbar')
-
-                <div class="content-wrapper">
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        <h4 class="fw-bold py-3 mb-4">Data anggota</h4>
-
-                        <div class="mb-4 d-flex justify-content-between align-items-center">
-                            <a href="{{ route('admin.anggota.export_excel', ['search' => request('search')]) }}" class="btn btn-success">
-                                <i class="bx bxs-file-export me-1"></i> Export Excel
-                            </a>
-                        </div>
-
-                        <div class="row mb-4">
-                            <div class="col-md-4">
-                                <form action="{{ route('admin.anggota.index') }}" method="GET">
-                                    <div class="input-group input-group-merge">
-                                        <span class="input-group-text"><i class="bx bx-search"></i></span>
-                                        <input type="text" name="search" class="form-control" placeholder="Cari nama atau email..." value="{{ request('search') }}" />
-                                        @if(request('search'))
-                                        <a href="{{ route('admin.anggota.index') }}" class="btn btn-secondary">
-                                            <i class="bx bx-x"></i>
-                                        </a>
-                                        @endif
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <h5 class="card-header">Table anggota</h5>
-                            <div class="card-body">
-                                @if(session('success'))
-                                <div class="alert alert-primary alert-dismissible" role="alert">
-                                    <span>{{ session('success') }}</span>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                                @endif
-
-                                <form id="bulkDeleteForm" action="{{ route('admin.anggota.bulkDelete') }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <div class="mb-3">
-                                        <button type="submit" id="btnDeleteSelected" class="btn btn-danger" onclick="return confirm('Hapus anggota terpilih?')" disabled>
-                                            <i class="bx bx-trash me-1"></i> Hapus Terpilih
-                                        </button>
-                                    </div>
-
-                                    <div class="table-responsive text-nowrap">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr class="text-center">
-                                                    <th style="width: 50px;">
-                                                        <input class="form-check-input" type="checkbox" id="selectAll">
-                                                    </th>
-                                                    <th>No</th>
-                                                    <th>Nama</th>
-                                                    <th>Email</th>
-                                                    <th>Role</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @php $no = 1; @endphp
-                                                @foreach($anggota as $item)
-                                                <tr>
-                                                    <td class="text-center">
-                                                        <input class="form-check-input item-checkbox" type="checkbox" name="ids[]" value="{{ $item->id }}">
-                                                    </td>
-                                                    <td class="text-center">{{ $no++ }}</td>
-                                                    <td>{{ $item->user->name ?? 'Tidak ada nama' }}</td>
-                                                    <td>{{ $item->user->email ?? 'Tidak ada akun' }}</td>
-                                                    <td class="text-center">
-                                                        @if($item->user)
-                                                        <span class="badge {{ $item->user->role == 'admin' ? 'bg-label-success' : 'bg-label-primary' }}">
-                                                            {{ ucfirst($item->user->role) }}
-                                                        </span>
-                                                        @endif
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <div class="d-flex justify-content-center gap-2">
-                                                            @if($item->user)
-                                                            <button type="submit" form="form-role-{{ $item->user->id }}" class="btn btn-secondary btn-sm" title="Tukar Role" data-bs-toggle="tooltip" data-bs-placement="top">
-                                                                <i class="bx bx-sync"></i>
-                                                            </button>
-                                                            @endif
-                                                            <a href="{{ route('admin.anggota.show', $item->id) }}" class="btn btn-info btn-sm" title="Show Anggota" data-bs-toggle="tooltip" data-bs-placement="top">
-                                                                <i class="bx bx-show"></i>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </form>
-
-                                @foreach($anggota as $item)
-                                    @if($item->user)
-                                    <form id="form-role-{{ $item->user->id }}" action="{{ route('admin.anggota.updateRole', $item->user->id) }}" method="POST" style="display:none;">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div>
-                        </div>
-
-                    @include('layouts.partials.footer')
-                    <div class="content-backdrop fade"></div>
-                </div>
-                </div>
-        </div>
-
-        <div class="layout-overlay layout-menu-toggle"></div>
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <a href="{{ route('admin.anggota.export_excel', ['search' => request('search')]) }}" class="btn btn-success">
+            <i class="bx bxs-file-export me-1"></i> Export Excel
+        </a>
     </div>
 
-    <script src="{{ asset('/assets/vendor/libs/jquery/jquery.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/libs/popper/popper.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/js/menu.js') }}"></script>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <form action="{{ route('admin.anggota.index') }}" method="GET">
+                <div class="input-group input-group-merge">
+                    <span class="input-group-text"><i class="bx bx-search"></i></span>
+                    <input type="text" name="search" class="form-control" placeholder="Cari nama atau email..." value="{{ request('search') }}" />
+                    @if(request('search'))
+                        <a href="{{ route('admin.anggota.index') }}" class="btn btn-secondary">
+                            <i class="bx bx-x"></i>
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <script src="{{ asset('/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
+    <div class="card">
+        <h5 class="card-header">Tabel Anggota</h5>
+        <div class="card-body">
+            @if(session('success'))
+                <div class="alert alert-primary alert-dismissible" role="alert">
+                    <span>{{ session('success') }}</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
 
-    <script src="{{ asset('/assets/js/main.js') }}"></script>
+            <form id="bulkDeleteForm" action="{{ route('admin.anggota.bulkDelete') }}" method="POST">
+                @csrf
+                @method('DELETE')
 
-    <script src="{{ asset('/assets/js/dashboards-analytics.js') }}"></script>
+                <div class="mb-3">
+                    <button type="submit" id="btnDeleteSelected" class="btn btn-danger" onclick="return confirm('Hapus anggota terpilih?')" disabled>
+                        <i class="bx bx-trash me-1"></i> Hapus Terpilih
+                    </button>
+                </div>
 
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-bordered">
+                        <thead class="text-center">
+                            <tr>
+                                <th style="width: 50px;"><input class="form-check-input" type="checkbox" id="selectAll"></th>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($anggota as $item)
+                            <tr>
+                                <td class="text-center">
+                                    <input class="form-check-input item-checkbox" type="checkbox" name="ids[]" value="{{ $item->id }}">
+                                </td>
+                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td>{{ $item->user->name ?? 'Tidak ada nama' }}</td>
+                                <td>{{ $item->user->email ?? 'Tidak ada akun' }}</td>
+                                <td class="text-center">
+                                    @if($item->user)
+                                        <span class="badge {{ $item->user->role == 'admin' ? 'bg-label-success' : 'bg-label-primary' }}">
+                                            {{ ucfirst($item->user->role) }}
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        @if($item->user)
+                                            <button type="submit" form="form-role-{{ $item->user->id }}" class="btn btn-secondary btn-sm" title="Tukar Role">
+                                                <i class="bx bx-sync"></i>
+                                            </button>
+                                        @endif
+                                        <a href="{{ route('admin.anggota.show', $item->id) }}" class="btn btn-info btn-sm">
+                                            <i class="bx bx-show"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
+            {{-- Hidden Forms for Role Update --}}
+            @foreach($anggota as $item)
+                @if($item->user)
+                <form id="form-role-{{ $item->user->id }}" action="{{ route('admin.anggota.updateRole', $item->user->id) }}" method="POST" style="display:none;">
+                    @csrf @method('PATCH')
+                </form>
+                @endif
+            @endforeach
+        </div>
+    </div>
+@endsection
+
+@push('page-js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const selectAll = document.getElementById('selectAll');
@@ -179,9 +118,7 @@
             }
 
             selectAll.addEventListener('click', function() {
-                checkboxes.forEach(checkbox => {
-                    checkbox.checked = selectAll.checked;
-                });
+                checkboxes.forEach(checkbox => checkbox.checked = selectAll.checked);
                 updateButtonStatus();
             });
 
@@ -196,5 +133,4 @@
             });
         });
     </script>
-</body>
-</html>
+@endpush
