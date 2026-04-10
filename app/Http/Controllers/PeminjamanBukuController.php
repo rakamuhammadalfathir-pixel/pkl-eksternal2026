@@ -101,7 +101,7 @@ class PeminjamanBukuController extends Controller
         $denda = abs($peminjaman->pengembalian->denda);
 
         // Konfigurasi Midtrans
-        \Midtrans\Config::$serverKey = 'Mid-server-Yt9YG4WnH1kNNHqlFgj-eUPw';
+        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         \Midtrans\Config::$isProduction = false;
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;
