@@ -71,7 +71,12 @@
                                     <td class="text-center">{{ $item->peminjaman->kode_transaksi }}</td>
                                     <td class="text-center">{{ \Carbon\Carbon::parse($item->tgl_kembali_aktual)->format('d-m-Y') }}</td>
                                     <td class="text-center">
-                                        <span class="text fw-bold text-danger">Rp {{ number_format($item->denda, 0, ',', '.') }}</span>
+                                        {{-- Menggunakan abs() untuk menghilangkan tanda minus --}}
+                                        @php $nominalDenda = abs($item->denda); @endphp
+                                        
+                                        <span class="text fw-bold {{ $nominalDenda > 0 ? 'text-danger' : 'text-dark' }}">
+                                            Rp {{ number_format($nominalDenda, 0, ',', '.') }}
+                                        </span>
                                     </td>
                                     <td class="text-center">
                                         <div class="d-flex flex-row justify-content-center gap-2">

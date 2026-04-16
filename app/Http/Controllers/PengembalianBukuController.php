@@ -14,9 +14,10 @@ class PengembalianBukuController extends Controller
     {
         $peminjaman = Peminjaman::findOrFail($id);
 
-        // 1. Hitung Denda (Misal: 1000 per hari)
-        $tglHarusKembali = Carbon::parse($peminjaman->tgl_harus_kembali);
-        $tglSekarang = now();
+        // Gunakan startOfDay agar perhitungannya murni tanggal, bukan sisa jam
+        $tglHarusKembali = Carbon::parse($peminjaman->tgl_harus_kembali)->startOfDay();
+        $tglSekarang = Carbon::now()->startOfDay();
+        
         $dendaPerHari = 1000;
         $totalDenda = 0;
 
@@ -25,17 +26,17 @@ class PengembalianBukuController extends Controller
             $totalDenda = $selisihHari * $dendaPerHari;
         }
 
-        // 2. Simpan ke tabel pengembalians
         Pengembalian::create([
             'peminjaman_id' => $peminjaman->id,
-            'tgl_kembali_aktual' => $tglSekarang,
+            'tgl_kembali_aktual' => now(),
             'denda' => $totalDenda,
+            'status_denda' => $totalDenda > 0 ? 'Belum Bayar' : 'Tidak Ada Denda'
         ]);
 
-        // 3. Update status peminjaman & Kembalikan Stok Buku
-        $peminjaman->update(['status' => 'Kembali']); // Pastikan status ini ada di ENUM database
+        $peminjaman->update(['status' => 'Kembali']);
         Buku::find($peminjaman->buku_id)->increment('stok');
 
-        return redirect()->back()->with('success', 'Buku berhasil dikembalikan. Denda: Rp ' . number_class($totalDenda));
+        // Perbaikan: number_format bukan number_class
+        return redirect()->back()->with('success', 'Buku berhasil dikembalikan. Denda: Rp ' . number_format($totalDenda, 0, ',', '.'));
     }
 }

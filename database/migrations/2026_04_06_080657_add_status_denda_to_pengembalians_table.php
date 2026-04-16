@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pengembalians', function (Blueprint $table) {
+            // Menambahkan kolom status dan tanggal bayar
             $table->string('status_denda')->default('Belum Bayar')->after('denda');
             $table->timestamp('tanggal_bayar')->nullable()->after('status_denda');
         });
@@ -23,7 +24,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('pengembalians', function (Blueprint $table) {
-            //
+            // Menghapus kolom jika migration di-rollback
+            $table->dropColumn(['status_denda', 'tanggal_bayar']);
         });
     }
 };

@@ -133,19 +133,31 @@ class PeminjamanBukuController extends Controller
 
     public function callback(Request $request)
     {
-        $serverKey = config('midtrans.server_key');
+        // Menggunakan config atau env untuk server key
+        $serverKey = env('MIDTRANS_SERVER_KEY'); 
         $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
 
         if ($hashed == $request->signature_key) {
             if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
                 
-                // Cari data peminjaman berdasarkan order_id yang dikirim Midtrans
-                $peminjaman = \App\Models\Peminjaman::find($request->order_id);
+                // --- PERBAIKAN NOMOR 1 ---
+                // Di fungsi bayar() kamu buat: 'DENDA-' . $peminjaman->kode_transaksi . '-' . time()
+                // Kita harus mengambil bagian tengahnya saja (kode_transaksi)
+                
+                $orderId = $request->order_id; // Contoh: DENDA-TRP-20260410-ELRKM-1712723000
+                $parts = explode('-', $orderId);
+                
+                // Jika formatnya DENDA-TRP-20260410-ELRKM-TIMESTAMP
+                // maka kode transaksi aslinya ada di index ke-1 dan ke-2
+                // Kita gabungkan lagi menjadi TRP-20260410-ELRKM
+                $orderIdAsli = $parts[1] . '-' . $parts[2] . '-' . $parts[3];
+
+                // Cari di tabel Peminjaman
+                $peminjaman = Peminjaman::where('kode_transaksi', $orderIdAsli)->first();
 
                 if ($peminjaman && $peminjaman->pengembalian) {
-                    // Update kolom yang baru kita buat tadi
                     $peminjaman->pengembalian->update([
-                        'status_denda' => 'Lunas',
+                        'status_denda' => 'Lunas', 
                         'tanggal_bayar' => now()
                     ]);
                 }

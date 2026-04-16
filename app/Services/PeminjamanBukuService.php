@@ -110,39 +110,33 @@ class PeminjamanBukuService
     {
         $peminjaman = Peminjaman::findOrFail($id);
         
-        // Pastikan kita membandingkan hanya tanggal (Y-m-d) agar hitungan hari akurat
+        // Set ke jam 00:00:00 agar perbandingan murni berdasarkan tanggal
         $tglHarusKembali = Carbon::parse($peminjaman->tgl_harus_kembali)->startOfDay();
-        $tglSekarang = now()->startOfDay(); 
+        $tglSekarang = Carbon::now()->startOfDay(); 
         
-        $denda = 0;
+        $totalDenda = 0;
 
-        // Logika: Jika tanggal sekarang melewati tanggal harus kembali
         if ($tglSekarang->gt($tglHarusKembali)) {
-            // Hitung selisih hari secara absolut
+            // diffInDays sekarang akan akurat karena keduanya sudah startOfDay
             $selisihHari = $tglSekarang->diffInDays($tglHarusKembali);
-            
-            // Denda 1000 per hari, dipastikan tidak minus dengan max(0, ...)
-            $denda = max(0, $selisihHari * 1000);
+            $totalDenda = $selisihHari * 1000;
         }
 
         // Simpan ke tabel pengembalian
         Pengembalian::create([
             'peminjaman_id'      => $peminjaman->id,
-            'tgl_kembali_aktual' => now(), // Simpan waktu lengkap saat klik tombol
-            'denda'              => $denda,
+            'tgl_kembali_aktual' => now(), 
+            'denda'              => $totalDenda,
+            'status_denda'       => $totalDenda > 0 ? 'Belum Bayar' : 'Tidak Ada Denda' // Tambahkan status awal denda
         ]);
 
-        // Update status di tabel peminjaman
-        $peminjaman->update([
-            'status' => 'Kembali'
-        ]);
+        $peminjaman->update(['status' => 'Kembali']);
         
-        // Tambah stok buku kembali
         Buku::find($peminjaman->buku_id)->increment('stok');
 
         return [
             'status' => 'success', 
-            'pesan' => 'Buku berhasil dikembalikan! ' . ($denda > 0 ? 'Denda: Rp ' . number_format($denda, 0, ',', '.') : 'Tepat waktu!')
+            'pesan' => 'Buku berhasil dikembalikan! ' . ($totalDenda > 0 ? 'Denda: Rp ' . number_format($totalDenda, 0, ',', '.') : 'Tepat waktu!')
         ];
     }
 

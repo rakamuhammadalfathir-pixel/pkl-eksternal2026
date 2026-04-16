@@ -58,5 +58,7 @@
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
     @stack('page-js')
+    @stack('scripts')
+    @yield('scripts')
 </body>
 </html>
