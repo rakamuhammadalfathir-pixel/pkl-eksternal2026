@@ -96,7 +96,7 @@
                     <label class="col-sm-2 col-form-label">Foto Sampul</label>
                     <div class="col-sm-10">
                         <div class="mt-2">
-                            <img src="{{ $buku->foto ? asset('storage/'.$buku->foto) : asset('assets/img/elements/18.jpg') }}" 
+                            <img src="{{ $buku->foto ? asset('storage/'.$buku->foto) : asset('assets/img/elements/buku.jpg') }}" 
                                  alt="Sampul Buku" class="d-block rounded shadow" height="200" />
                         </div>
                     </div>

@@ -117,7 +117,7 @@
         <input type="file" name="foto" id="upload" class="form-control @error('foto') is-invalid @enderror" accept="image/*">
         <div class="mt-2">
             @php
-                $preview = isset($buku->foto) ? asset('storage/'.$buku->foto) : asset('assets/img/elements/18.jpg');
+                $preview = isset($buku->foto) ? asset('storage/'.$buku->foto) : asset('assets/img/elements/buku.jpg');
             @endphp
             <img src="{{ $preview }}" alt="Preview" class="d-block rounded" height="100" id="uploadedAvatar" />
         </div>

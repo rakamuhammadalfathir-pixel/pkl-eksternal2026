@@ -17,10 +17,50 @@
     <link rel="stylesheet" href="{{ asset('/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
     
     <style>
-        body { padding-top: 70px !important; }
-        .layout-page { padding-left: 0 !important; }
-        /* Tambahan style untuk avatar agar tetap square/proposional */
-        #uploadedAvatar { object-fit: cover; }
+        body { 
+            background-color: #f5f5f9; 
+            padding-top: 80px !important; 
+        }
+        
+        .card {
+            border-radius: 15px;
+        }
+
+        /* Efek hover pada input */
+        .form-control:focus {
+            border-color: #696cff;
+            box-shadow: 0 0 0 0.2rem rgba(105, 108, 255, 0.1);
+        }
+
+        /* Mengatur avatar agar tetap bundar dan rapi */
+        #uploadedAvatar {
+            object-fit: cover;
+            background-color: #fff;
+            z-index: 1;
+        }
+
+        .mt-n5 {
+            margin-top: -5rem !important;
+        }
+
+        /* Animasi saat tombol ditekan */
+        .btn-primary {
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(105, 108, 255, 0.4) !important;
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            border-right: none;
+        }
+
+        .form-control-lg {
+            font-size: 0.95rem;
+        }
     </style>
 
     <script src="{{ asset('/assets/vendor/js/helpers.js') }}"></script>

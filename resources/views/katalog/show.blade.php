@@ -27,7 +27,7 @@
         <div class="row">
             <div class="col-md-4 mb-4">
                 <div class="img-container shadow-sm">
-                    <img src="{{ $buku->foto ? asset('storage/buku/' . $buku->foto) : asset('assets/img/elements/18.jpg') }}" alt="{{ $buku->judul }}" class="img-fluid rounded shadow" style="max-height: 500px; width: 100%; object-fit: cover;" />
+                    <img src="{{ $buku->foto ? asset('storage/buku/' . $buku->foto) : asset('assets/img/elements/buku.jpg') }}" alt="{{ $buku->judul }}" class="img-fluid rounded shadow" style="max-height: 500px; width: 100%; object-fit: cover;" />
                 </div>
             </div>
 

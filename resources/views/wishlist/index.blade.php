@@ -21,7 +21,7 @@
                             </button>
                         </form>
 
-                        <img src="{{ $item->foto ? asset('storage/buku/' . $item->foto) : asset('assets/img/elements/18.jpg') }}" class="img-fluid rounded shadow-sm" style="height: 220px; width: 100%; object-fit: cover;" alt="{{ $item->judul }}"/>
+                        <img src="{{ $item->foto ? asset('storage/buku/' . $item->foto) : asset('assets/img/elements/buku.jpg') }}" class="img-fluid rounded shadow-sm" style="height: 220px; width: 100%; object-fit: cover;" alt="{{ $item->judul }}"/>
                     </div>
                     
                     <div class="card-body d-flex flex-column">

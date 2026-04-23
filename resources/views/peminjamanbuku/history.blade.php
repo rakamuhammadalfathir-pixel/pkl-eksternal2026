@@ -47,7 +47,7 @@
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                <img src="{{ $item->buku->foto ? asset('storage/buku/' . $item->buku->foto) : asset('assets/img/elements/18.jpg') }}" 
+                                <img src="{{ $item->buku->foto ? asset('storage/buku/' . $item->buku->foto) : asset('assets/img/elements/buku.jpg') }}" 
                                      alt="cover" class="avatar-img me-3 shadow-sm" style="width: 40px; height: 55px; object-fit: cover; border-radius: 4px;">
                                 <div class="d-flex flex-column">
                                     <span class="fw-bold text-dark">{{ Str::limit($item->buku->judul, 30) }}</span>

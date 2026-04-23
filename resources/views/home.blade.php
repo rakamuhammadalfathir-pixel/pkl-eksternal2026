@@ -75,7 +75,7 @@
             <div class="col-sm-6 col-md-4 col-lg-3">
                 <div class="card h-100 book-card">
                     <div class="p-3">
-                        <img src="{{ $item->foto ? asset('storage/buku/'.$item->foto) : asset('assets/img/elements/18.jpg') }}" class="w-100 rounded shadow-sm" alt="{{ $item->judul }}" style="height: 300px; object-fit: cover;">
+                        <img src="{{ $item->foto ? asset('storage/buku/'.$item->foto) : asset('assets/img/elements/buku.jpg') }}" class="w-100 rounded shadow-sm" alt="{{ $item->judul }}" style="height: 300px; object-fit: cover;">
                     </div>
                     <div class="card-body pt-0">
                         <div class="d-flex justify-content-between align-items-start mb-2">

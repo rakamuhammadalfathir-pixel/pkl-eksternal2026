@@ -59,7 +59,7 @@
                 <div class="col">
                     <div class="card h-100 shadow-sm border-0">
                         <div class="p-2"> 
-                            <img src="{{ $item->foto ? asset('storage/buku/'.$item->foto) : asset('assets/img/elements/18.jpg') }}" 
+                            <img src="{{ $item->foto ? asset('storage/buku/'.$item->foto) : asset('assets/img/elements/buku.jpg') }}" 
                                 class="card-img-top rounded" style="height: 280px; object-fit: cover;">
                         </div>
                         <div class="card-body">
@@ -77,6 +77,9 @@
                     <h5>Buku tidak ditemukan</h5>
                 </div>
             @endforelse
+        </div>
+        <div class="d-flex justify-content-end mt-4">
+            {{ $buku->appends(request()->query())->links() }}
         </div>
     </div>
 </div>

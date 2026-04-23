@@ -94,6 +94,8 @@
                     </tbody>
                 </table>
             </div>
+            <div class="d-flex justify-content-end mt-4">
+                {{ $buku->appends(request()->query())->links() }}
         </form>
     </div>
 </div>

@@ -104,7 +104,7 @@
                 @foreach($popularBooks as $book)
                     <div class="col-6 col-md-4 col-lg-2 text-center">
                         <div class="card h-100 border-0 shadow-none">
-                            <img src="{{ $book->foto ? asset('storage/buku/' . $book->foto) : asset('assets/img/elements/18.jpg') }}" 
+                            <img src="{{ $book->foto ? asset('storage/buku/' . $book->foto) : asset('assets/img/elements/buku.jpg') }}" 
                                  class="card-img-top rounded shadow-sm mb-2 book-cover" 
                                  alt="{{ $book->judul }}">
                             <div class="card-body p-0">

@@ -25,7 +25,7 @@
                 @forelse($peminjamanbuku as $id => $details)
                 <tr>
                     <td>
-                        <img src="{{ $details['foto'] ? asset('storage/buku/' . $details['foto']) : asset('assets/img/elements/18.jpg') }}" class="rounded shadow-sm" width="60" height="80" style="object-fit: cover;">
+                        <img src="{{ $details['foto'] ? asset('storage/buku/' . $details['foto']) : asset('assets/img/elements/buku.jpg') }}" class="rounded shadow-sm" width="60" height="80" style="object-fit: cover;">
                     </td>
                     <td>
                         <span class="fw-bold d-block fs-6 text-dark">{{ $details['judul'] }}</span>
